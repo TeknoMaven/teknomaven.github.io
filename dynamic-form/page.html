@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form with Bootstrap 5</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Dynamic Form with Bootstrap 5</h2>
+        <form id="dynamicForm" class="mb-4">
+            <!-- Nama -->
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan Nama">
+            </div>
+
+            <!-- Hobi Section -->
+            <div id="hobiGroup" class="mb-3">
+                <label class="form-label">Hobi</label>
+                <div class="input-group mb-2">
+                    <input type="text" name="hobi[]" class="form-control" placeholder="Masukkan Hobi">
+                    <button type="button" class="btn btn-outline-danger remove-hobi">Hapus</button>
+                </div>
+            </div>
+            <button type="button" id="addHobi" class="btn btn-outline-success mb-3">Tambah Hobi</button>
+
+            <!-- Sosial Media Section -->
+            <div id="sosialMediaGroup" class="mb-3">
+                <label class="form-label">Sosial Media</label>
+                <div class="input-group mb-2">
+                    <input type="text" name="sosialMedia[]" class="form-control" placeholder="Masukkan Sosial Media">
+                    <button type="button" class="btn btn-outline-danger remove-sosial">Hapus</button>
+                </div>
+            </div>
+            <button type="button" id="addSosialMedia" class="btn btn-outline-success mb-3">Tambah Sosial Media</button>
+
+            <!-- Kegiatan Sertifikat Section -->
+            <div id="kegiatanGroup" class="mb-3">
+                <label class="form-label">Kegiatan Sertifikat</label>
+                <div class="input-group mb-2">
+                    <input type="text" name="namaKegiatan[]" class="form-control" placeholder="Nama Kegiatan Sertifikat">
+                    <input type="text" name="tahunKegiatan[]" class="form-control ms-2" placeholder="Tahun">
+                    <button type="button" class="btn btn-outline-danger remove-kegiatan ms-2">Hapus</button>
+                </div>
+            </div>
+            <button type="button" id="addKegiatan" class="btn btn-outline-success mb-3">Tambah Kegiatan Sertifikat</button>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Hasil JSON -->
+        <div id="result">
+            <h3>Hasil JSON:</h3>
+            <pre id="jsonResult" class="bg-light p-3"></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
