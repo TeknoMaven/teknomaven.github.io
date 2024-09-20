@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Iframe Sandbox with Auto Beautifier and Highlight.js</title>
+  
+  <!-- Include highlight.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark-reasonable.min.css" integrity="sha512-RwXJS3k4Z0IK6TGoL3pgQlA9g2THFhKL7z9TYWdAI8u6xK0AUuMWieJuWgTRayywC9A94ifUj1RzjDa1NIlUIg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .unique-iframe-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    }
+
+    iframe.unique-sandbox-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .code-container {
+      margin-bottom: 20px;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: monospace;
+      white-space: pre-wrap; /* Allow wrapping for long lines */
+    }
+
+    code[contenteditable="true"] {
+      outline: none; /* Remove the default outline when editing */
+    }
+
+    button.unique-button {
+      margin-bottom: 20px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Embed Preview with Auto Beautifier and Highlight.js</h1>
+
+  <!-- Section containing the HTML, CSS, and JS elements -->
+  <section id="source-code" style="display: none;">
+    <div id="html-content">
+      <div>
+        <h2>Hello from dynamically updated Iframe!</h2>
+        <p>This content is dynamically set using JavaScript.</p>
+      </div>
+    </div>
+
+    <div id="css-content">
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        text-align: center;
+        padding: 20px;
+      }
+      h2 {
+        color: #2c3e50;
+      }
+      p {
+        font-size: 18px;
+      }
+    </div>
+
+    <div id="js-content">
+      console.log('JavaScript running inside dynamically updated iframe');
+    </div>
+  </section>
+
+  <!-- Code areas for user code -->
+  <div class="code-container">
+    <h3>HTML</h3>
+    <pre><code id="html-code" class="language-html"></code></pre>
+  </div>
+  
+  <div class="code-container">
+    <h3>CSS</h3>
+    <pre><code id="css-code" class="language-css"></code></pre>
+  </div>
+  
+  <div class="code-container">
+    <h3>JavaScript</h3>
+    <pre><code id="js-code" class="language-javascript"></code></pre>
+  </div>
+  
+  <!-- Responsive iframe container -->
+  <div class="unique-iframe-container">
+    <iframe class="unique-sandbox-iframe" id="sandbox-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+  
+  <!-- Include highlight.js and initiate highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+  <!-- Include Prettier.js for formatting the code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/standalone.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-postcss.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-babel.min.js"></script>
+
+  <script>
+    // Initialize highlight.js
+    hljs.highlightAll();
+
+    // Function to dynamically update the content of <code> elements
+    function setCodeContent() {
+      const htmlElement = document.getElementById('html-content').innerHTML.trim();
+      const cssElement = document.getElementById('css-content').innerHTML.trim();
+      const jsElement = document.getElementById('js-content').innerHTML.trim();
+
+      document.getElementById('html-code').textContent = htmlElement;
+      document.getElementById('css-code').textContent = cssElement;
+      document.getElementById('js-code').textContent = jsElement;
+      
+      // Reapply syntax highlighting after content update
+      document.querySelectorAll('code').forEach(function(codeBlock) {
+        hljs.highlightElement(codeBlock);
+      });
+    }
+
+    // Set initial content for the code blocks
+    setCodeContent();
+    updateIframe();
+    beautifyCode();
+
+    // Function to update the iframe with the current code content
+    function updateIframe() {
+      const html = document.getElementById('html-code').textContent;
+      const css = "<style>" + document.getElementById('css-code').textContent + "</style>";
+      const js = "<script>" + document.getElementById('js-code').textContent + "<\/script>";
+      
+      const iframeContent = html + css + js;
+      
+      const iframe = document.getElementById('sandbox-iframe').contentWindow.document;
+      iframe.open();
+      iframe.write(iframeContent);
+      iframe.close();
+    }
+
+    // Beautify code using Prettier.js
+    function beautifyCode() {
+      const html = document.getElementById('html-code').textContent;
+      const css = document.getElementById('css-code').textContent;
+      const js = document.getElementById('js-code').textContent;
+
+      const formattedHtml = prettier.format(html, { parser: "html", plugins: prettierPlugins });
+      const formattedCss = prettier.format(css, { parser: "css", plugins: prettierPlugins });
+      const formattedJs = prettier.format(js, { parser: "babel", plugins: prettierPlugins });
+
+      document.getElementById('html-code').textContent = formattedHtml;
+      document.getElementById('css-code').textContent = formattedCss;
+      document.getElementById('js-code').textContent = formattedJs;
+
+      // Reapply syntax highlighting after beautifying
+      document.querySelectorAll('code').forEach(function(codeBlock) {
+        hljs.highlightElement(codeBlock);
+      });
+    }
+
+    // Listen for content changes in editable code blocks and re-highlight
+    document.querySelectorAll('code[contenteditable="true"]').forEach(function(codeBlock) {
+      codeBlock.addEventListener('input', function() {
+        // Trigger re-highlighting after changes
+        hljs.highlightElement(codeBlock);
+      });
+    });
+  </script>
+</body>
+</html>
