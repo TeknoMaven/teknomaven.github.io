@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator with Logo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">QR Code Generator with Logo</h1>
+                
+                <div class="mb-3">
+                    <label for="qrText" class="form-label">Enter text for QR Code:</label>
+                    <input type="text" class="form-control" id="qrText" placeholder="Enter text">
+                </div>
+
+                <div class="mb-3">
+                    <label for="logoInput" class="form-label">Upload Logo:</label>
+                    <input type="file" class="form-control" id="logoInput">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="qrSize" class="form-label">QR Code Size (px):</label>
+                        <input type="number" class="form-control" id="qrSize" value="200">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="logoWidth" class="form-label">Logo Width (px):</label>
+                        <input type="number" class="form-control" id="logoWidth" value="50">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="logoHeight" class="form-label">Logo Height (px):</label>
+                        <input type="number" class="form-control" id="logoHeight" value="50">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button id="generate" class="btn btn-primary">Generate QR Code</button>
+                    <button id="download" class="btn btn-success">Download QR Code</button>
+                </div>
+                
+                <div id="qrcode" class="text-center mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
