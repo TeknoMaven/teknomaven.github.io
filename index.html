@@ -1,187 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teknomaven</title>
-  
-  <!-- Include highlight.js CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark-reasonable.min.css" integrity="sha512-RwXJS3k4Z0IK6TGoL3pgQlA9g2THFhKL7z9TYWdAI8u6xK0AUuMWieJuWgTRayywC9A94ifUj1RzjDa1NIlUIg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
-    .unique-iframe-container {
-      position: relative;
-      width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-    }
-
-    iframe.unique-sandbox-iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .code-container {
-      margin-bottom: 20px;
-    }
-
-    pre {
-      background: #f4f4f4;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      font-family: monospace;
-      white-space: pre-wrap; /* Allow wrapping for long lines */
-    }
-
-    code[contenteditable="true"] {
-      outline: none; /* Remove the default outline when editing */
-    }
-
-    button.unique-button {
-      margin-bottom: 20px;
-      padding: 10px 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search & Category Filter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <h1>Embed Preview with Auto Beautifier and Highlight.js</h1>
-
-  <!-- Section containing the HTML, CSS, and JS elements -->
-  <section id="source-code" style="display: none;">
-    <div id="html-content">
-      <div>
-        <h2>Hello from dynamically updated Iframe!</h2>
-        <p>This content is dynamically set using JavaScript.</p>
-      </div>
+<div class="container my-4">
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Search by article title...">
+        </div>
     </div>
 
-    <div id="css-content">
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        color: #333;
-        text-align: center;
-        padding: 20px;
-      }
-      h2 {
-        color: #2c3e50;
-      }
-      p {
-        font-size: 18px;
-      }
+    <!-- Category Buttons -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <button class="btn btn-primary filter-btn" data-filter="all">All</button>
+            <button class="btn btn-secondary filter-btn" data-filter="webdev">Web Dev</button>
+        </div>
     </div>
 
-    <div id="js-content">
-      console.log('JavaScript running inside dynamically updated iframe');
+    <!-- Post Grid -->
+    <div class="row" id="post-grid">
+        <!-- Card 1 -->
+        <div class="col-md-4 mb-4 post-card" data-category="webdev">
+          <div class="card">
+            <a
+              href="https://demo.teknomaven.com/hide-show-password-form"
+              target="_blank"
+            >
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4mLMDJEwx3Q-fqnSbwSLe4LuvBvffeaM7E-EnntIKLKy7Hs2j2r93aH0wXCbGn90xPfHlu2dGMCwx2oopSxj79XdQQ74qjsl81gVDd-cgJJG-2WcPo0TZeh7BHVGWbQWYCgZqB7JsNRFZjnx9EZlttlizZHXZlinAvy-B5LGXOw7onKCBbFsse1ql3tbV/w640-h360/Tutorial%20Lengkap:%20Membuat%20Tombol%20Tampilkan%20Sembunyikan%20Password%20dengan%20Bootstrap%205.3.png"
+                class="card-img-top"
+                alt="Technology Image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Understanding the Latest Technology Trends</h5>
+                <p class="card-text">Category: Technology</p>
+                <p class="card-text">
+                  This article explores the latest trends in technology, including AI,
+                  blockchain, and cloud computing.
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Add more cards as needed -->
     </div>
-  </section>
+</div>
 
-  <!-- Code areas for user code -->
-  <div class="code-container">
-    <h3>HTML</h3>
-    <pre><code id="html-code" class="language-html"></code></pre>
-  </div>
-  
-  <div class="code-container">
-    <h3>CSS</h3>
-    <pre><code id="css-code" class="language-css"></code></pre>
-  </div>
-  
-  <div class="code-container">
-    <h3>JavaScript</h3>
-    <pre><code id="js-code" class="language-javascript"></code></pre>
-  </div>
-  
-  <!-- Responsive iframe container -->
-  <div class="unique-iframe-container">
-    <iframe class="unique-sandbox-iframe" id="sandbox-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
-  </div>
-  
-  <!-- Include highlight.js and initiate highlighting -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var selectedCategory = 'all'; // Default category
 
-  <!-- Include Prettier.js for formatting the code -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/standalone.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-html.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-postcss.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.0/parser-babel.min.js"></script>
+        // Realtime Search Functionality
+        $('#search').on('keyup', function(){
+            filterPosts();
+        });
 
-  <script>
-    // Initialize highlight.js
-    hljs.highlightAll();
+        // Category Filter Functionality
+        $('.filter-btn').on('click', function(){
+            selectedCategory = $(this).attr('data-filter');
+            $('.filter-btn').removeClass('btn-primary').addClass('btn-secondary'); // Reset button styles
+            $(this).removeClass('btn-secondary').addClass('btn-primary'); // Highlight active button
+            filterPosts();
+        });
 
-    // Function to dynamically update the content of <code> elements
-    function setCodeContent() {
-      const htmlElement = document.getElementById('html-content').innerHTML.trim();
-      const cssElement = document.getElementById('css-content').innerHTML.trim();
-      const jsElement = document.getElementById('js-content').innerHTML.trim();
+        function filterPosts() {
+            var searchValue = $('#search').val().toLowerCase();
 
-      document.getElementById('html-code').textContent = htmlElement;
-      document.getElementById('css-code').textContent = cssElement;
-      document.getElementById('js-code').textContent = jsElement;
-      
-      // Reapply syntax highlighting after content update
-      document.querySelectorAll('code').forEach(function(codeBlock) {
-        hljs.highlightElement(codeBlock);
-      });
-    }
+            $('#post-grid .post-card').each(function(){
+                var titleText = $(this).find('.card-title').text().toLowerCase();
+                var category = $(this).attr('data-category');
 
-    // Set initial content for the code blocks
-    setCodeContent();
-    updateIframe();
-    beautifyCode();
-
-    // Function to update the iframe with the current code content
-    function updateIframe() {
-      const html = document.getElementById('html-code').textContent;
-      const css = "<style>" + document.getElementById('css-code').textContent + "</style>";
-      const js = "<script>" + document.getElementById('js-code').textContent + "<\/script>";
-      
-      const iframeContent = html + css + js;
-      
-      const iframe = document.getElementById('sandbox-iframe').contentWindow.document;
-      iframe.open();
-      iframe.write(iframeContent);
-      iframe.close();
-    }
-
-    // Beautify code using Prettier.js
-    function beautifyCode() {
-      const html = document.getElementById('html-code').textContent;
-      const css = document.getElementById('css-code').textContent;
-      const js = document.getElementById('js-code').textContent;
-
-      const formattedHtml = prettier.format(html, { parser: "html", plugins: prettierPlugins });
-      const formattedCss = prettier.format(css, { parser: "css", plugins: prettierPlugins });
-      const formattedJs = prettier.format(js, { parser: "babel", plugins: prettierPlugins });
-
-      document.getElementById('html-code').textContent = formattedHtml;
-      document.getElementById('css-code').textContent = formattedCss;
-      document.getElementById('js-code').textContent = formattedJs;
-
-      // Reapply syntax highlighting after beautifying
-      document.querySelectorAll('code').forEach(function(codeBlock) {
-        hljs.highlightElement(codeBlock);
-      });
-    }
-
-    // Listen for content changes in editable code blocks and re-highlight
-    document.querySelectorAll('code[contenteditable="true"]').forEach(function(codeBlock) {
-      codeBlock.addEventListener('input', function() {
-        // Trigger re-highlighting after changes
-        hljs.highlightElement(codeBlock);
-      });
+                // Check if post matches both search query and selected category
+                if ((selectedCategory === 'all' || category === selectedCategory) && titleText.indexOf(searchValue) > -1) {
+                    $(this).show(); // Show matching posts
+                } else {
+                    $(this).hide(); // Hide non-matching posts
+                }
+            });
+        }
     });
-  </script>
+</script>
+
 </body>
 </html>
