@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.hover-text span {
+    display: inline-block;
+    transition: font-size 0.3s ease-in-out;
+    font-size: 2em;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Menangani spasi */
+.hover-text .space {
+    width: 0.5em; /* Lebar spasi */
+    display: inline-block;
+}
