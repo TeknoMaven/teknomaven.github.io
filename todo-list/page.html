@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List with Bootstrap and jQuery</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+  <h1 class="text-center my-4">Todo List</h1>
+
+  <!-- Input to add new todo item -->
+  <div class="input-group mb-3">
+    <input type="text" id="new-todo" class="form-control" placeholder="Tambahkan item baru">
+    <button class="btn btn-primary" id="add-todo">Tambah</button>
+  </div>
+
+  <!-- Todo List -->
+  <ul class="list-group" id="todo-list">
+    <li class="todo-item list-group-item d-flex justify-content-between align-items-center">
+      <span>Learn Bootstrap</span>
+      <div>
+        <button class="btn btn-sm btn-success mark-complete">Selesai</button>
+        <button class="btn btn-sm btn-danger remove-item">Hapus</button>
+      </div>
+    </li>
+    <li class="todo-item list-group-item d-flex justify-content-between align-items-center">
+      <span>Practice jQuery</span>
+      <div>
+        <button class="btn btn-sm btn-success mark-complete">Selesai</button>
+        <button class="btn btn-sm btn-danger remove-item">Hapus</button>
+      </div>
+    </li>
+    <li class="todo-item list-group-item d-flex justify-content-between align-items-center">
+      <span>Build a Project</span>
+      <div>
+        <button class="btn btn-sm btn-success mark-complete">Selesai</button>
+        <button class="btn btn-sm btn-danger remove-item">Hapus</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+body {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    min-height: 100vh;
+    color: white;
+  }
+  .todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+  }
+  .todo-item.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  .todo-item button {
+    background-color: white;
+    color: #6a11cb;
+  }
