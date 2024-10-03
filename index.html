@@ -10,14 +10,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
       a {
-               text-decoration: none !important;
-               color: black !important;
-           }
-    
-           /* Tambahkan hover efek jika diinginkan */
-           a:hover {
-               color: #007bff; /* Mengubah warna saat di-hover (opsional) */
-           }
+          text-decoration: none !important;
+          color: black !important;
+      }
+      a:hover {
+          color: #007bff;
+      }
     </style>
 </head>
 <body>
@@ -34,98 +32,79 @@
         <div class="col-12">
             <button class="btn btn-primary filter-btn" data-filter="all">All</button>
             <button class="btn btn-secondary filter-btn" data-filter="ui">User Interface</button>
-            <button class="btn btn-secondary filter-btn" data-filter="ux">user Experience</button>
+            <button class="btn btn-secondary filter-btn" data-filter="ux">User Experience</button>
         </div>
     </div>
 
     <!-- Post Grid -->
-    <div class="row" id="post-grid">
-        <!-- Card 1 -->
-        <div class="col-md-4 mb-4 post-card" data-category="ui">
-          <div class="card">
-            <a
-              href="https://demo.teknomaven.com/hide-show-password-form"
-              target="_blank"
-            >
-              <img
-                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4mLMDJEwx3Q-fqnSbwSLe4LuvBvffeaM7E-EnntIKLKy7Hs2j2r93aH0wXCbGn90xPfHlu2dGMCwx2oopSxj79XdQQ74qjsl81gVDd-cgJJG-2WcPo0TZeh7BHVGWbQWYCgZqB7JsNRFZjnx9EZlttlizZHXZlinAvy-B5LGXOw7onKCBbFsse1ql3tbV/w640-h360/Tutorial%20Lengkap:%20Membuat%20Tombol%20Tampilkan%20Sembunyikan%20Password%20dengan%20Bootstrap%205.3.png"
-                class="card-img-top"
-                alt="Technology Image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Hide Show Password</h5>
-                <p class="card-text">Category: User Interface</p>
-                <p class="card-text">
-                  Technology : <br>
-                  1. HTML<br>
-                  2. css<br>
-                  3. JavaScript (Jquery)
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <!-- Card 1 -->
-        <div class="col-md-4 mb-4 post-card" data-category="ux">
-            <div class="card">
-              <a
-                href="https://demo.teknomaven.com/form-otp"
-                target="_blank"
-              >
-                <img
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi24sBmhO9oipDX6-jfUgGByTUruIQm9YnmhQ7YNNlUXCQw99P8lDD-zzqqQaxRvKiX7uM9QxfA3NmwlX1X2Avq3839jb5piCSe_gPxwsXQERjhPkE7D3TGpXVQnOvSDv7of2Wh-_WXsHw_F2tE76nFQ0zpUDgYnMWveTy3sRl1tzo2jia2orfIS1DZoD2O/w640-h360/thumb%20Cara%20Membuat%20Form%20OTP%206%20Kotak%20dengan%20Bootstrap%205%20dan%20jQuery.png"
-                  class="card-img-top"
-                  alt="Technology Image"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">OTP Form</h5>
-                  <p class="card-text">Category: user Experience</p>
-                  <p class="card-text">
-                    Technology : <br>
-                    1. HTML<br>
-                    2. css<br>
-                    3. JavaScript (Jquery)
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
-
-
-          <!-- Card 1 -->
-        <div class="col-md-4 mb-4 post-card" data-category="ux">
-          <div class="card">
-            <a
-              href="https://demo.teknomaven.com/email-autocomplete"
-              target="_blank"
-            >
-              <img
-                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcQk9Snvz8H-KLf6BxDWql8uHzcutubocQsjq2BEt1Izl29qKLTekzG6M7LrX4GrwTcfMzpLnbZ4UBTlECBv3Wc9nohRz8CaKI1rw5oyeC8bXf1qRuwL3PKek71WqhV7KcdqZKhwDd7W2yFmfHHzokgiYviwlFO9TKvwyI72ddxLVVMTYzpm_tKOYU73k7/s1280/Tutorial%20Membuat%20Autocomplete%20Email%20di%20Form%20dengan%20Bootstrap%20dan%20jQuery.png"
-                class="card-img-top"
-                alt="Technology Image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Email Autocomplete with Bootstrap 5</h5>
-                <p class="card-text">Category: user Experience</p>
-                <p class="card-text">
-                  Technology : <br>
-                  1. HTML<br>
-                  2. css<br>
-                  3. JavaScript (Jquery)
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <!-- Add more cards as needed -->
-    </div>
+    <div class="row" id="post-grid"></div>
 </div>
 
 <script>
     $(document).ready(function(){
         var selectedCategory = 'all'; // Default category
+
+        // JSON data for the cards
+        var posts = [
+            {
+                "url": "https://demo.teknomaven.com/hide-show-password-form/page.html",
+                "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4mLMDJEwx3Q-fqnSbwSLe4LuvBvffeaM7E-EnntIKLKy7Hs2j2r93aH0wXCbGn90xPfHlu2dGMCwx2oopSxj79XdQQ74qjsl81gVDd-cgJJG-2WcPo0TZeh7BHVGWbQWYCgZqB7JsNRFZjnx9EZlttlizZHXZlinAvy-B5LGXOw7onKCBbFsse1ql3tbV/w640-h360/Tutorial%20Lengkap:%20Membuat%20Tombol%20Tampilkan%20Sembunyikan%20Password%20dengan%20Bootstrap%205.3.png",
+                "title": "Hide Show Password",
+                "category": "ui",
+                "description": "Technology : HTML, CSS, JavaScript (JQuery)"
+            },
+            {
+                "url": "https://demo.teknomaven.com/form-otp",
+                "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi24sBmhO9oipDX6-jfUgGByTUruIQm9YnmhQ7YNNlUXCQw99P8lDD-zzqqQaxRvKiX7uM9QxfA3NmwlX1X2Avq3839jb5piCSe_gPxwsXQERjhPkE7D3TGpXVQnOvSDv7of2Wh-_WXsHw_F2tE76nFQ0zpUDgYnMWveTy3sRl1tzo2jia2orfIS1DZoD2O/w640-h360/thumb%20Cara%20Membuat%20Form%20OTP%206%20Kotak%20dengan%20Bootstrap%205%20dan%20jQuery.png",
+                "title": "OTP Form",
+                "category": "ux",
+                "description": "Technology : HTML, CSS, JavaScript (JQuery)"
+            },
+            {
+                "url": "https://demo.teknomaven.com/email-autocomplete/page.html",
+                "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcQk9Snvz8H-KLf6BxDWql8uHzcutubocQsjq2BEt1Izl29qKLTekzG6M7LrX4GrwTcfMzpLnbZ4UBTlECBv3Wc9nohRz8CaKI1rw5oyeC8bXf1qRuwL3PKek71WqhV7KcdqZKhwDd7W2yFmfHHzokgiYviwlFO9TKvwyI72ddxLVVMTYzpm_tKOYU73k7/s1280/Tutorial%20Membuat%20Autocomplete%20Email%20di%20Form%20dengan%20Bootstrap%20dan%20jQuery.png",
+                "title": "Email Autocomplete with Bootstrap 5",
+                "category": "ux",
+                "description": "Technology : HTML, CSS, JavaScript (JQuery)"
+            },
+            {
+                "url": "https://demo.teknomaven.com/format-no-hp/page.html",
+                "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjVVtF43NvmVh7vpKeFHwDEeHF7x0ELkTWc0mwE1hounTCKorltGwp2Au05Se3MfRr_4BX95319SlXNtC9nFF-6mOgeQKDrSHnUx8UFTGV-k7CkRS0zyTx5E1OI9KCgaywx8OQIHMBE2NMFrnX9w2I-K9gC81Bs7O2kLOgY5FMGXB0tYCqicOqXWWsQiPyV/s1280/Cara%20Mudah%20Membuat%20Input%20Nomor%20Handphone%20yang%20Auto-Format%20di%20Website%20dengan%20JavaScript.png",
+                "title": "Cara Mudah Membuat Input Nomor Handphone yang Auto-Format di Website dengan JavaScript",
+                "category": "ux",
+                "description": "Technology : HTML, CSS, JavaScript (JQuery)"
+            }
+        ];
+
+        // Generate cards from JSON
+        function generatePosts() {
+            $('#post-grid').empty(); // Clear current cards
+            $.each(posts, function(index, post) {
+                var card = `
+                    <div class="col-md-4 mb-4 post-card" data-category="${post.category}">
+                        <div class="card">
+                            <a href="${post.url}" target="_blank">
+                                <img src="${post.image}" class="card-img-top" alt="Technology Image" />
+                                <div class="card-body">
+                                    <h5 class="card-title">${post.title}</h5>
+                                    <p class="card-text">Category: ${capitalizeFirstLetter(post.category)}</p>
+                                    <p class="card-text">${post.description}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                $('#post-grid').append(card);
+            });
+        }
+
+        // Capitalize first letter of category
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Initial card generation
+        generatePosts();
 
         // Realtime Search Functionality
         $('#search').on('keyup', function(){
