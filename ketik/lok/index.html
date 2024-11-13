@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Artikel Lowongan Kerja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="sticky-sidebar">
+            <h2>Status Pengisian Form</h2>
+            <div class="sidebar-content">
+                
+                <div id="previewContainer">
+                    <!-- Preview content will be inserted here by JavaScript -->
+                    
+                </div>
+                
+            </div>
+            <div class="button-group">
+                <button type="button" class="generate-btn" onclick="generateHtml()">Generate HTML</button>
+            </div>
+        </div>
+    
+        <div class="main-content">
+            <h1>Generator Artikel Lowongan Kerja</h1>
+    
+            <div class="form-section">
+                <h2>Informasi Perusahaan</h2>
+                
+                <div class="form-group">
+                    <label for="companyName">Nama Perusahaan <span class="required">*</span></label>
+                    <input type="text" id="companyName" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="companyDescription">Deskripsi Perusahaan <span class="required">*</span></label>
+                    <textarea id="companyDescription" required></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="companyCategory">Kategori Perusahaan</label>
+                    <select id="companyCategory">
+                        <option value="">Pilih Kategori</option>
+                        <option value="Teknologi">Teknologi</option>
+                        <option value="Manufaktur">Manufaktur</option>
+                        <option value="Jasa">Jasa</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Keuangan">Keuangan</option>
+                        <option value="Pendidikan">Pendidikan</option>
+                        <option value="Kesehatan">Kesehatan</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="text" id="website">
+                </div>
+    
+                <div class="form-group">
+                    <label for="companyType">Jenis Perusahaan</label>
+                    <select id="companyType">
+                        <option value="">Pilih Jenis</option>
+                        <option value="Swasta">Swasta</option>
+                        <option value="BUMN">BUMN</option>
+                        <option value="Startup">Startup</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="companyScale">Skala Perusahaan</label>
+                    <select id="companyScale">
+                        <option value="">Pilih Skala</option>
+                        <option value="< 50 Karyawan">< 50 Karyawan</option>
+                        <option value="50 - 200 Karyawan">50 - 200 Karyawan</option>
+                        <option value="200 - 500 Karyawan">200 - 500 Karyawan</option>
+                        <option value="> 500 Karyawan">> 500 Karyawan</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                <h2>Informasi Spesifik Lowongan</h2>
+    
+                <div class="form-group">
+                    <label for="suggestedMajor">Jurusan yang Disarankan</label>
+                    <select id="suggestedMajor">
+                        <option value="">Pilih Jurusan</option>
+                        <option value="Semua Jurusan">Semua Jurusan</option>
+                        <option value="Teknik Informatika">Teknik Informatika</option>
+                        <option value="Sistem Informasi">Sistem Informasi</option>
+                        <option value="Teknik Komputer">Teknik Komputer</option>
+                        <option value="Multimedia">Multimedia</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="jobLevel">Level Pekerjaan</label>
+                    <select id="jobLevel">
+                        <option value="">Pilih Level</option>
+                        <option value="Mahasiswa">Mahasiswa</option>
+                        <option value="Fresh Graduate">Fresh Graduate</option>
+                        <option value="Entry Level">Entry Level</option>
+                        <option value="Berpengalaman">Berpengalaman</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Manager">Manager</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="gender">Jenis Kelamin</label>
+                    <select id="gender">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Semua Jenis Kelamin">Semua Jenis Kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                <h2>Informasi Lowongan</h2>
+    
+                <div class="form-group">
+                    <label for="position">Posisi <span class="required">*</span></label>
+                    <input type="text" id="position" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="jobDescription">Deskripsi Pekerjaan <span class="required">*</span></label>
+                    <textarea id="jobDescription" required></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="location">Lokasi Penempatan <span class="required">*</span></label>
+                    <input type="text" id="location" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="deadline">Batas Pendaftaran <span class="required">*</span></label>
+                    <input type="date" id="deadline" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="workDays">Hari Kerja</label>
+                    <select id="workDays">
+                        <option value="">Pilih Hari Kerja</option>
+                        <option value="Senin - Jumat">Senin - Jumat</option>
+                        <option value="Senin - Sabtu">Senin - Sabtu</option>
+                        <option value="Shift">Shift</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="dressCode">Gaya Berpakaian</label>
+                    <select id="dressCode">
+                        <option value="">Pilih Gaya Berpakaian</option>
+                        <option value="Formal">Formal</option>
+                        <option value="Smart Casual">Smart Casual</option>
+                        <option value="Casual">Casual</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                <h2>Persyaratan</h2>
+                <div class="list-container">
+                    <div id="requirementsList" class="requirements-list">
+                        <!-- Requirements will be added here -->
+                    </div>
+                    <button type="button" class="add-btn" onclick="addRequirement()">+ Tambah Persyaratan</button>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                <h2>Berkas Yang Dilampirkan</h2>
+                <div class="list-container">
+                    <div id="documentsList" class="documents-list">
+                        <!-- Documents will be added here -->
+                    </div>
+                    <button type="button" class="add-btn" onclick="addDocument()">+ Tambah Berkas</button>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                <h2>Platform Pendaftaran</h2>
+    
+                <div class="platform-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="platformOnline">
+                        <label for="platformOnline">Pendaftaran Online</label>
+                    </div>
+    
+                    <div id="onlineDetails" class="platform-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="onlineLink">Link Pendaftaran</label>
+                            <input type="text" id="onlineLink">
+                        </div>
+                        <div class="form-group">
+                            <label for="onlineDescription">Deskripsi/Petunjuk</label>
+                            <textarea id="onlineDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="platform-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="platformEmail">
+                        <label for="platformEmail">Pendaftaran Via Email</label>
+                    </div>
+    
+                    <div id="emailDetails" class="platform-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="emailAddress">Alamat Email</label>
+                            <input type="email" id="emailAddress">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailDescription">Deskripsi/Petunjuk</label>
+                            <textarea id="emailDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="platform-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="platformPost">
+                        <label for="platformPost">Pendaftaran Via Pos</label>
+                    </div>
+    
+                    <div id="postDetails" class="platform-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="postAddress">Alamat Pengiriman</label>
+                            <textarea id="postAddress"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="postDescription">Deskripsi/Petunjuk</label>
+                            <textarea id="postDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="platform-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="platformWalkin">
+                        <label for="platformWalkin">Pendaftaran Langsung (Walk-in)</label>
+                    </div>
+    
+                    <div id="walkinDetails" class="platform-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="walkinAddress">Alamat</label>
+                            <textarea id="walkinAddress"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="walkinSchedule">Jadwal</label>
+                            <input type="text" id="walkinSchedule">
+                        </div>
+                        <div class="form-group">
+                            <label for="walkinDescription">Deskripsi/Petunjuk</label>
+                            <textarea id="walkinDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-section">
+                
+    
+                <pre id="generatedHtml" style="display: none;"></pre>
+    
+                <button type="button" class="copy-btn" onclick="copyHtml()" style="display: none;">Salin HTML</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
