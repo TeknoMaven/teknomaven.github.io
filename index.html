@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFuture - Membangun Masa Depan Digital</title>
+    <title>TeknoMaven - Membangun Masa Depan Digital</title>
     <style>
         * {
             margin: 0;
@@ -291,41 +291,6 @@
             color: #1e293b;
         }
 
-        /* Team Section */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .team-card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(226, 232, 240, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .team-avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #64748b;
-        }
-
         /* Portfolio Section */
         .portfolio-grid {
             display: grid;
@@ -436,6 +401,41 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #64748b;
         }
 
         /* Contact Form Section */
@@ -614,7 +614,7 @@
     <!-- Header -->
     <header>
         <nav>
-            <div class="logo">TechFuture</div>
+            <div class="logo">TeknoMaven</div>
             <ul class="nav-links">
                 <li><a href="#home">Beranda</a></li>
                 <li><a href="#about">Tentang</a></li>
@@ -622,6 +622,7 @@
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#team">Tim</a></li>
                 <li><a href="#contact">Kontak</a></li>
+                <li><a href="https://blog.teknomaven.com">Blog</a></li>
             </ul>
         </nav>
     </header>
@@ -642,7 +643,7 @@
         <h2>Tentang Kami</h2>
         <div class="about-grid">
             <div class="about-text">
-                <p>TechFuture adalah pelopor dalam industri teknologi dan pemrograman yang berkomitmen untuk menciptakan solusi digital masa depan. Dengan tim ahli yang berpengalaman, kami menghadirkan inovasi terdepan dalam pengembangan software, aplikasi mobile, dan sistem terintegrasi.</p>
+                <p>TeknoMaven adalah pelopor dalam industri teknologi dan pemrograman yang berkomitmen untuk menciptakan solusi digital masa depan. Dengan tim ahli yang berpengalaman, kami menghadirkan inovasi terdepan dalam pengembangan software dan sistem terintegrasi.</p>
                 <p>Visi kami adalah menjadi mitra teknologi terpercaya yang membantu bisnis berkembang di era digital dengan solusi yang efisien, scalable, dan future-ready.</p>
             </div>
             <div class="about-image">
@@ -661,19 +662,9 @@
                 <p>Aplikasi web modern dengan teknologi terdepan untuk performa optimal dan pengalaman pengguna yang luar biasa.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">📱</div>
-                <h3>Aplikasi Mobile</h3>
-                <p>Solusi mobile native dan cross-platform yang responsif, cepat, dan user-friendly untuk semua platform.</p>
-            </div>
-            <div class="service-card">
                 <div class="service-icon">🤖</div>
                 <h3>AI & Machine Learning</h3>
                 <p>Implementasi kecerdasan buatan dan pembelajaran mesin untuk mengotomatisasi dan mengoptimalkan proses bisnis.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">☁️</div>
-                <h3>Cloud Solutions</h3>
-                <p>Migrasi dan optimalisasi infrastruktur cloud untuk skalabilitas, keamanan, dan efisiensi maksimal.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">🔒</div>
@@ -688,18 +679,6 @@
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section id="team" class="section">
-        <h2>Tim Ahli Kami</h2>
-        <div class="team-grid">
-            <!-- Loading placeholder -->
-            <div class="loading-placeholder">
-                <div class="loading-spinner"></div>
-                <p>Memuat data tim...</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Portfolio Section -->
     <section id="portfolio" class="section">
         <h2>Portfolio Kami</h2>
@@ -708,6 +687,18 @@
             <div class="loading-placeholder">
                 <div class="loading-spinner"></div>
                 <p>Memuat portfolio...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="section">
+        <h2>Tim Ahli Kami</h2>
+        <div class="team-grid">
+            <!-- Loading placeholder -->
+            <div class="loading-placeholder">
+                <div class="loading-spinner"></div>
+                <p>Memuat data tim...</p>
             </div>
         </div>
     </section>
@@ -750,7 +741,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 TechFuture. Semua hak cipta dilindungi. Membangun masa depan bersama teknologi.</p>
+        <p>&copy; 2024 TeknoMaven. Semua hak cipta dilindungi. Membangun masa depan bersama teknologi.</p>
     </footer>
 
     <script>
@@ -776,16 +767,25 @@
         // Load Portfolio Data from API
         async function loadPortfolioData() {
             try {
+                console.log('Loading portfolio data from API...');
                 const response = await fetch(`${API_URL}?action=getPortfolio`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const data = await response.json();
+                console.log('Portfolio data loaded:', data);
                 
                 if (data.portfolio && data.portfolio.length > 0) {
                     renderPortfolio(data.portfolio);
+                } else {
+                    throw new Error('No portfolio data received');
                 }
+                
             } catch (error) {
                 console.error('Error loading portfolio:', error);
-                // Fallback ke data static jika API gagal
-                showPortfolioError();
+                showPortfolioError(error.message);
             }
         }
 
@@ -833,15 +833,25 @@
         // Load Team Data from API
         async function loadTeamData() {
             try {
+                console.log('Loading team data from API...');
                 const response = await fetch(`${API_URL}?action=getTeam`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const data = await response.json();
+                console.log('Team data loaded:', data);
                 
                 if (data.team && data.team.length > 0) {
                     renderTeam(data.team);
+                } else {
+                    throw new Error('No team data received');
                 }
+                
             } catch (error) {
                 console.error('Error loading team:', error);
-                showTeamError();
+                showTeamError(error.message);
             }
         }
 
@@ -874,78 +884,42 @@
         }
 
         // Show error when portfolio loading fails
-        function showPortfolioError() {
+        function showPortfolioError(errorMessage = '') {
             const portfolioGrid = document.querySelector('.portfolio-grid');
             if (portfolioGrid) {
                 portfolioGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b;">
-                        <p>⚠️ Gagal memuat data portfolio. Silakan refresh halaman.</p>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 10px; background: rgba(248, 250, 252, 0.5);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                        <h3 style="margin-bottom: 1rem; color: #ef4444;">Gagal Memuat Portfolio</h3>
+                        <p style="margin-bottom: 1rem;">Tidak dapat mengambil data portfolio dari server.</p>
+                        ${errorMessage ? `<p style="font-size: 0.9rem; color: #64748b;">Error: ${errorMessage}</p>` : ''}
+                        <button onclick="loadPortfolioData()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Coba Lagi
+                        </button>
                     </div>
                 `;
             }
         }
 
         // Show error when team loading fails  
-        function showTeamError() {
+        function showTeamError(errorMessage = '') {
             const teamGrid = document.querySelector('.team-grid');
             if (teamGrid) {
                 teamGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b;">
-                        <p>⚠️ Gagal memuat data tim. Silakan refresh halaman.</p>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 10px; background: rgba(248, 250, 252, 0.5);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                        <h3 style="margin-bottom: 1rem; color: #ef4444;">Gagal Memuat Data Tim</h3>
+                        <p style="margin-bottom: 1rem;">Tidak dapat mengambil data tim dari server.</p>
+                        ${errorMessage ? `<p style="font-size: 0.9rem; color: #64748b;">Error: ${errorMessage}</p>` : ''}
+                        <button onclick="loadTeamData()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Coba Lagi
+                        </button>
                     </div>
                 `;
             }
         }
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        });
-
-        // Initialize particles when page loads
-        window.addEventListener('load', createParticles);
-
-        // Add intersection observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all sections
-        document.querySelectorAll('.section').forEach(section => {
-            observer.observe(section);
-        });
-
-        // Contact form handling
+        // CORS-FRIENDLY Contact form handling via GET request
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -957,28 +931,32 @@
             submitBtn.innerHTML = '<span>Mengirim...</span><div class="btn-icon">⏳</div>';
             submitBtn.disabled = true;
             
-            // Prepare form data
+            // Prepare data for GET request
             const contactData = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                subject: formData.get('subject'),
-                message: formData.get('message')
+                name: encodeURIComponent(formData.get('name')),
+                email: encodeURIComponent(formData.get('email')),
+                subject: encodeURIComponent(formData.get('subject')),
+                message: encodeURIComponent(formData.get('message'))
             };
             
+            // Create query string
+            const queryString = new URLSearchParams({
+                action: 'submitContact',
+                ...contactData
+            }).toString();
+            
             try {
-                const response = await fetch(`${API_URL}?action=submitContact`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(contactData)
+                // Use GET request to avoid CORS preflight
+                const response = await fetch(`${API_URL}?${queryString}`, {
+                    method: 'GET',
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
                 const result = await response.json();
+                console.log('Contact form response:', result);
                 
                 if (result.success) {
                     // Success
@@ -1078,6 +1056,92 @@
             }, 5000);
         }
 
+        // Debug API connection
+        async function testAPIConnection() {
+            console.log('🔍 Testing API connection...');
+            console.log('API URL:', API_URL);
+            
+            try {
+                // Test basic connection
+                const response = await fetch(API_URL);
+                console.log('✅ API Response:', response.status, response.statusText);
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    console.log('📄 API Response body:', text);
+                } else {
+                    console.error('❌ API returned error status');
+                }
+                
+            } catch (error) {
+                console.error('❌ API Connection failed:', error);
+                
+                if (error.message.includes('Failed to fetch')) {
+                    console.log('💡 Possible causes:');
+                    console.log('   • API URL is incorrect');
+                    console.log('   • Web App is not deployed');
+                    console.log('   • Web App access is not set to "Anyone"');
+                }
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Add intersection observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Add smooth scroll to portfolio cards
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+        portfolioCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
         // Initialize app when page loads
         window.addEventListener('load', async function() {
             console.log('🚀 Initializing TechFuture Website...');
@@ -1147,18 +1211,6 @@
                 document.body.appendChild(debugPanel);
             }, 1000);
         }
-
-        // Add smooth scroll to portfolio cards
-        const portfolioCards = document.querySelectorAll('.portfolio-card');
-        portfolioCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
     </script>
 </body>
 </html>
