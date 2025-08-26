@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFuture - Membangun Masa Depan Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #64748b;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-icon {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #64748b;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .portfolio-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-placeholder {
+            height: 100%;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-icon {
+            font-size: 4rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(6, 182, 212, 0.9));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-card:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-card:hover .portfolio-icon {
+            transform: scale(0.8);
+            opacity: 0.3;
+        }
+
+        .portfolio-overlay h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .portfolio-content {
+            padding: 2rem;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .portfolio-content p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-tags span {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Contact Form Section */
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 3rem;
+            border-radius: 25px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            margin-top: 3rem;
+            backdrop-filter: blur(10px);
+            text-align: left;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Loading Placeholder */
+        .loading-placeholder {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TechFuture</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#services">Layanan</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#team">Tim</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="hero-content">
+            <h1>Membangun Masa Depan Digital</h1>
+            <p>Kami adalah perusahaan teknologi terdepan yang menghadirkan solusi inovatif untuk mengubah visi Anda menjadi realitas digital yang menakjubkan.</p>
+            <a href="#contact" class="cta-button">Mulai Proyek Anda</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section fade-in">
+        <h2>Tentang Kami</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>TechFuture adalah pelopor dalam industri teknologi dan pemrograman yang berkomitmen untuk menciptakan solusi digital masa depan. Dengan tim ahli yang berpengalaman, kami menghadirkan inovasi terdepan dalam pengembangan software, aplikasi mobile, dan sistem terintegrasi.</p>
+                <p>Visi kami adalah menjadi mitra teknologi terpercaya yang membantu bisnis berkembang di era digital dengan solusi yang efisien, scalable, dan future-ready.</p>
+            </div>
+            <div class="about-image">
+                <div class="tech-icon">⚡</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section">
+        <h2>Layanan Kami</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Pengembangan Web</h3>
+                <p>Aplikasi web modern dengan teknologi terdepan untuk performa optimal dan pengalaman pengguna yang luar biasa.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Aplikasi Mobile</h3>
+                <p>Solusi mobile native dan cross-platform yang responsif, cepat, dan user-friendly untuk semua platform.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🤖</div>
+                <h3>AI & Machine Learning</h3>
+                <p>Implementasi kecerdasan buatan dan pembelajaran mesin untuk mengotomatisasi dan mengoptimalkan proses bisnis.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">☁️</div>
+                <h3>Cloud Solutions</h3>
+                <p>Migrasi dan optimalisasi infrastruktur cloud untuk skalabilitas, keamanan, dan efisiensi maksimal.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔒</div>
+                <h3>Cybersecurity</h3>
+                <p>Perlindungan sistem dan data dengan solusi keamanan cyber terdepan untuk melindungi aset digital Anda.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>Data Analytics</h3>
+                <p>Analisis data mendalam dengan visualisasi interaktif untuk mendukung pengambilan keputusan strategis.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="section">
+        <h2>Tim Ahli Kami</h2>
+        <div class="team-grid">
+            <!-- Loading placeholder -->
+            <div class="loading-placeholder">
+                <div class="loading-spinner"></div>
+                <p>Memuat data tim...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="section">
+        <h2>Portfolio Kami</h2>
+        <div class="portfolio-grid">
+            <!-- Loading placeholder -->
+            <div class="loading-placeholder">
+                <div class="loading-spinner"></div>
+                <p>Memuat portfolio...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="section">
+        <h2>Hubungi Kami</h2>
+        <div class="contact-content">
+            <p>Siap untuk memulai proyek teknologi Anda? Ceritakan ide Anda kepada kami dan mari wujudkan bersama!</p>
+            
+            <form class="contact-form" id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Pesan</label>
+                    <textarea id="message" name="message" rows="6" required placeholder="Ceritakan tentang proyek yang ingin Anda kembangkan..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <span>Kirim Pesan</span>
+                    <div class="btn-icon">📧</div>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 TechFuture. Semua hak cipta dilindungi. Membangun masa depan bersama teknologi.</p>
+    </footer>
+
+    <script>
+        // API Configuration - Ganti dengan URL Web App Anda
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwzosFTQ_VDq90H58osFFocg_wmYE4E-mJfbOtnYfV7a8UNd2dbRg0ugni8_3rmHESGYA/exec';
+        
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Load Portfolio Data from API
+        async function loadPortfolioData() {
+            try {
+                const response = await fetch(`${API_URL}?action=getPortfolio`);
+                const data = await response.json();
+                
+                if (data.portfolio && data.portfolio.length > 0) {
+                    renderPortfolio(data.portfolio);
+                }
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+                // Fallback ke data static jika API gagal
+                showPortfolioError();
+            }
+        }
+
+        // Render Portfolio Data
+        function renderPortfolio(portfolioData) {
+            const portfolioGrid = document.querySelector('.portfolio-grid');
+            if (!portfolioGrid) return;
+            
+            portfolioGrid.innerHTML = ''; // Clear existing content
+            
+            portfolioData.forEach(item => {
+                const tags = item.Tags ? item.Tags.split(',') : [];
+                const portfolioCard = createPortfolioCard(item, tags);
+                portfolioGrid.appendChild(portfolioCard);
+            });
+        }
+
+        // Create Portfolio Card Element
+        function createPortfolioCard(item, tags) {
+            const card = document.createElement('div');
+            card.className = 'portfolio-card';
+            
+            card.innerHTML = `
+                <div class="portfolio-image">
+                    <div class="portfolio-placeholder">
+                        <div class="portfolio-icon">${item.Icon || '💻'}</div>
+                        <div class="portfolio-overlay">
+                            <h4>${item.Title}</h4>
+                            <p>${item['Tech Stack'] || ''}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-content">
+                    <h3>${item.Title}</h3>
+                    <p>${item.Description}</p>
+                    <div class="portfolio-tags">
+                        ${tags.map(tag => `<span>${tag.trim()}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Load Team Data from API
+        async function loadTeamData() {
+            try {
+                const response = await fetch(`${API_URL}?action=getTeam`);
+                const data = await response.json();
+                
+                if (data.team && data.team.length > 0) {
+                    renderTeam(data.team);
+                }
+            } catch (error) {
+                console.error('Error loading team:', error);
+                showTeamError();
+            }
+        }
+
+        // Render Team Data
+        function renderTeam(teamData) {
+            const teamGrid = document.querySelector('.team-grid');
+            if (!teamGrid) return;
+            
+            teamGrid.innerHTML = ''; // Clear existing content
+            
+            teamData.forEach(member => {
+                const teamCard = createTeamCard(member);
+                teamGrid.appendChild(teamCard);
+            });
+        }
+
+        // Create Team Card Element
+        function createTeamCard(member) {
+            const card = document.createElement('div');
+            card.className = 'team-card';
+            
+            card.innerHTML = `
+                <div class="team-avatar">${member.Avatar || '👤'}</div>
+                <h3>${member.Name}</h3>
+                <p style="font-weight: 600; color: #3b82f6; margin-bottom: 0.5rem;">${member.Position}</p>
+                <p style="color: #64748b;">${member.Description}</p>
+            `;
+            
+            return card;
+        }
+
+        // Show error when portfolio loading fails
+        function showPortfolioError() {
+            const portfolioGrid = document.querySelector('.portfolio-grid');
+            if (portfolioGrid) {
+                portfolioGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b;">
+                        <p>⚠️ Gagal memuat data portfolio. Silakan refresh halaman.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Show error when team loading fails  
+        function showTeamError() {
+            const teamGrid = document.querySelector('.team-grid');
+            if (teamGrid) {
+                teamGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b;">
+                        <p>⚠️ Gagal memuat data tim. Silakan refresh halaman.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Initialize particles when page loads
+        window.addEventListener('load', createParticles);
+
+        // Add intersection observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span>Mengirim...</span><div class="btn-icon">⏳</div>';
+            submitBtn.disabled = true;
+            
+            // Prepare form data
+            const contactData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                subject: formData.get('subject'),
+                message: formData.get('message')
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}?action=submitContact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(contactData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Success
+                    submitBtn.innerHTML = '<span>Berhasil Terkirim!</span><div class="btn-icon">✅</div>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                    
+                    // Show success message
+                    showNotification('Pesan Anda telah berhasil dikirim! Kami akan segera menghubungi Anda.', 'success');
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+                        submitBtn.disabled = false;
+                    }, 3000);
+                    
+                } else {
+                    throw new Error(result.error || 'Gagal mengirim pesan');
+                }
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                
+                // Show error state
+                submitBtn.innerHTML = '<span>Gagal Mengirim</span><div class="btn-icon">❌</div>';
+                submitBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                
+                const errorMessage = error.message.includes('Failed to fetch') 
+                    ? 'Koneksi bermasalah. Periksa koneksi internet Anda atau coba lagi nanti.'
+                    : `Gagal mengirim pesan: ${error.message}`;
+                    
+                showNotification(errorMessage, 'error');
+                
+                // Reset button after 5 seconds
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+                    submitBtn.disabled = false;
+                }, 5000);
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            
+            // Set background color based on type
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Initialize app when page loads
+        window.addEventListener('load', async function() {
+            console.log('🚀 Initializing TechFuture Website...');
+            
+            createParticles();
+            
+            // Check if API URL is configured
+            if (API_URL.includes('YOUR_SCRIPT_ID')) {
+                console.error('❌ API URL not configured! Please update API_URL in the script.');
+                showNotification('Website belum dikonfigurasi dengan API. Hubungi administrator.', 'error');
+                return;
+            }
+            
+            console.log('🔗 Using API URL:', API_URL);
+            
+            // Test API connection first (optional, for debugging)
+            if (window.location.search.includes('debug=true')) {
+                await testAPIConnection();
+            }
+            
+            // Load data from API with loading indicators
+            console.log('📊 Loading data from API...');
+            
+            await Promise.allSettled([
+                loadPortfolioData(),
+                loadTeamData()
+            ]);
+            
+            console.log('✅ App initialization completed');
+        });
+
+        // Global error handler for unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            event.preventDefault(); // Prevent default browser error handling
+        });
+
+        // Add debug query parameter support
+        // Usage: website.html?debug=true untuk enable debug mode
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('debug') === 'true') {
+            console.log('🐛 Debug mode enabled');
+            
+            // Add debug panel to page
+            setTimeout(() => {
+                const debugPanel = document.createElement('div');
+                debugPanel.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    font-family: monospace;
+                    font-size: 12px;
+                    z-index: 10000;
+                    max-width: 300px;
+                `;
+                debugPanel.innerHTML = `
+                    <div><strong>🐛 Debug Panel</strong></div>
+                    <div>API URL: ${API_URL.substring(0, 50)}...</div>
+                    <button onclick="testAPIConnection()" style="margin-top: 5px; padding: 3px 6px;">Test API</button>
+                    <button onclick="loadPortfolioData()" style="margin-top: 5px; padding: 3px 6px;">Reload Portfolio</button>
+                    <button onclick="loadTeamData()" style="margin-top: 5px; padding: 3px 6px;">Reload Team</button>
+                `;
+                document.body.appendChild(debugPanel);
+            }, 1000);
+        }
+
+        // Add smooth scroll to portfolio cards
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+        portfolioCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
