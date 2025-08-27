@@ -404,6 +404,41 @@
             font-weight: 500;
         }
 
+        .portfolio-actions {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .detail-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .detail-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .detail-button .button-icon {
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-button:hover .button-icon {
+            transform: translateX(2px);
+        }
+
         /* Load More Button */
         .load-more-container {
             text-align: center;
@@ -1035,6 +1070,10 @@
             const card = document.createElement('div');
             card.className = 'portfolio-card';
             
+            // Create URL-safe project name
+            const projectSlug = encodeURIComponent(item.Title.replace(/\s+/g, '+'));
+            const detailButtonText = siteContent.portfolio_detail_button || 'Lihat Detail';
+            
             card.innerHTML = `
                 <div class="portfolio-image">
                     <div class="portfolio-placeholder">
@@ -1050,6 +1089,12 @@
                     <p>${item.Description}</p>
                     <div class="portfolio-tags">
                         ${tags.map(tag => `<span>${tag.trim()}</span>`).join('')}
+                    </div>
+                    <div class="portfolio-actions">
+                        <a href="portofolio/?proyek=${projectSlug}" class="detail-button">
+                            ${detailButtonText}
+                            <span class="button-icon">→</span>
+                        </a>
                     </div>
                 </div>
             `;

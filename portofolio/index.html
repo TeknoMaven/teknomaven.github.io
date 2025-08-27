@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="detail-title">Portfolio Detail - TeknoMaven</title>
+    <link rel="icon" id="favicon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Project Header */
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main Image */
+        .main-image-section {
+            margin-bottom: 3rem;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-content {
+            font-size: 1.1rem;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Features List */
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .feature-icon {
+            color: #3b82f6;
+            font-size: 1.2rem;
+            margin-top: 0.1rem;
+        }
+
+        /* Challenges & Solutions */
+        .challenge-solution {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fef7f7, #fef2f2);
+            border-radius: 12px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .challenge-solution:last-child {
+            margin-bottom: 0;
+        }
+
+        .challenge {
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution {
+            color: #059669;
+            font-weight: 500;
+        }
+
+        /* Results */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-item {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            color: #65a30d;
+            font-size: 0.9rem;
+        }
+
+        /* Screenshots Gallery */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .screenshot-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .screenshot-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Contact Form Section */
+        .demo-contact-section {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 25px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .demo-contact-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-contact-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:disabled {
+            background: #f8fafc;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Loading States */
+        .loading-container {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(248, 113, 113, 0.1);
+            border-radius: 20px;
+            border: 1px dashed #ef4444;
+            color: #dc2626;
+        }
+
+        .error-container h2 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .retry-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 2rem 1rem;
+                margin-top: 70px;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .demo-contact-section {
+                padding: 2rem 1rem;
+            }
+
+            nav {
+                padding: 1rem 2%;
+            }
+
+            .back-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo" id="company-name">TeknoMaven</div>
+            <a href="../index.html" class="back-button" id="back-button">
+                ← <span id="back-button-text">Kembali ke Portfolio</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Loading State -->
+        <div class="loading-container" id="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Memuat detail proyek...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-container" id="error-container" style="display: none;">
+            <h2>Proyek Tidak Ditemukan</h2>
+            <p id="error-message">Maaf, proyek yang Anda cari tidak dapat ditemukan.</p>
+            <button class="retry-button" onclick="loadProjectDetail()">Coba Lagi</button>
+        </div>
+
+        <!-- Project Content (Hidden initially) -->
+        <div id="project-content" style="display: none;">
+            <!-- Project Header -->
+            <div class="project-header fade-in">
+                <h1 class="project-title" id="project-title">Judul Proyek</h1>
+                <p class="project-subtitle" id="project-subtitle">Deskripsi singkat proyek</p>
+            </div>
+
+            <!-- Main Image -->
+            <div class="main-image-section fade-in">
+                <img src="" alt="Project Preview" class="main-image" id="main-image">
+            </div>
+
+            <!-- Tech Stack Section -->
+            <div class="content-section fade-in">
+                <h2 class="section-title">
+                    <div class="section-icon">🛠️</div>
+                    Tech Stack
+                </h2>
+                <div class="section-content">
+                    <div class="tech-stack" id="tech-stack-container">
+                        <!-- Tech items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Features Section -->
+            <div class="content-section fade-in">
+                <h2 class="section-title">
+                    <div class="section-icon">✨</div>
+                    Fitur Utama
+                </h2>
+                <div class="section-content">
+                    <div class="features-list" id="features-container">
+                        <!-- Features will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screenshots Section -->
+            <div class="content-section fade-in" id="screenshots-section">
+                <h2 class="section-title">
+                    <div class="section-icon">📸</div>
+                    Screenshot & Preview
+                </h2>
+                <div class="section-content">
+                    <div class="screenshots-grid" id="screenshots-container">
+                        <!-- Screenshots will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges & Solutions Section -->
+            <div class="content-section fade-in">
+                <h2 class="section-title">
+                    <div class="section-icon">🎯</div>
+                    Tantangan & Solusi
+                </h2>
+                <div class="section-content" id="challenges-container">
+                    <!-- Challenges and solutions will be populated here -->
+                </div>
+            </div>
+
+            <!-- Results & Outcomes Section -->
+            <div class="content-section fade-in">
+                <h2 class="section-title">
+                    <div class="section-icon">📊</div>
+                    Hasil & Pencapaian
+                </h2>
+                <div class="section-content">
+                    <div class="results-grid" id="results-container">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Contact Form -->
+            <div class="demo-contact-section fade-in">
+                <h2 class="demo-contact-title" id="demo-contact-title">Tertarik dengan Proyek Ini?</h2>
+                <p class="demo-contact-description" id="demo-contact-description">
+                    Hubungi kami untuk melihat demo langsung atau diskusi proyek serupa untuk bisnis Anda.
+                </p>
+                
+                <form class="contact-form" id="demoContactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="demo-name" id="demo-name-label">Nama Lengkap</label>
+                            <input type="text" id="demo-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="demo-email" id="demo-email-label">Email</label>
+                            <input type="email" id="demo-email" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="demo-subject" id="demo-subject-label">Subject</label>
+                        <input type="text" id="demo-subject" name="subject" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="demo-message" id="demo-message-label">Pesan</label>
+                        <textarea id="demo-message" name="message" rows="5" required placeholder="Jelaskan kebutuhan atau pertanyaan Anda tentang proyek ini..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span id="demo-submit-text">Kirim Permintaan Demo</span>
+                        <div class="btn-icon">📧</div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p id="footer-text">&copy; 2024 TeknoMaven. Semua hak cipta dilindungi. Membangun masa depan bersama teknologi.</p>
+    </footer>
+
+    <script>
+        // API Configuration
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwzosFTQ_VDq90H58osFFocg_wmYE4E-mJfbOtnYfV7a8UNd2dbRg0ugni8_3rmHESGYA/exec';
+        
+        // Global variables
+        let siteContent = {};
+        let currentProject = {};
+
+        // Get project name from URL parameter
+        function getProjectFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('proyek');
+        }
+
+        // Load site content (same as main page)
+        async function loadSiteContent() {
+            try {
+                console.log('Loading site content...');
+                const response = await fetch(`${API_URL}?action=getContent`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Site content loaded:', data);
+                
+                if (data.content) {
+                    siteContent = data.content;
+                    applySiteContent();
+                }
+                
+            } catch (error) {
+                console.error('Error loading site content:', error);
+            }
+        }
+
+        // Apply site content to elements
+        function applySiteContent() {
+            const setContent = (id, key) => {
+                const element = document.getElementById(id);
+                if (element && siteContent[key]) {
+                    element.textContent = siteContent[key];
+                }
+            };
+
+            // Apply content
+            setContent('company-name', 'company_name');
+            setContent('back-button-text', 'portfolio_back_button');
+            setContent('demo-contact-title', 'demo_contact_title');
+            setContent('demo-contact-description', 'demo_contact_description');
+            setContent('demo-name-label', 'contact_name_label');
+            setContent('demo-email-label', 'contact_email_label');
+            setContent('demo-subject-label', 'contact_subject_label');
+            setContent('demo-message-label', 'contact_message_label');
+            setContent('demo-submit-text', 'contact_submit_text');
+            setContent('footer-text', 'footer_text');
+
+            // Set placeholder
+            const messageTextarea = document.getElementById('demo-message');
+            if (messageTextarea && siteContent.demo_message_placeholder) {
+                messageTextarea.placeholder = siteContent.demo_message_placeholder;
+            }
+
+            // Set favicon
+            const favicon = document.getElementById('favicon');
+            if (siteContent.favicon_url) {
+                if (siteContent.favicon_url.startsWith('http')) {
+                    favicon.href = siteContent.favicon_url;
+                } else {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 32;
+                    canvas.height = 32;
+                    const ctx = canvas.getContext('2d');
+                    ctx.font = '24px Arial';
+                    ctx.fillText(siteContent.favicon_url, 4, 24);
+                    favicon.href = canvas.toDataURL();
+                }
+            }
+        }
+
+        // Load project detail
+        async function loadProjectDetail() {
+            const projectName = getProjectFromURL();
+            
+            if (!projectName) {
+                showError('Parameter proyek tidak ditemukan dalam URL');
+                return;
+            }
+
+            try {
+                console.log('Loading project detail for:', projectName);
+                const response = await fetch(`${API_URL}?action=getPortfolioDetail&project=${encodeURIComponent(projectName)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Project detail response:', data);
+                
+                if (data.found && data.portfolioDetail) {
+                    currentProject = data.portfolioDetail;
+                    displayProjectDetail(data.portfolioDetail);
+                } else {
+                    showError(data.error || 'Proyek tidak ditemukan');
+                }
+                
+            } catch (error) {
+                console.error('Error loading project detail:', error);
+                showError('Gagal memuat detail proyek: ' + error.message);
+            }
+        }
+
+        // Display project detail
+        function displayProjectDetail(project) {
+            console.log('Displaying project:', project);
+            
+            // Hide loading, show content
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('error-container').style.display = 'none';
+            document.getElementById('project-content').style.display = 'block';
+
+            // Set page title
+            document.title = `${project.Title} - TeknoMaven Portfolio`;
+            document.getElementById('detail-title').textContent = `${project.Title} - TeknoMaven Portfolio`;
+
+            // Project header
+            document.getElementById('project-title').textContent = project.Title || 'Untitled Project';
+            document.getElementById('project-subtitle').textContent = project['Short Description'] || 'No description available';
+
+            // Main image
+            const mainImage = document.getElementById('main-image');
+            if (project['Main Image URL']) {
+                mainImage.src = project['Main Image URL'];
+                mainImage.alt = project.Title;
+            } else {
+                mainImage.style.display = 'none';
+            }
+
+            // Tech stack
+            displayTechStack(project['Tech Stack'] || '');
+
+            // Key features
+            displayFeatures(project['Key Features'] || '');
+
+            // Screenshots
+            displayScreenshots(project['Screenshot URLs'] || '');
+
+            // Challenges & Solutions
+            displayChallengesSolutions(project['Challenges Solutions'] || '');
+
+            // Results
+            displayResults(project['Results Outcomes'] || '');
+
+            // Set up demo form
+            setupDemoForm(project.Title);
+        }
+
+        // Display tech stack
+        function displayTechStack(techStackStr) {
+            const container = document.getElementById('tech-stack-container');
+            if (!techStackStr) {
+                container.innerHTML = '<p>Tech stack information not available</p>';
+                return;
+            }
+
+            const techItems = techStackStr.split(',').map(item => item.trim());
+            container.innerHTML = techItems.map(tech => 
+                `<div class="tech-item">${tech}</div>`
+            ).join('');
+        }
+
+        // Display features
+        function displayFeatures(featuresStr) {
+            const container = document.getElementById('features-container');
+            if (!featuresStr) {
+                container.innerHTML = '<p>Features information not available</p>';
+                return;
+            }
+
+            const features = featuresStr.split('|').map(item => item.trim());
+            container.innerHTML = features.map(feature => 
+                `<div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div>${feature}</div>
+                </div>`
+            ).join('');
+        }
+
+        // Display screenshots
+        function displayScreenshots(screenshotsStr) {
+            const container = document.getElementById('screenshots-container');
+            const section = document.getElementById('screenshots-section');
+            
+            if (!screenshotsStr) {
+                section.style.display = 'none';
+                return;
+            }
+
+            const screenshots = screenshotsStr.split(',').map(url => url.trim()).filter(url => url);
+            
+            if (screenshots.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = screenshots.map(url => 
+                `<div class="screenshot-item">
+                    <img src="${url}" alt="Project Screenshot" class="screenshot-img">
+                </div>`
+            ).join('');
+        }
+
+        // Display challenges and solutions
+        function displayChallengesSolutions(challengesStr) {
+            const container = document.getElementById('challenges-container');
+            if (!challengesStr) {
+                container.innerHTML = '<p>Challenges and solutions information not available</p>';
+                return;
+            }
+
+            const items = challengesStr.split('|').map(item => item.trim());
+            container.innerHTML = items.map(item => {
+                const parts = item.split(' Solution: ');
+                if (parts.length === 2) {
+                    const challenge = parts[0].replace('Challenge: ', '');
+                    const solution = parts[1];
+                    return `<div class="challenge-solution">
+                        <div class="challenge"><strong>Tantangan:</strong> ${challenge}</div>
+                        <div class="solution"><strong>Solusi:</strong> ${solution}</div>
+                    </div>`;
+                } else {
+                    return `<div class="challenge-solution">
+                        <div>${item}</div>
+                    </div>`;
+                }
+            }).join('');
+        }
+
+        // Display results
+        function displayResults(resultsStr) {
+            const container = document.getElementById('results-container');
+            if (!resultsStr) {
+                container.innerHTML = '<p>Results information not available</p>';
+                return;
+            }
+
+            const results = resultsStr.split('|').map(item => item.trim());
+            container.innerHTML = results.map(result => 
+                `<div class="result-item">
+                    <div class="result-value">✅</div>
+                    <div class="result-label">${result}</div>
+                </div>`
+            ).join('');
+        }
+
+        // Setup demo contact form
+        function setupDemoForm(projectTitle) {
+            const subjectField = document.getElementById('demo-subject');
+            const autoSubject = `Permintaan Akses Demo Proyek/Aplikasi: ${projectTitle}`;
+            subjectField.value = autoSubject;
+
+            // Form submission
+            document.getElementById('demoContactForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitBtn = document.querySelector('#demoContactForm .submit-btn');
+                const submitText = submitBtn.querySelector('span');
+                const originalText = submitText.textContent;
+                
+                // Show loading state
+                submitText.textContent = siteContent.contact_loading_text || 'Mengirim...';
+                submitBtn.querySelector('.btn-icon').textContent = '⏳';
+                submitBtn.disabled = true;
+                
+                const contactData = {
+                    name: encodeURIComponent(formData.get('name')),
+                    email: encodeURIComponent(formData.get('email')),
+                    subject: encodeURIComponent(formData.get('subject')),
+                    message: encodeURIComponent(formData.get('message'))
+                };
+                
+                const queryString = new URLSearchParams({
+                    action: 'submitContact',
+                    ...contactData
+                }).toString();
+                
+                try {
+                    const response = await fetch(`${API_URL}?${queryString}`, {
+                        method: 'GET',
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const successText = siteContent.contact_success_text || 'Berhasil Terkirim!';
+                        submitText.textContent = successText;
+                        submitBtn.querySelector('.btn-icon').textContent = '✅';
+                        submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                        
+                        showNotification('Permintaan demo Anda telah dikirim! Kami akan segera menghubungi Anda.', 'success');
+                        
+                        this.reset();
+                        // Reset subject after form reset
+                        setTimeout(() => {
+                            subjectField.value = autoSubject;
+                        }, 100);
+                        
+                        setTimeout(() => {
+                            submitText.textContent = originalText;
+                            submitBtn.querySelector('.btn-icon').textContent = '📧';
+                            submitBtn.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+                            submitBtn.disabled = false;
+                        }, 3000);
+                        
+                    } else {
+                        throw new Error(result.error || 'Gagal mengirim pesan');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error submitting demo form:', error);
+                    
+                    const errorText = siteContent.contact_error_text || 'Gagal Mengirim';
+                    submitText.textContent = errorText;
+                    submitBtn.querySelector('.btn-icon').textContent = '❌';
+                    submitBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    
+                    showNotification('Gagal mengirim permintaan demo. Silakan coba lagi.', 'error');
+                    
+                    setTimeout(() => {
+                        submitText.textContent = originalText;
+                        submitBtn.querySelector('.btn-icon').textContent = '📧';
+                        submitBtn.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+                        submitBtn.disabled = false;
+                    }, 5000);
+                }
+            });
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('project-content').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Initialize page
+        window.addEventListener('load', async function() {
+            console.log('Initializing portfolio detail page...');
+            
+            if (API_URL.includes('YOUR_SCRIPT_ID')) {
+                showError('API belum dikonfigurasi. Hubungi administrator.');
+                return;
+            }
+            
+            // Load content and project detail
+            await Promise.all([
+                loadSiteContent(),
+                loadProjectDetail()
+            ]);
+            
+            console.log('Portfolio detail page initialized');
+        });
+
+        // Global error handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>
