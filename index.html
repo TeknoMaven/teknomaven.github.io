@@ -697,10 +697,11 @@
                 <li><a href="#home" id="nav-home">Beranda</a></li>
                 <li><a href="#about" id="nav-about">Tentang</a></li>
                 <li><a href="#services" id="nav-services">Layanan</a></li>
+                <li><a href="/produk" style="color: #3b82f6;">Produk</a></li>
                 <li><a href="#portfolio" id="nav-portfolio">Portfolio</a></li>
                 <li><a href="#team" id="nav-team">Tim</a></li>
                 <li><a href="#contact" id="nav-contact">Kontak</a></li>
-                <li><a href="#" id="nav-blog" target="_blank">Blog</a></li>
+                <li><a href="#" id="nav-blog">Blog</a></li>
             </ul>
         </nav>
     </header>
@@ -911,7 +912,16 @@
             
             const blogLink = document.getElementById('nav-blog');
             if (blogLink && siteContent.blog_url) {
+                // Set URL blog
                 blogLink.href = siteContent.blog_url;
+                
+                // Tambahkan target _blank untuk link eksternal
+                if (siteContent.blog_url.startsWith('http')) {
+                    blogLink.target = '_blank';
+                    blogLink.rel = 'noopener noreferrer';
+                }
+                
+                console.log('Blog URL updated to:', siteContent.blog_url);
             }
 
             setContent('hero-title', 'hero_title');
@@ -1358,8 +1368,19 @@
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                
+                // Skip smooth scrolling untuk link blog
+                if (this.id === 'nav-blog') {
+                    // Jika masih "#", prevent default, jika sudah URL external, biarkan navigate
+                    if (href === '#') {
+                        e.preventDefault();
+                    }
+                    return;
+                }
+                
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(href);
                 if (target) {
                     target.scrollIntoView({
                         behavior: 'smooth',

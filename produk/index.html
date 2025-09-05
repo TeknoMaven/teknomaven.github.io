@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produk - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .clear-filters {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .clear-filters:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.3);
+        }
+
+        /* Products Grid */
+        .products-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .products-count {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-placeholder {
+            font-size: 4rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .product-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .product-features {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-detail {
+            flex: 1;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-cart {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cart:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Product Detail Modal */
+        .product-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-image {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 20px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            opacity: 0.7;
+        }
+
+        .detail-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-category {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .detail-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .detail-features {
+            margin-bottom: 2rem;
+        }
+
+        .detail-features h4 {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .feature-item {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .page-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            color: #64748b;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .search-filter-section {
+                padding: 1.5rem;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            .detail-actions {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TeknoMaven</div>
+            <ul class="nav-links">
+                <li><a href="/#home">Beranda</a></li>
+                <li><a href="/#about">Tentang</a></li>
+                <li><a href="/#services">Layanan</a></li>
+                <li><a href="/produk" style="color: #3b82f6;">Produk</a></li>
+                <li><a href="/#team">Tim</a></li>
+                <li><a href="/#contact">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Produk Teknologi</h1>
+            <p class="page-subtitle">Temukan solusi teknologi terbaik untuk mengembangkan bisnis Anda dengan produk-produk inovatif dari TeknoMaven</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari produk, fitur, atau kategori...">
+                <span class="search-icon">🔍</span>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label class="filter-label">Kategori</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">Semua Kategori</option>
+                        <option value="Software">Software</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Service">Layanan</option>
+                        <option value="Solution">Solusi</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Harga</label>
+                    <select class="filter-select" id="priceFilter">
+                        <option value="">Semua Harga</option>
+                        <option value="0-1000000">< Rp 1.000.000</option>
+                        <option value="1000000-5000000">Rp 1.000.000 - 5.000.000</option>
+                        <option value="5000000-10000000">Rp 5.000.000 - 10.000.000</option>
+                        <option value="10000000-999999999">> Rp 10.000.000</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Rating</label>
+                    <select class="filter-select" id="ratingFilter">
+                        <option value="">Semua Rating</option>
+                        <option value="5">5 Bintang</option>
+                        <option value="4">4+ Bintang</option>
+                        <option value="3">3+ Bintang</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <button class="clear-filters" id="clearFilters">Hapus Filter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="products-section">
+            <div class="section-header">
+                <div class="products-count" id="productsCount">Menampilkan 0 produk</div>
+                <select class="sort-select" id="sortSelect">
+                    <option value="name">Urutkan: Nama A-Z</option>
+                    <option value="name_desc">Urutkan: Nama Z-A</option>
+                    <option value="price">Urutkan: Harga Terendah</option>
+                    <option value="price_desc">Urutkan: Harga Tertinggi</option>
+                    <option value="rating">Urutkan: Rating Tertinggi</option>
+                </select>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="product-detail-modal" id="productDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Detail Produk</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Sample products JSON data
+            const productsData = {
+                "products": [
+                    {
+                        "id": 1,
+                        "name": "TeknoCloud Suite",
+                        "category": "Software",
+                        "price": 2500000,
+                        "rating": 5,
+                        "description": "Solusi cloud computing lengkap untuk manajemen data perusahaan dengan keamanan tingkat enterprise.",
+                        "longDescription": "TeknoCloud Suite adalah platform cloud computing terdepan yang menyediakan solusi lengkap untuk manajemen data, backup otomatis, dan akses real-time dari mana saja. Dengan teknologi enkripsi end-to-end dan infrastruktur server global, produk ini menjamin keamanan dan performa optimal untuk bisnis Anda.",
+                        "features": ["Cloud Storage 1TB", "Backup Otomatis", "Multi-Platform", "24/7 Support", "SSL Security"],
+                        "icon": "☁️",
+                        "badge": "Populer",
+                        "orderLink": "https://wa.me/628123456789?text=Saya%20ingin%20memesan%20TeknoCloud%20Suite"
+                    },
+                    {
+                        "id": 2,
+                        "name": "AI Analytics Pro",
+                        "category": "Software",
+                        "price": 4200000,
+                        "rating": 5,
+                        "description": "Platform analitik berbasis AI untuk mengoptimalkan performa bisnis dengan insight mendalam.",
+                        "longDescription": "AI Analytics Pro menggunakan machine learning terdepan untuk menganalisis data bisnis Anda dan memberikan insight yang actionable. Platform ini dapat memprediksi tren pasar, mengoptimalkan operasi, dan meningkatkan ROI dengan akurasi tinggi.",
+                        "features": ["Machine Learning", "Predictive Analytics", "Real-time Dashboard", "Custom Reports", "API Integration"],
+                        "icon": "🤖",
+                        "badge": "Terbaru",
+                        "orderLink": "https://wa.me/628123456789?text=Saya%20ingin%20memesan%20AI%20Analytics%20Pro"
+                    },
+                    {
+                        "id": 3,
+                        "name": "SecureVPN Enterprise",
+                        "category": "Software",
+                        "price": 1800000,
+                        "rating": 4,
+                        "description": "Solusi VPN enterprise dengan keamanan tingkat militer untuk akses remote yang aman.",
+                        "longDescription": "SecureVPN Enterprise menyediakan koneksi VPN yang aman dan cepat untuk tim remote Anda. Dengan enkripsi military-grade dan server di berbagai negara, solusi ini menjamin privasi dan keamanan data perusahaan.",
+                        "features": ["Military-grade Encryption", "Multi-location Servers", "Team Management", "Zero-log Policy", "24/7 Monitoring"],
+                        "icon": "🛡️",
+                        "badge": null,
+                        "orderLink": "mailto:order@teknomaven.com?subject=Order%20SecureVPN%20Enterprise&body=Saya%20ingin%20memesan%20SecureVPN%20Enterprise"
+                    },
+                    {
+                        "id": 4,
+                        "name": "TeknoServer Pro",
+                        "category": "Hardware",
+                        "price": 15000000,
+                        "rating": 5,
+                        "description": "Server high-performance untuk aplikasi enterprise dengan spesifikasi terdepan.",
+                        "longDescription": "TeknoServer Pro adalah solusi server fisik dengan performa tinggi yang dirancang khusus untuk kebutuhan enterprise. Dengan processor terbaru, RAM besar, dan storage SSD NVMe, server ini mampu menangani beban kerja berat dengan efisien.",
+                        "features": ["Intel Xeon Processor", "64GB DDR4 RAM", "2TB NVMe SSD", "Redundant PSU", "3 Year Warranty"],
+                        "icon": "🖥️",
+                        "badge": "Best Seller",
+                        "orderLink": "https://teknomaven.com/order/teknoserver-pro"
+                    },
+                    {
+                        "id": 5,
+                        "name": "SmartOffice IoT",
+                        "category": "Hardware",
+                        "price": 8500000,
+                        "rating": 4,
+                        "description": "Sistem IoT untuk otomatisasi kantor pintar dengan kontrol penuh dari smartphone.",
+                        "longDescription": "SmartOffice IoT mengintegrasikan berbagai perangkat kantor menjadi satu ekosistem pintar. Kontrol pencahayaan, AC, keamanan, dan perangkat lainnya dari smartphone Anda dengan teknologi IoT terdepan.",
+                        "features": ["Smart Lighting", "Climate Control", "Security System", "Mobile App", "Voice Control"],
+                        "icon": "🏢",
+                        "badge": null,
+                        "orderLink": "https://wa.me/628123456789?text=Saya%20ingin%20konsultasi%20SmartOffice%20IoT"
+                    },
+                    {
+                        "id": 6,
+                        "name": "DevOps Consultation",
+                        "category": "Service",
+                        "price": 12000000,
+                        "rating": 5,
+                        "description": "Layanan konsultasi DevOps untuk optimalisasi workflow dan deployment automation.",
+                        "longDescription": "Tim ahli DevOps kami akan membantu mentransformasi infrastruktur IT Anda dengan metodologi DevOps terbaru. Dari CI/CD pipeline hingga containerization, kami memberikan solusi end-to-end untuk meningkatkan efisiensi development.",
+                        "features": ["CI/CD Setup", "Container Orchestration", "Infrastructure as Code", "Monitoring Setup", "Training Program"],
+                        "icon": "⚙️",
+                        "badge": "Expert",
+                        "orderLink": "https://calendly.com/teknomaven/devops-consultation"
+                    },
+                    {
+                        "id": 7,
+                        "name": "Cybersecurity Audit",
+                        "category": "Service",
+                        "price": 7500000,
+                        "rating": 5,
+                        "description": "Audit keamanan siber komprehensif untuk melindungi aset digital perusahaan.",
+                        "longDescription": "Layanan audit keamanan siber yang menyeluruh untuk mengidentifikasi vulnerabilitas dalam sistem IT Anda. Tim security expert kami akan melakukan penetration testing dan memberikan rekomendasi untuk meningkatkan postur keamanan.",
+                        "features": ["Penetration Testing", "Vulnerability Assessment", "Security Report", "Remediation Plan", "Compliance Check"],
+                        "icon": "🔒",
+                        "badge": null,
+                        "orderLink": "https://form.jotform.com/teknomaven/cybersecurity-audit"
+                    },
+                    {
+                        "id": 8,
+                        "name": "Enterprise Integration",
+                        "category": "Solution",
+                        "price": 25000000,
+                        "rating": 4,
+                        "description": "Solusi integrasi enterprise untuk menghubungkan semua sistem bisnis Anda.",
+                        "longDescription": "Enterprise Integration Solution memungkinkan integrasi seamless antara berbagai sistem bisnis yang ada. Dari ERP hingga CRM, kami memastikan semua aplikasi dapat berkomunikasi dengan efisien dan data tersinkronisasi real-time.",
+                        "features": ["API Gateway", "Data Synchronization", "Legacy System Integration", "Real-time Monitoring", "Scalable Architecture"],
+                        "icon": "🔗",
+                        "badge": "Premium",
+                        "orderLink": "mailto:enterprise@teknomaven.com?subject=Enterprise%20Integration%20Inquiry"
+                    },
+                    {
+                        "id": 9,
+                        "name": "Mobile App Development",
+                        "category": "Service",
+                        "price": 18000000,
+                        "rating": 5,
+                        "description": "Pengembangan aplikasi mobile native untuk iOS dan Android dengan UX terbaik.",
+                        "longDescription": "Tim developer mobile kami akan membangun aplikasi mobile yang sesuai dengan kebutuhan bisnis Anda. Dengan pengalaman dalam mengembangkan aplikasi untuk berbagai industri, kami memastikan aplikasi yang user-friendly dan performa optimal.",
+                        "features": ["Native Development", "Cross-platform Support", "UI/UX Design", "Backend Integration", "App Store Deployment"],
+                        "icon": "📱",
+                        "badge": "Hot",
+                        "orderLink": "https://wa.me/628123456789?text=Saya%20ingin%20konsultasi%20Mobile%20App%20Development"
+                    },
+                    {
+                        "id": 10,
+                        "name": "Blockchain Solution",
+                        "category": "Solution",
+                        "price": 35000000,
+                        "rating": 4,
+                        "description": "Implementasi teknologi blockchain untuk transparansi dan keamanan transaksi.",
+                        "longDescription": "Solusi blockchain custom yang dirancang untuk meningkatkan transparansi dan keamanan dalam proses bisnis Anda. Dari smart contracts hingga cryptocurrency integration, kami menyediakan solusi blockchain yang robust dan scalable.",
+                        "features": ["Smart Contracts", "Cryptocurrency Integration", "Decentralized Apps", "Security Tokens", "Consensus Mechanisms"],
+                        "icon": "⛓️",
+                        "badge": "Innovation",
+                        "orderLink": "https://teknomaven.com/blockchain-consultation"
+                    },
+                    {
+                        "id": 11,
+                        "name": "Cloud Migration Service",
+                        "category": "Service",
+                        "price": 15000000,
+                        "rating": 5,
+                        "description": "Layanan migrasi ke cloud yang aman dan efisien dengan minimal downtime.",
+                        "longDescription": "Layanan migrasi cloud profesional yang membantu memindahkan infrastruktur IT Anda ke cloud dengan risiko minimal. Tim expert kami memastikan proses migrasi berjalan lancar dengan strategy yang tepat dan backup plan yang komprehensif.",
+                        "features": ["Migration Strategy", "Data Transfer", "Application Modernization", "Performance Optimization", "Post-migration Support"],
+                        "icon": "☁️",
+                        "badge": null,
+                        "orderLink": "https://calendly.com/teknomaven/cloud-migration"
+                    },
+                    {
+                        "id": 12,
+                        "name": "TeknoNetwork Pro",
+                        "category": "Hardware",
+                        "price": 12000000,
+                        "rating": 4,
+                        "description": "Perangkat networking enterprise untuk konektivitas tinggi dan management terpusat.",
+                        "longDescription": "TeknoNetwork Pro adalah solusi networking enterprise yang menyediakan konektivitas high-speed dan management terpusat. Dengan fitur load balancing, failover, dan monitoring real-time, produk ini ideal untuk kantor dengan trafik tinggi.",
+                        "features": ["Gigabit Ethernet", "Load Balancing", "Network Monitoring", "Centralized Management", "High Availability"],
+                        "icon": "🌐",
+                        "badge": null,
+                        "orderLink": "https://wa.me/628123456789?text=Saya%20ingin%20informasi%20TeknoNetwork%20Pro"
+                    }
+                ]
+            };
+
+            let products = [];
+            let filteredProducts = [];
+            let currentPage = 1;
+            const itemsPerPage = 6;
+
+            // Load products from JSON
+            function loadProducts() {
+                try {
+                    // In a real application, you would fetch this from an external JSON file
+                    // fetch('products.json').then(response => response.json()).then(data => {
+                    //     products = data.products;
+                    //     filteredProducts = [...products];
+                    //     renderProducts();
+                    // });
+                    
+                    // For this demo, we'll use the embedded JSON data
+                    products = productsData.products;
+                    filteredProducts = [...products];
+                    renderProducts();
+                } catch (error) {
+                    console.error('Error loading products:', error);
+                    showError('Gagal memuat data produk');
+                }
+            }
+
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 3 + 3) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Format currency
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            }
+
+            // Render products
+            function renderProducts() {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const productsToShow = filteredProducts.slice(startIndex, endIndex);
+                
+                const productsGrid = $('#productsGrid');
+                productsGrid.empty();
+
+                if (productsToShow.length === 0) {
+                    productsGrid.html(`
+                        <div class="no-results">
+                            <div class="no-results-icon">📦</div>
+                            <h3>Tidak ada produk ditemukan</h3>
+                            <p>Coba ubah filter atau kata kunci pencarian Anda</p>
+                        </div>
+                    `);
+                    return;
+                }
+
+                productsToShow.forEach(product => {
+                    const productCard = $(`
+                        <div class="product-card fade-in" data-id="${product.id}">
+                            <div class="product-image">
+                                <div class="product-placeholder">${product.icon}</div>
+                                ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                            </div>
+                            <div class="product-content">
+                                <div class="product-category">${product.category}</div>
+                                <h3 class="product-title">${product.name}</h3>
+                                <p class="product-description">${product.description}</p>
+                                <div class="product-price">${formatCurrency(product.price)}</div>
+                                <div class="product-features">
+                                    ${product.features.slice(0, 3).map(feature => 
+                                        `<span class="feature-tag">${feature}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-detail" onclick="showProductDetail(${product.id})">
+                                        Lihat Detail
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    
+                    productsGrid.append(productCard);
+                });
+
+                // Update products count
+                $('#productsCount').text(`Menampilkan ${filteredProducts.length} produk`);
+                
+                // Render pagination
+                renderPagination();
+            }
+
+            // Render pagination
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+                const pagination = $('#pagination');
+                pagination.empty();
+
+                if (totalPages <= 1) return;
+
+                // Previous button
+                if (currentPage > 1) {
+                    pagination.append(`
+                        <button class="page-btn" onclick="changePage(${currentPage - 1})">
+                            ← Sebelumnya
+                        </button>
+                    `);
+                }
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === currentPage || 
+                        i === 1 || 
+                        i === totalPages || 
+                        (i >= currentPage - 1 && i <= currentPage + 1)) {
+                        pagination.append(`
+                            <button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                                    onclick="changePage(${i})">
+                                ${i}
+                            </button>
+                        `);
+                    } else if (i === currentPage - 2 || i === currentPage + 2) {
+                        pagination.append('<span>...</span>');
+                    }
+                }
+
+                // Next button
+                if (currentPage < totalPages) {
+                    pagination.append(`
+                        <button class="page-btn" onclick="changePage(${currentPage + 1})">
+                            Selanjutnya →
+                        </button>
+                    `);
+                }
+            }
+
+            // Change page
+            window.changePage = function(page) {
+                currentPage = page;
+                renderProducts();
+                $('html, body').animate({
+                    scrollTop: $('.products-section').offset().top - 100
+                }, 500);
+            };
+
+            // Filter products
+            function filterProducts() {
+                const searchTerm = $('#searchInput').val().toLowerCase();
+                const categoryFilter = $('#categoryFilter').val();
+                const priceFilter = $('#priceFilter').val();
+                const ratingFilter = $('#ratingFilter').val();
+
+                filteredProducts = products.filter(product => {
+                    // Search filter
+                    const matchesSearch = !searchTerm || 
+                        product.name.toLowerCase().includes(searchTerm) ||
+                        product.description.toLowerCase().includes(searchTerm) ||
+                        product.category.toLowerCase().includes(searchTerm) ||
+                        product.features.some(feature => feature.toLowerCase().includes(searchTerm));
+
+                    // Category filter
+                    const matchesCategory = !categoryFilter || product.category === categoryFilter;
+
+                    // Price filter
+                    let matchesPrice = true;
+                    if (priceFilter) {
+                        const [min, max] = priceFilter.split('-').map(Number);
+                        matchesPrice = product.price >= min && product.price <= max;
+                    }
+
+                    // Rating filter
+                    const matchesRating = !ratingFilter || product.rating >= parseInt(ratingFilter);
+
+                    return matchesSearch && matchesCategory && matchesPrice && matchesRating;
+                });
+
+                currentPage = 1;
+                renderProducts();
+            }
+
+            // Sort products
+            function sortProducts() {
+                const sortBy = $('#sortSelect').val();
+                
+                filteredProducts.sort((a, b) => {
+                    switch (sortBy) {
+                        case 'name':
+                            return a.name.localeCompare(b.name);
+                        case 'name_desc':
+                            return b.name.localeCompare(a.name);
+                        case 'price':
+                            return a.price - b.price;
+                        case 'price_desc':
+                            return b.price - a.price;
+                        case 'rating':
+                            return b.rating - a.rating;
+                        default:
+                            return 0;
+                    }
+                });
+
+                currentPage = 1;
+                renderProducts();
+            }
+
+            // Show product detail
+            window.showProductDetail = function(productId) {
+                const product = products.find(p => p.id === productId);
+                if (!product) return;
+
+                const modalTitle = $('#modalTitle');
+                const modalBody = $('#modalBody');
+                
+                modalTitle.text(product.name);
+                
+                modalBody.html(`
+                    <div class="detail-grid">
+                        <div class="detail-image">
+                            ${product.icon}
+                        </div>
+                        <div class="detail-info">
+                            <h3>${product.name}</h3>
+                            <div class="detail-category">${product.category}</div>
+                            <div class="detail-price">${formatCurrency(product.price)}</div>
+                            <div class="detail-description">
+                                ${product.longDescription}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-features">
+                        <h4>Fitur Unggulan</h4>
+                        <div class="features-list">
+                            ${product.features.map(feature => 
+                                `<span class="feature-item">${feature}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-actions">
+                        <button class="btn-primary" onclick="orderProduct(${product.id})">
+                            Pesan Sekarang
+                        </button>
+                    </div>
+                `);
+
+                $('#productDetailModal').fadeIn(300);
+                $('body').css('overflow', 'hidden');
+            };
+
+            // Close modal
+            $('#modalClose, #productDetailModal').click(function(e) {
+                if (e.target === this) {
+                    $('#productDetailModal').fadeOut(300);
+                    $('body').css('overflow', 'auto');
+                }
+            });
+
+            // Order product - show Lynk.id info before redirect
+            window.orderProduct = function(productId) {
+                const product = products.find(p => p.id === productId);
+                if (!product || !product.orderLink) {
+                    showNotification('Link pemesanan tidak tersedia untuk produk ini', 'error');
+                    return;
+                }
+
+                // Close product detail modal first
+                $('#productDetailModal').fadeOut(300);
+                $('body').css('overflow', 'auto');
+
+                // Show order confirmation modal
+                showOrderConfirmation(product);
+            };
+
+            // Show order confirmation modal with Lynk.id info
+            function showOrderConfirmation(product) {
+                const confirmationModal = $(`
+                    <div id="orderConfirmationModal" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.8);
+                        backdrop-filter: blur(10px);
+                        z-index: 2001;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 2rem;
+                    ">
+                        <div style="
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 25px;
+                            max-width: 500px;
+                            width: 100%;
+                            position: relative;
+                            backdrop-filter: blur(20px);
+                            border: 1px solid rgba(226, 232, 240, 0.5);
+                            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+                            animation: fadeInUp 0.3s ease-out;
+                        ">
+                            <div style="
+                                padding: 2rem;
+                                text-align: center;
+                            ">
+                                <div style="
+                                    font-size: 3rem;
+                                    margin-bottom: 1rem;
+                                    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    background-clip: text;
+                                ">🛒</div>
+                                
+                                <h3 style="
+                                    font-size: 1.5rem;
+                                    font-weight: 700;
+                                    color: #1e293b;
+                                    margin-bottom: 1rem;
+                                ">Konfirmasi Pemesanan</h3>
+                                
+                                <div style="
+                                    background: rgba(59, 130, 246, 0.1);
+                                    border: 2px solid rgba(59, 130, 246, 0.2);
+                                    border-radius: 15px;
+                                    padding: 1.5rem;
+                                    margin-bottom: 1.5rem;
+                                ">
+                                    <h4 style="
+                                        color: #3b82f6;
+                                        font-weight: 600;
+                                        margin-bottom: 0.8rem;
+                                        font-size: 1.1rem;
+                                    ">${product.name}</h4>
+                                    <p style="
+                                        color: #1e293b;
+                                        font-size: 1.2rem;
+                                        font-weight: 700;
+                                    ">${formatCurrency(product.price)}</p>
+                                </div>
+                                
+                                <div style="
+                                    background: rgba(16, 185, 129, 0.1);
+                                    border: 2px solid rgba(16, 185, 129, 0.2);
+                                    border-radius: 15px;
+                                    padding: 1.5rem;
+                                    margin-bottom: 2rem;
+                                    text-align: left;
+                                ">
+                                    <div style="
+                                        display: flex;
+                                        align-items: center;
+                                        margin-bottom: 1rem;
+                                    ">
+                                        <div style="
+                                            width: 40px;
+                                            height: 40px;
+                                            background: linear-gradient(135deg, #10b981, #059669);
+                                            border-radius: 50%;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            margin-right: 1rem;
+                                            color: white;
+                                            font-weight: bold;
+                                        ">L</div>
+                                        <div>
+                                            <h4 style="
+                                                color: #10b981;
+                                                font-weight: 600;
+                                                margin-bottom: 0.2rem;
+                                            ">Pembayaran Aman dengan Lynk.id</h4>
+                                            <p style="
+                                                color: #64748b;
+                                                font-size: 0.9rem;
+                                                margin: 0;
+                                            ">Platform pembayaran terpercaya</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <ul style="
+                                        color: #374151;
+                                        font-size: 0.9rem;
+                                        line-height: 1.6;
+                                        margin: 0;
+                                        padding-left: 1.2rem;
+                                    ">
+                                        <li>Pemesanan akan diproses melalui sistem kami</li>
+                                        <li>Pembayaran 100% aman dengan Lynk.id</li>
+                                        <li>Berbagai metode pembayaran tersedia</li>
+                                        <li>Konfirmasi otomatis setelah pembayaran</li>
+                                    </ul>
+                                </div>
+                                
+                                <div style="
+                                    display: flex;
+                                    gap: 1rem;
+                                ">
+                                    <button id="cancelOrder" style="
+                                        flex: 1;
+                                        background: rgba(239, 68, 68, 0.1);
+                                        color: #ef4444;
+                                        border: 2px solid #ef4444;
+                                        padding: 1rem 1.5rem;
+                                        border-radius: 50px;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                    ">Batal</button>
+                                    
+                                    <button id="proceedOrder" style="
+                                        flex: 2;
+                                        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+                                        color: white;
+                                        border: none;
+                                        padding: 1rem 1.5rem;
+                                        border-radius: 50px;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+                                    ">Lanjutkan Pemesanan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                $('body').append(confirmationModal);
+                $('body').css('overflow', 'hidden');
+
+                // Add hover effects
+                confirmationModal.find('#cancelOrder').hover(
+                    function() {
+                        $(this).css({
+                            'background': '#ef4444',
+                            'color': 'white',
+                            'transform': 'translateY(-2px)'
+                        });
+                    },
+                    function() {
+                        $(this).css({
+                            'background': 'rgba(239, 68, 68, 0.1)',
+                            'color': '#ef4444',
+                            'transform': 'translateY(0)'
+                        });
+                    }
+                );
+
+                confirmationModal.find('#proceedOrder').hover(
+                    function() {
+                        $(this).css({
+                            'transform': 'translateY(-3px)',
+                            'box-shadow': '0 15px 40px rgba(59, 130, 246, 0.4)'
+                        });
+                    },
+                    function() {
+                        $(this).css({
+                            'transform': 'translateY(0)',
+                            'box-shadow': '0 10px 30px rgba(59, 130, 246, 0.3)'
+                        });
+                    }
+                );
+
+                // Cancel button
+                confirmationModal.find('#cancelOrder').click(function() {
+                    confirmationModal.fadeOut(300, function() {
+                        confirmationModal.remove();
+                        $('body').css('overflow', 'auto');
+                    });
+                });
+
+                // Proceed button
+                confirmationModal.find('#proceedOrder').click(function() {
+                    // Show processing state
+                    $(this).html('Memproses... <div style="display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 8px;"></div>');
+                    $(this).prop('disabled', true);
+
+                    // Close modal and redirect after delay
+                    setTimeout(() => {
+                        confirmationModal.fadeOut(300, function() {
+                            confirmationModal.remove();
+                            $('body').css('overflow', 'auto');
+                        });
+
+                        // Show redirect notification
+                        showNotification('Mengarahkan ke halaman pemesanan Lynk.id...', 'info');
+
+                        // Redirect to order link
+                        setTimeout(() => {
+                            window.open(product.orderLink, '_blank');
+                        }, 800);
+                    }, 1500);
+                });
+
+                // Close on outside click
+                confirmationModal.click(function(e) {
+                    if (e.target === this) {
+                        confirmationModal.fadeOut(300, function() {
+                            confirmationModal.remove();
+                            $('body').css('overflow', 'auto');
+                        });
+                    }
+                });
+            }
+
+            // Show notification
+            function showNotification(message, type = 'info') {
+                const existingNotification = $('.notification');
+                if (existingNotification.length) {
+                    existingNotification.remove();
+                }
+                
+                const notification = $(`
+                    <div class="notification notification-${type}" style="
+                        position: fixed;
+                        top: 100px;
+                        right: 20px;
+                        padding: 1rem 1.5rem;
+                        border-radius: 10px;
+                        color: white;
+                        font-weight: 500;
+                        z-index: 10000;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        transform: translateX(400px);
+                        transition: transform 0.3s ease;
+                        max-width: 400px;
+                        word-wrap: break-word;
+                        background: ${type === 'success' ? 'linear-gradient(135deg, #10b981, #059669)' : 
+                                   type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 
+                                   'linear-gradient(135deg, #3b82f6, #06b6d4)'};
+                    ">
+                        ${message}
+                    </div>
+                `);
+                
+                $('body').append(notification);
+                
+                setTimeout(() => {
+                    notification.css('transform', 'translateX(0)');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.css('transform', 'translateX(400px)');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 3000);
+            }
+
+            // Show error
+            function showError(message) {
+                const productsGrid = $('#productsGrid');
+                productsGrid.html(`
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 10px; background: rgba(248, 250, 252, 0.5);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                        <h3 style="margin-bottom: 1rem; color: #ef4444;">Error</h3>
+                        <p style="margin-bottom: 1rem;">${message}</p>
+                        <button onclick="loadProducts()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Coba Lagi
+                        </button>
+                    </div>
+                `);
+            }
+
+            // Event listeners
+            $('#searchInput').on('input', debounce(filterProducts, 300));
+            $('#categoryFilter, #priceFilter, #ratingFilter').on('change', filterProducts);
+            $('#sortSelect').on('change', sortProducts);
+            
+            $('#clearFilters').click(function() {
+                $('#searchInput').val('');
+                $('#categoryFilter, #priceFilter, #ratingFilter, #sortSelect').val('');
+                filteredProducts = [...products];
+                currentPage = 1;
+                renderProducts();
+            });
+
+            // Debounce function
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
+
+            // Initialize
+            createParticles();
+            loadProducts();
+        });
+    </script>
+</body>
+</html>
