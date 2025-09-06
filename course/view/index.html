@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Stack Web Development - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.8);
+            border-right: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .progress-percentage {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(226, 232, 240, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .modules-list {
+            padding: 0;
+        }
+
+        .module-section {
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .module-header {
+            padding: 1rem 1.5rem;
+            background: rgba(248, 250, 252, 0.8);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .module-header:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .module-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .module-toggle {
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+
+        .module-header.expanded .module-toggle {
+            transform: rotate(90deg);
+        }
+
+        .lessons-list {
+            background: rgba(255, 255, 255, 0.9);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .lessons-list.expanded {
+            max-height: 500px;
+        }
+
+        .lesson-item {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lesson-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+            padding-left: 2.5rem;
+        }
+
+        .lesson-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .lesson-icon {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .lesson-info {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .lesson-duration {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .lesson-status {
+            font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breadcrumb {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        /* Syllabus View */
+        .syllabus-view {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .syllabus-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .syllabus-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .syllabus-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .course-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .syllabus-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .syllabus-section {
+            margin-bottom: 2rem;
+        }
+
+        .syllabus-section h3 {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .syllabus-lessons {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .syllabus-lessons li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .syllabus-lessons li:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-content {
+            flex: 1;
+        }
+
+        .lesson-name {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+
+        .lesson-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .lesson-time {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .start-course-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 2rem auto 0;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-course-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Lesson View */
+        .lesson-view {
+            display: none;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .lesson-content-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-details {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .lesson-details h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .lesson-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-objectives {
+            margin-bottom: 2rem;
+        }
+
+        .lesson-objectives h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .objectives-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objectives-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .objectives-list li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 0.1rem;
+        }
+
+        .materials-sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            height: fit-content;
+        }
+
+        .materials-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .materials-header h4 {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .material-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.3);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .material-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .material-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+
+        .material-icon {
+            font-size: 1.2rem;
+        }
+
+        .material-details h5 {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .material-details span {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .btn-download-material {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .btn-download-material:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .nav-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+                height: auto;
+                min-height: 60vh;
+            }
+
+            .lesson-content-section {
+                grid-template-columns: 1fr;
+            }
+
+            .course-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .syllabus-title {
+                font-size: 2rem;
+            }
+
+            .content-header {
+                padding: 1rem;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TeknoMaven</div>
+            <ul class="nav-links">
+                <li><a href="#home" id="nav-home">Beranda</a></li>
+                <li><a href="#about" id="nav-about">Tentang</a></li>
+                <li><a href="#services" id="nav-services">Layanan</a></li>
+                <li><a href="#portfolio" id="nav-portfolio">Portfolio</a></li>
+                <li><a href="#team" id="nav-team">Tim</a></li>
+                <li><a href="#contact" id="nav-contact">Kontak</a></li>
+                <li><a href="/produk">Produk</a></li>
+                <li><a href="/course" style="color: #3b82f6;">Course</a></li>
+                <li><a href="/download">Download</a></li>
+                <li><a href="#" id="nav-blog">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="course-title">Full Stack Web Development</h2>
+                <div class="course-meta">
+                    <span>⏱️ 12 Jam</span>
+                    <span>📚 8 Modules</span>
+                    <span>🎯 Menengah</span>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">Progress Belajar</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="modules-list" id="modulesList">
+                <!-- Modules will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="breadcrumb" id="breadcrumb">Course Overview</div>
+                <div class="content-actions">
+                    <a href="courses.html" class="action-btn">← Kembali ke Courses</a>
+                    <button class="action-btn" id="toggleSyllabus">📋 Syllabus</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Syllabus View -->
+                <div class="syllabus-view" id="syllabusView">
+                    <div class="syllabus-header">
+                        <h1 class="syllabus-title">Full Stack Web Development</h1>
+                        <p class="syllabus-description">
+                            Pelajari pengembangan web modern dari frontend hingga backend. Course komprehensif ini akan membawa Anda dari pemula hingga mahir dalam membangun aplikasi web full stack menggunakan teknologi terkini seperti React, Node.js, dan database modern.
+                        </p>
+                        
+                        <div class="course-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">⏱️</div>
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Jam Video</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📚</div>
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Lessons</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📥</div>
+                                <div class="stat-value">15</div>
+                                <div class="stat-label">Resources</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="syllabus-content" id="syllabusContent">
+                        <!-- Syllabus modules will be loaded here -->
+                    </div>
+
+                    <button class="start-course-btn" onclick="startCourse()">
+                        🚀 Mulai Course
+                    </button>
+                </div>
+
+                <!-- Lesson View -->
+                <div class="lesson-view" id="lessonView">
+                    <div class="video-container" id="videoContainer">
+                        <!-- Video will be loaded here -->
+                    </div>
+
+                    <div class="lesson-content-section">
+                        <div class="lesson-details" id="lessonDetails">
+                            <!-- Lesson details will be loaded here -->
+                        </div>
+
+                        <div class="materials-sidebar" id="materialsSidebar">
+                            <!-- Materials will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="lesson-navigation" id="lessonNavigation">
+                        <!-- Navigation buttons will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Course data
+            const courseData = {
+                "course": {
+                    "id": "fullstack-web-dev",
+                    "title": "Full Stack Web Development",
+                    "description": "Comprehensive course covering modern web development from frontend to backend",
+                    "instructor": "Ahmad Fauzi",
+                    "duration": "12 hours",
+                    "level": "Intermediate",
+                    "modules": [
+                        {
+                            "id": 1,
+                            "title": "1. Introduction & Setup",
+                            "lessons": [
+                                {
+                                    "id": "1-1",
+                                    "title": "Course Introduction",
+                                    "duration": "15 min",
+                                    "youtubeId": "PkZNo7MFNFg",
+                                    "description": "Pengenalan course dan overview teknologi yang akan dipelajari.",
+                                    "objectives": [
+                                        "Memahami struktur course dan tujuan pembelajaran",
+                                        "Mengenal teknologi modern web development",
+                                        "Menyiapkan environment development"
+                                    ],
+                                    "materials": [
+                                        {
+                                            "name": "Course Roadmap",
+                                            "type": "PDF",
+                                            "size": "2.1 MB",
+                                            "downloadUrl": "#"
+                                        },
+                                        {
+                                            "name": "Development Tools List",
+                                            "type": "PDF",
+                                            "size": "1.5 MB",
+                                            "downloadUrl": "#"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "1-2",
+                                    "title": "Development Environment Setup",
+                                    "duration": "25 min",
+                                    "youtubeId": "w7ejDZ8SWv8",
+                                    "description": "Setup tools dan environment yang diperlukan untuk development.",
+                                    "objectives": [
+                                        "Install Node.js dan npm",
+                                        "Setup code editor dan extensions",
+                                        "Konfigurasi Git dan GitHub"
+                                    ],
+                                    "materials": [
+                                        {
+                                            "name": "Setup Guide",
+                                            "type": "PDF",
+                                            "size": "3.2 MB",
+                                            "downloadUrl": "#"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "title": "2. HTML & CSS Fundamentals",
+                            "lessons": [
+                                {
+                                    "id": "2-1",
+                                    "title": "Modern HTML Structure",
+                                    "duration": "30 min",
+                                    "youtubeId": "rfscVS0vtbw",
+                                    "description": "Memahami struktur HTML modern dan semantic elements.",
+                                    "objectives": [
+                                        "Menulis HTML semantic yang benar",
+                                        "Menggunakan HTML5 elements",
+                                        "Best practices untuk accessibility"
+                                    ],
+                                    "materials": [
+                                        {
+                                            "name": "HTML5 Cheat Sheet",
+                                            "type": "PDF",
+                                            "size": "1.8 MB",
+                                            "downloadUrl": "#"
+                                        },
+                                        {
+                                            "name": "HTML Template Files",
+                                            "type": "ZIP",
+                                            "size": "2.5 MB",
+                                            "downloadUrl": "#"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "2-2", 
+                                    "title": "CSS Grid & Flexbox",
+                                    "duration": "45 min",
+                                    "youtubeId": "1ukSR1GRtMU",
+                                    "description": "Menguasai layout modern dengan CSS Grid dan Flexbox.",
+                                    "objectives": [
+                                        "Memahami konsep Grid dan Flexbox",
+                                        "Membuat layout responsive",
+                                        "Praktik layout patterns"
+                                    ],
+                                    "materials": [
+                                        {
+                                            "name": "CSS Layout Examples",
+                                            "type": "ZIP",
+                                            "size": "4.2 MB",
+                                            "downloadUrl": "#"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "title": "3. JavaScript Essentials",
+                            "lessons": [
+                                {
+                                    "id": "3-1",
+                                    "title": "ES6+ Features",
+                                    "duration": "40 min",
+                                    "youtubeId": "3c-iBn73dDE",
+                                    "description": "Fitur-fitur modern JavaScript yang wajib dikuasai.",
+                                    "objectives": [
+                                        "Arrow functions dan destructuring",
+                                        "Async/await dan Promises",
+                                        "Modules dan imports"
+                                    ],
+                                    "materials": [
+                                        {
+                                            "name": "ES6+ Guide",
+                                            "type": "PDF",
+                                            "size": "2.8 MB",
+                                            "downloadUrl": "#"
+                                        },
+                                        {
+                                            "name": "JavaScript Exercises",
+                                            "type": "ZIP",
+                                            "size": "3.1 MB",
+                                            "downloadUrl": "#"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+
+            let currentLesson = null;
+            let completedLessons = new Set();
+            let currentView = 'syllabus';
+
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 3 + 3) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Initialize page
+            function initializePage() {
+                renderModulesList();
+                renderSyllabus();
+                updateProgress();
+            }
+
+            // Render modules list in sidebar
+            function renderModulesList() {
+                const modulesList = $('#modulesList');
+                modulesList.empty();
+
+                courseData.course.modules.forEach(module => {
+                    const moduleSection = $(`
+                        <div class="module-section">
+                            <div class="module-header" onclick="toggleModule(${module.id})">
+                                <span class="module-title">${module.title}</span>
+                                <span class="module-toggle">▶</span>
+                            </div>
+                            <div class="lessons-list" id="module-${module.id}-lessons">
+                                ${module.lessons.map(lesson => `
+                                    <div class="lesson-item" data-lesson-id="${lesson.id}" onclick="selectLesson('${lesson.id}')">
+                                        <span class="lesson-icon">▶</span>
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">${lesson.title}</div>
+                                            <div class="lesson-duration">${lesson.duration}</div>
+                                        </div>
+                                        <span class="lesson-status" id="status-${lesson.id}">⭕</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `);
+                    modulesList.append(moduleSection);
+                });
+            }
+
+            // Render syllabus content
+            function renderSyllabus() {
+                const syllabusContent = $('#syllabusContent');
+                syllabusContent.empty();
+
+                courseData.course.modules.forEach(module => {
+                    const syllabusSection = $(`
+                        <div class="syllabus-section">
+                            <h3>📚 ${module.title}</h3>
+                            <ul class="syllabus-lessons">
+                                ${module.lessons.map(lesson => `
+                                    <li>
+                                        <div class="lesson-content">
+                                            <div class="lesson-name">${lesson.title}</div>
+                                            <div class="lesson-desc">${lesson.description}</div>
+                                        </div>
+                                        <div class="lesson-time">${lesson.duration}</div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `);
+                    syllabusContent.append(syllabusSection);
+                });
+            }
+
+            // Toggle module expansion
+            window.toggleModule = function(moduleId) {
+                const lessonsList = $(`#module-${moduleId}-lessons`);
+                const moduleHeader = lessonsList.prev('.module-header');
+                
+                if (lessonsList.hasClass('expanded')) {
+                    lessonsList.removeClass('expanded');
+                    moduleHeader.removeClass('expanded');
+                } else {
+                    lessonsList.addClass('expanded');
+                    moduleHeader.addClass('expanded');
+                }
+            };
+
+            // Start course
+            window.startCourse = function() {
+                // Find first lesson
+                const firstLesson = courseData.course.modules[0].lessons[0];
+                selectLesson(firstLesson.id);
+                
+                // Expand first module
+                toggleModule(1);
+            };
+
+            // Select lesson
+            window.selectLesson = function(lessonId) {
+                // Find lesson data
+                let selectedLesson = null;
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        if (lesson.id === lessonId) {
+                            selectedLesson = lesson;
+                        }
+                    });
+                });
+
+                if (!selectedLesson) return;
+
+                currentLesson = selectedLesson;
+                
+                // Update active states
+                $('.lesson-item').removeClass('active');
+                $(`.lesson-item[data-lesson-id="${lessonId}"]`).addClass('active');
+                
+                // Switch to lesson view
+                showLessonView();
+                renderLessonContent();
+                updateBreadcrumb();
+            };
+
+            // Show lesson view
+            function showLessonView() {
+                $('#syllabusView').hide();
+                $('#lessonView').show();
+                currentView = 'lesson';
+            }
+
+            // Show syllabus view
+            function showSyllabusView() {
+                $('#syllabusView').show();
+                $('#lessonView').hide();
+                currentView = 'syllabus';
+                $('#breadcrumb').text('Course Overview');
+            }
+
+            // Render lesson content
+            function renderLessonContent() {
+                if (!currentLesson) return;
+
+                // Render video
+                const videoContainer = $('#videoContainer');
+                videoContainer.html(`
+                    <iframe src="https://www.youtube.com/embed/${currentLesson.youtubeId}?autoplay=1" 
+                            allowfullscreen allow="autoplay"></iframe>
+                `);
+
+                // Render lesson details
+                const lessonDetails = $('#lessonDetails');
+                lessonDetails.html(`
+                    <h2>${currentLesson.title}</h2>
+                    <div class="lesson-meta">
+                        <span>⏱️ ${currentLesson.duration}</span>
+                        <span>📚 ${getCurrentModuleTitle()}</span>
+                        <span>🎯 Intermediate</span>
+                    </div>
+                    <div class="lesson-description">
+                        ${currentLesson.description}
+                    </div>
+                    <div class="lesson-objectives">
+                        <h4>🎯 Learning Objectives</h4>
+                        <ul class="objectives-list">
+                            ${currentLesson.objectives.map(obj => `<li>${obj}</li>`).join('')}
+                        </ul>
+                    </div>
+                `);
+
+                // Render materials
+                const materialsSidebar = $('#materialsSidebar');
+                materialsSidebar.html(`
+                    <div class="materials-header">
+                        <span>📎</span>
+                        <h4>Download Materials</h4>
+                    </div>
+                    ${currentLesson.materials.map(material => `
+                        <div class="material-item">
+                            <div class="material-info">
+                                <span class="material-icon">${getFileIcon(material.type)}</span>
+                                <div class="material-details">
+                                    <h5>${material.name}</h5>
+                                    <span>${material.type} • ${material.size}</span>
+                                </div>
+                            </div>
+                            <button class="btn-download-material" onclick="downloadMaterial('${material.downloadUrl}', '${material.name}')">
+                                Download
+                            </button>
+                        </div>
+                    `).join('')}
+                `);
+
+                // Render navigation
+                renderLessonNavigation();
+            }
+
+            // Get current module title
+            function getCurrentModuleTitle() {
+                let moduleTitle = '';
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        if (lesson.id === currentLesson.id) {
+                            moduleTitle = module.title;
+                        }
+                    });
+                });
+                return moduleTitle;
+            }
+
+            // Get file icon
+            function getFileIcon(type) {
+                const icons = {
+                    'PDF': '📄',
+                    'ZIP': '📦',
+                    'DOC': '📝',
+                    'PPT': '📊'
+                };
+                return icons[type] || '📄';
+            }
+
+            // Download material
+            window.downloadMaterial = function(url, filename) {
+                // Mark lesson as completed when downloading materials
+                if (currentLesson) {
+                    markLessonCompleted(currentLesson.id);
+                }
+                
+                // Simulate download
+                alert(`Downloading ${filename}...`);
+                
+                // In real implementation, handle actual download
+                // window.open(url, '_blank');
+            };
+
+            // Mark lesson completed
+            function markLessonCompleted(lessonId) {
+                completedLessons.add(lessonId);
+                $(`#status-${lessonId}`).text('✅');
+                updateProgress();
+            }
+
+            // Update progress
+            function updateProgress() {
+                const totalLessons = courseData.course.modules.reduce((total, module) => total + module.lessons.length, 0);
+                const completedCount = completedLessons.size;
+                const percentage = Math.round((completedCount / totalLessons) * 100);
+                
+                $('#progressPercentage').text(`${percentage}%`);
+                $('#progressFill').css('width', `${percentage}%`);
+            }
+
+            // Render lesson navigation
+            function renderLessonNavigation() {
+                const lessonNavigation = $('#lessonNavigation');
+                const { prevLesson, nextLesson } = getAdjacentLessons();
+                
+                lessonNavigation.html(`
+                    <button class="nav-btn" ${!prevLesson ? 'disabled' : ''} onclick="selectLesson('${prevLesson?.id || ''}')">
+                        ← Previous Lesson
+                    </button>
+                    <button class="nav-btn" onclick="markLessonCompleted('${currentLesson.id}')">
+                        ✓ Mark Complete
+                    </button>
+                    <button class="nav-btn" ${!nextLesson ? 'disabled' : ''} onclick="selectLesson('${nextLesson?.id || ''}')">
+                        Next Lesson →
+                    </button>
+                `);
+            }
+
+            // Get adjacent lessons
+            function getAdjacentLessons() {
+                const allLessons = [];
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        allLessons.push(lesson);
+                    });
+                });
+
+                const currentIndex = allLessons.findIndex(lesson => lesson.id === currentLesson.id);
+                return {
+                    prevLesson: currentIndex > 0 ? allLessons[currentIndex - 1] : null,
+                    nextLesson: currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null
+                };
+            }
+
+            // Update breadcrumb
+            function updateBreadcrumb() {
+                if (currentLesson) {
+                    const moduleTitle = getCurrentModuleTitle();
+                    $('#breadcrumb').text(`${moduleTitle} > ${currentLesson.title}`);
+                }
+            }
+
+            // Toggle syllabus view
+            $('#toggleSyllabus').click(function() {
+                if (currentView === 'syllabus') {
+                    return;
+                } else {
+                    showSyllabusView();
+                }
+            });
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
+
+            // Initialize
+            createParticles();
+            initializePage();
+        });
+    </script>
+</body>
+</html>

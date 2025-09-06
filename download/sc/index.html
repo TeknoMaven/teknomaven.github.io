@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source Code Viewer - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+            padding: 2rem;
+            gap: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .file-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            transform: translateX(5px);
+        }
+
+        .file-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .file-icon {
+            font-size: 1.2rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: rgba(248, 250, 252, 0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            overflow-x: auto;
+            padding: 0.5rem 1rem 0;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #64748b;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b;
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .tab-close {
+            margin-left: 0.5rem;
+            color: #64748b;
+            hover: #ef4444;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tab-close:hover {
+            color: #ef4444;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-info {
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .toolbar-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .toolbar-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Editor */
+        .editor-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+
+        .editor-content {
+            padding: 1.5rem;
+        }
+
+        pre {
+            margin: 0;
+            background: rgba(248, 250, 252, 0.8) !important;
+            border-radius: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.3);
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Loading & Error States */
+        .state-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            height: 100%;
+        }
+
+        .state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .retry-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Welcome State */
+        .welcome-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            height: 100%;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+            word-wrap: break-word;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 200px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .toolbar-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TeknoMaven</div>
+            <ul class="nav-links">
+                <li><a href="#home" id="nav-home">Beranda</a></li>
+                <li><a href="#about" id="nav-about">Tentang</a></li>
+                <li><a href="#services" id="nav-services">Layanan</a></li>
+                <li><a href="#portfolio" id="nav-portfolio">Portfolio</a></li>
+                <li><a href="#team" id="nav-team">Tim</a></li>
+                <li><a href="#contact" id="nav-contact">Kontak</a></li>
+                <li><a href="/produk">Produk</a></li>
+                <li><a href="/course">Course</a></li>
+                <li><a href="/download" style="color: #3b82f6;">Project</a></li>
+                <li><a href="#" id="nav-blog">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar fade-in">
+            <div class="sidebar-header">
+                📁 Source Files
+            </div>
+            <ul id="fileList" class="file-list">
+                <!-- Files will be loaded here -->
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content fade-in">
+            <!-- Tabs -->
+            <div id="tabsContainer" class="tabs-container">
+                <!-- Tabs will be rendered here -->
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="file-info">
+                    <span id="fileName">Pilih file untuk melihat source code</span>
+                    <span id="fileSize" style="display: none;"></span>
+                    <span id="lineCount" style="display: none;"></span>
+                </div>
+                <div class="toolbar-actions">
+                    <button class="toolbar-btn" id="copyBtn" disabled>
+                        <span>📋</span>
+                        Copy
+                    </button>
+                    <button class="toolbar-btn" id="downloadBtn" disabled>
+                        <span>⬇️</span>
+                        Download
+                    </button>
+                    <button class="toolbar-btn" id="rawBtn" disabled>
+                        <span>🔗</span>
+                        Raw
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div class="editor-container">
+                <div id="editorContent" class="editor-content">
+                    <div class="welcome-state">
+                        <div class="welcome-icon">💻</div>
+                        <h3 class="welcome-title">Source Code Viewer</h3>
+                        <p>Pilih file dari sidebar untuk melihat source code</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Configuration for source files
+            const files = [
+                {
+                    id: "qr-generator",
+                    name: "QR Generator",
+                    url: "https://raw.githubusercontent.com/TeknoMaven/teknomaven.github.io/refs/heads/main/demo/Qr-Generator/page.html",
+                    language: "html",
+                    icon: "📱"
+                },
+                {
+                    id: "calculator",
+                    name: "Calculator App", 
+                    url: "https://raw.githubusercontent.com/TeknoMaven/teknomaven.github.io/refs/heads/main/demo/Qr-Generator/index.html",
+                    language: "javascript",
+                    icon: "🧮"
+                },
+                {
+                    id: "todo-list",
+                    name: "Todo List",
+                    url: "https://raw.githubusercontent.com/koleksiprihadi/basicframeworkphp/refs/heads/main/README.md",
+                    language: "markdown",
+                    icon: "📝"
+                }
+            ];
+
+            let openTabs = [];
+            let activeFile = null;
+            let currentCode = "";
+
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 3 + 3) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Render file list
+            function renderFileList() {
+                const fileList = $('#fileList');
+                fileList.empty();
+
+                files.forEach(file => {
+                    const fileItem = $(`
+                        <li class="file-item" data-file-id="${file.id}">
+                            <span class="file-icon">${file.icon}</span>
+                            <span class="file-name">${file.name}</span>
+                        </li>
+                    `);
+
+                    fileItem.click(() => openFile(file));
+                    fileList.append(fileItem);
+                });
+            }
+
+            // Render tabs
+            function renderTabs() {
+                const tabsContainer = $('#tabsContainer');
+                tabsContainer.empty();
+
+                if (openTabs.length === 0) {
+                    tabsContainer.hide();
+                    return;
+                }
+
+                tabsContainer.show();
+                openTabs.forEach(file => {
+                    const isActive = activeFile && activeFile.id === file.id;
+                    const tab = $(`
+                        <div class="tab ${isActive ? 'active' : ''}" data-file-id="${file.id}">
+                            <span class="file-icon">${file.icon}</span>
+                            <span>${file.name}</span>
+                            <span class="tab-close">×</span>
+                        </div>
+                    `);
+
+                    tab.find('.tab-close').click((e) => {
+                        e.stopPropagation();
+                        closeTab(file);
+                    });
+
+                    tab.click(() => setActiveTab(file));
+                    tabsContainer.append(tab);
+                });
+            }
+
+            // Open file
+            function openFile(file) {
+                // Add to open tabs if not already open
+                if (!openTabs.find(f => f.id === file.id)) {
+                    openTabs.push(file);
+                }
+
+                setActiveTab(file);
+                renderTabs();
+                updateSidebarSelection(file);
+            }
+
+            // Set active tab
+            function setActiveTab(file) {
+                activeFile = file;
+                renderTabs();
+                loadFile(file);
+                updateSidebarSelection(file);
+            }
+
+            // Close tab
+            function closeTab(file) {
+                openTabs = openTabs.filter(f => f.id !== file.id);
+                
+                // If closing active tab, switch to another tab or show welcome
+                if (activeFile && activeFile.id === file.id) {
+                    if (openTabs.length > 0) {
+                        setActiveTab(openTabs[0]);
+                    } else {
+                        activeFile = null;
+                        showWelcomeState();
+                        updateToolbar(null);
+                        $('.file-item').removeClass('active');
+                    }
+                }
+                
+                renderTabs();
+            }
+
+            // Update sidebar selection
+            function updateSidebarSelection(file) {
+                $('.file-item').removeClass('active');
+                $(`.file-item[data-file-id="${file.id}"]`).addClass('active');
+            }
+
+            // Load file content
+            async function loadFile(file) {
+                const editorContent = $('#editorContent');
+                
+                // Show loading state
+                editorContent.html(`
+                    <div class="state-message">
+                        <div class="loading-spinner"></div>
+                        <h3>Loading ${file.name}...</h3>
+                        <p>Mengambil source code dari repository</p>
+                    </div>
+                `);
+
+                try {
+                    const response = await fetch(file.url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const code = await response.text();
+                    currentCode = code;
+                    
+                    // Display code with syntax highlighting
+                    editorContent.html(`
+                        <pre><code class="hljs language-${file.language}">${escapeHtml(code)}</code></pre>
+                    `);
+
+                    // Apply syntax highlighting
+                    hljs.highlightAll();
+
+                    // Update file info and toolbar
+                    updateFileInfo(code, file);
+                    updateToolbar(file);
+
+                } catch (error) {
+                    console.error('Error loading file:', error);
+                    showErrorState(file, error.message);
+                }
+            }
+
+            // Show welcome state
+            function showWelcomeState() {
+                const editorContent = $('#editorContent');
+                editorContent.html(`
+                    <div class="welcome-state">
+                        <div class="welcome-icon">💻</div>
+                        <h3 class="welcome-title">Source Code Viewer</h3>
+                        <p>Pilih file dari sidebar untuk melihat source code</p>
+                    </div>
+                `);
+            }
+
+            // Show error state
+            function showErrorState(file, errorMessage) {
+                const editorContent = $('#editorContent');
+                editorContent.html(`
+                    <div class="state-message">
+                        <div class="state-icon">⚠️</div>
+                        <h3>Gagal Memuat ${file.name}</h3>
+                        <p>Error: ${errorMessage}</p>
+                        <button class="retry-btn" onclick="loadFile(files.find(f => f.id === '${file.id}'))">
+                            Coba Lagi
+                        </button>
+                    </div>
+                `);
+            }
+
+            // Update file info
+            function updateFileInfo(code, file) {
+                const lines = code.split('\n').length;
+                const sizeInBytes = new Blob([code]).size;
+                const sizeFormatted = formatFileSize(sizeInBytes);
+
+                $('#fileName').text(file.name);
+                $('#fileSize').text(sizeFormatted).show();
+                $('#lineCount').text(`${lines} lines`).show();
+            }
+
+            // Update toolbar
+            function updateToolbar(file) {
+                const copyBtn = $('#copyBtn');
+                const downloadBtn = $('#downloadBtn');
+                const rawBtn = $('#rawBtn');
+
+                if (file) {
+                    copyBtn.prop('disabled', false);
+                    downloadBtn.prop('disabled', false);
+                    rawBtn.prop('disabled', false);
+                } else {
+                    copyBtn.prop('disabled', true);
+                    downloadBtn.prop('disabled', true);
+                    rawBtn.prop('disabled', true);
+                    $('#fileName').text('Pilih file untuk melihat source code');
+                    $('#fileSize, #lineCount').hide();
+                }
+            }
+
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Escape HTML
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Copy code to clipboard
+            $('#copyBtn').click(function() {
+                if (!currentCode) {
+                    showNotification('Tidak ada kode untuk di-copy', 'error');
+                    return;
+                }
+
+                navigator.clipboard.writeText(currentCode).then(() => {
+                    showNotification('Source code berhasil di-copy!', 'success');
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = currentCode;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showNotification('Source code berhasil di-copy!', 'success');
+                });
+            });
+
+            // Download file
+            $('#downloadBtn').click(function() {
+                if (!currentCode || !activeFile) {
+                    showNotification('Tidak ada file untuk didownload', 'error');
+                    return;
+                }
+
+                const blob = new Blob([currentCode], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                const extensions = {
+                    html: '.html',
+                    css: '.css',
+                    javascript: '.js',
+                    php: '.php',
+                    python: '.py',
+                    java: '.java',
+                    json: '.json',
+                    markdown: '.md'
+                };
+                
+                const extension = extensions[activeFile.language] || '.txt';
+                a.download = `${activeFile.name.replace(/[^a-z0-9]/gi, '-')}${extension}`;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                showNotification('File berhasil didownload!', 'success');
+            });
+
+            // Open raw file
+            $('#rawBtn').click(function() {
+                if (activeFile) {
+                    window.open(activeFile.url, '_blank');
+                }
+            });
+
+            // View toggle event handlers
+            $('#codeViewBtn').click(function() {
+                setViewMode('code');
+            });
+
+            $('#markdownViewBtn').click(function() {
+                setViewMode('markdown');
+            });
+
+            // Configure marked.js for better markdown rendering
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    highlight: function(code, language) {
+                        if (language && hljs.getLanguage(language)) {
+                            try {
+                                return hljs.highlight(code, { language: language }).value;
+                            } catch (err) {}
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+            }
+
+            // Show notification
+            function showNotification(message, type = 'success') {
+                $('.notification').remove();
+
+                const notification = $(`
+                    <div class="notification ${type}">
+                        ${message}
+                    </div>
+                `);
+
+                $('body').append(notification);
+
+                setTimeout(() => {
+                    notification.addClass('show');
+                }, 100);
+
+                setTimeout(() => {
+                    notification.removeClass('show');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 3000);
+            }
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
+
+            // Make loadFile globally accessible for retry button
+            window.loadFile = loadFile;
+            window.files = files;
+
+            // Initialize
+            createParticles();
+            renderFileList();
+            showWelcomeState();
+            updateToolbar(null);
+        });
+    </script>
+</body>
+</html>

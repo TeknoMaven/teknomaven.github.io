@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        /* Downloads Grid */
+        .downloads-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .downloads-count {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .download-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-header {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .download-icon {
+            font-size: 4rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .download-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .download-content {
+            padding: 2rem;
+        }
+
+        .download-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .download-version {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .download-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .download-features {
+            margin-bottom: 2rem;
+        }
+
+        .features-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-download {
+            flex: 1;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .btn-info:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Download Modal */
+        .download-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .download-progress {
+            margin-bottom: 2rem;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(59, 130, 246, 0.1);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .download-info {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #ef4444;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-start-download {
+            flex: 2;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-start-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .search-section {
+                padding: 1.5rem;
+            }
+
+            .downloads-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-actions {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Download Animation States */
+        .downloading .progress-text {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TeknoMaven</div>
+            <ul class="nav-links">
+                <li><a href="#home" id="nav-home">Beranda</a></li>
+                <li><a href="#about" id="nav-about">Tentang</a></li>
+                <li><a href="#services" id="nav-services">Layanan</a></li>
+                <li><a href="#portfolio" id="nav-portfolio">Portfolio</a></li>
+                <li><a href="#team" id="nav-team">Tim</a></li>
+                <li><a href="#contact" id="nav-contact">Kontak</a></li>
+                <li><a href="/produk">Produk</a></li>
+                <li><a href="/course">Course</a></li>
+                <li><a href="/download" style="color: #3b82f6;">Download</a></li>
+                <li><a href="#" id="nav-blog">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Download Center</h1>
+            <p class="page-subtitle">Download software, tools, dan resources gratis dari TeknoMaven untuk mengoptimalkan produktivitas teknologi Anda</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari software, tools, atau dokumentasi...">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <!-- Downloads Section -->
+        <div class="downloads-section">
+            <div class="section-header">
+                <div class="downloads-count" id="downloadsCount">Menampilkan 0 download</div>
+            </div>
+            
+            <div class="downloads-grid" id="downloadsGrid">
+                <!-- Downloads will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Modal -->
+    <div class="download-modal" id="downloadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Memulai Download</h2>
+                <p class="modal-subtitle" id="modalSubtitle">Siapkan download Anda</p>
+            </div>
+            <div class="modal-body">
+                <div class="download-progress">
+                    <div class="progress-circle">
+                        <svg class="progress-ring" width="120" height="120">
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#3b82f6"/>
+                                    <stop offset="100%" style="stop-color:#06b6d4"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="50" id="progressRing"/>
+                        </svg>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+                </div>
+                
+                <div class="download-info" id="downloadInfo">
+                    <p>Download akan dimulai dalam beberapa detik. Pastikan koneksi internet Anda stabil.</p>
+                </div>
+                
+                <div class="modal-actions" id="modalActions">
+                    <button class="btn-cancel" id="cancelDownload">Batal</button>
+                    <button class="btn-start-download" id="startDownload">Mulai Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Sample downloads data
+            const downloadsData = {
+                "downloads": [
+                    {
+                        "id": 1,
+                        "name": "TeknoMaven Security Scanner",
+                        "version": "v3.2.1",
+                        "description": "Tool keamanan komprehensif untuk scanning vulnerabilitas pada sistem dan aplikasi web. Deteksi otomatis celah keamanan dengan database terbaru.",
+                        "icon": "🛡️",
+                        "badge": "Populer",
+                        "category": "Security",
+                        "size": "45.2 MB",
+                        "platform": "Windows, macOS, Linux",
+                        "license": "Freeware",
+                        "downloads": "12,453",
+                        "features": ["Vulnerability Scanner", "Real-time Protection", "Custom Reports", "Multi-platform", "Free Updates"],
+                        "downloadUrl": "/"
+                    },
+                    {
+                        "id": 2,
+                        "name": "CloudSync Pro",
+                        "version": "v2.8.0",
+                        "description": "Aplikasi sinkronisasi cloud yang memungkinkan backup dan sync file otomatis ke berbagai platform cloud storage dengan enkripsi end-to-end.",
+                        "icon": "☁️",
+                        "badge": "Terbaru",
+                        "category": "Productivity",
+                        "size": "28.7 MB",
+                        "platform": "Windows, macOS",
+                        "license": "Freemium",
+                        "downloads": "8,921",
+                        "features": ["Multi-cloud Support", "Auto Backup", "File Encryption", "Bandwidth Control", "Version History"],
+                        "downloadUrl": "https://cdn.teknomaven.com/cloudsync-pro-v2.8.0.exe"
+                    },
+                    {
+                        "id": 3,
+                        "name": "DevTools Collection",
+                        "version": "v1.5.3",
+                        "description": "Kumpulan lengkap development tools dan utilities untuk programmer. Termasuk code formatter, minifier, validator, dan berbagai helper tools.",
+                        "icon": "⚙️",
+                        "badge": "Essential",
+                        "category": "Development",
+                        "size": "156.4 MB",
+                        "platform": "Cross-platform",
+                        "license": "Open Source",
+                        "downloads": "15,677",
+                        "features": ["Code Formatter", "Minifier Tools", "API Tester", "Database Helper", "Git Integration"],
+                        "downloadUrl": "https://cdn.teknomaven.com/devtools-collection-v1.5.3.zip"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Network Monitor Plus",
+                        "version": "v4.1.2",
+                        "description": "Tool monitoring jaringan real-time untuk administrator IT. Monitor bandwidth, koneksi, dan performa jaringan dengan dashboard interaktif.",
+                        "icon": "🌐",
+                        "badge": null,
+                        "category": "Network",
+                        "size": "67.8 MB",
+                        "platform": "Windows, Linux",
+                        "license": "Commercial Trial",
+                        "downloads": "6,234",
+                        "features": ["Real-time Monitoring", "Bandwidth Analysis", "Alert System", "Custom Dashboard", "Export Reports"],
+                        "downloadUrl": "https://cdn.teknomaven.com/network-monitor-plus-v4.1.2.msi"
+                    },
+                    {
+                        "id": 5,
+                        "name": "TeknoMaven API Documentation",
+                        "version": "v2023.3",
+                        "description": "Dokumentasi lengkap API TeknoMaven dalam format offline. Termasuk contoh kode, tutorial implementasi, dan reference guide.",
+                        "icon": "📚",
+                        "badge": "Docs",
+                        "category": "Documentation",
+                        "size": "12.3 MB",
+                        "platform": "Any Browser",
+                        "license": "Free",
+                        "downloads": "3,456",
+                        "features": ["Interactive Examples", "Search Function", "Code Snippets", "Offline Access", "Regular Updates"],
+                        "downloadUrl": "https://cdn.teknomaven.com/api-docs-v2023.3.zip"
+                    },
+                    {
+                        "id": 6,
+                        "name": "Mobile App Template Kit",
+                        "version": "v1.0.8",
+                        "description": "Template kit lengkap untuk pengembangan aplikasi mobile dengan React Native. Termasuk 20+ screen template dan komponen UI siap pakai.",
+                        "icon": "📱",
+                        "badge": "New",
+                        "category": "Mobile",
+                        "size": "89.1 MB",
+                        "platform": "React Native",
+                        "license": "MIT License",
+                        "downloads": "2,187",
+                        "features": ["20+ Templates", "UI Components", "Navigation Setup", "State Management", "Sample Data"],
+                        "downloadUrl": "https://cdn.teknomaven.com/mobile-template-kit-v1.0.8.zip"
+                    }
+                ]
+            };
+
+            let downloads = [];
+            let filteredDownloads = [];
+
+            // Load downloads from JSON
+            function loadDownloads() {
+                try {
+                    downloads = downloadsData.downloads;
+                    filteredDownloads = [...downloads];
+                    renderDownloads();
+                } catch (error) {
+                    console.error('Error loading downloads:', error);
+                    showError('Gagal memuat data download');
+                }
+            }
+
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 3 + 3) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Render downloads
+            function renderDownloads() {
+                const downloadsGrid = $('#downloadsGrid');
+                downloadsGrid.empty();
+
+                if (filteredDownloads.length === 0) {
+                    downloadsGrid.html(`
+                        <div class="no-results">
+                            <div class="no-results-icon">📁</div>
+                            <h3>Tidak ada download ditemukan</h3>
+                            <p>Coba ubah kata kunci pencarian Anda</p>
+                        </div>
+                    `);
+                    return;
+                }
+
+                filteredDownloads.forEach(item => {
+                    const downloadCard = $(`
+                        <div class="download-card fade-in" data-id="${item.id}">
+                            <div class="download-header">
+                                <div class="download-icon">${item.icon}</div>
+                                ${item.badge ? `<div class="download-badge">${item.badge}</div>` : ''}
+                            </div>
+                            <div class="download-content">
+                                <h3 class="download-title">${item.name}</h3>
+                                <div class="download-version">${item.version}</div>
+                                <p class="download-description">${item.description}</p>
+                                
+                                <div class="download-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Ukuran File</span>
+                                        <span class="detail-value">${item.size}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Platform</span>
+                                        <span class="detail-value">${item.platform}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Lisensi</span>
+                                        <span class="detail-value">${item.license}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Download</span>
+                                        <span class="detail-value">${item.downloads}x</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="download-features">
+                                    <div class="features-title">Fitur Utama</div>
+                                    <div class="features-list">
+                                        ${item.features.map(feature => 
+                                            `<span class="feature-tag">${feature}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div class="download-actions">
+                                    <button class="btn-download" onclick="initiateDownload(${item.id})">
+                                        <span>⬇️</span>
+                                        Download
+                                    </button>
+                                    <button class="btn-info" onclick="showDownloadInfo(${item.id})" title="Info">
+                                        ℹ️
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    
+                    downloadsGrid.append(downloadCard);
+                });
+
+                // Update downloads count
+                $('#downloadsCount').text(`Menampilkan ${filteredDownloads.length} download`);
+            }
+
+            // Filter downloads
+            function filterDownloads() {
+                const searchTerm = $('#searchInput').val().toLowerCase();
+
+                filteredDownloads = downloads.filter(item => {
+                    return !searchTerm || 
+                        item.name.toLowerCase().includes(searchTerm) ||
+                        item.description.toLowerCase().includes(searchTerm) ||
+                        item.category.toLowerCase().includes(searchTerm) ||
+                        item.features.some(feature => feature.toLowerCase().includes(searchTerm));
+                });
+
+                renderDownloads();
+            }
+
+            // Initiate download with animation
+            window.initiateDownload = function(downloadId) {
+                const download = downloads.find(d => d.id === downloadId);
+                if (!download) return;
+
+                const modal = $('#downloadModal');
+                const modalTitle = $('#modalTitle');
+                const modalSubtitle = $('#modalSubtitle');
+                const progressRing = $('#progressRing');
+                const progressText = $('#progressText');
+                const downloadInfo = $('#downloadInfo');
+                const modalActions = $('#modalActions');
+
+                // Reset modal state
+                modalTitle.text(`Download ${download.name}`);
+                modalSubtitle.text(`${download.version} • ${download.size}`);
+                progressRing.css('stroke-dashoffset', '314');
+                progressText.text('0%');
+                downloadInfo.html(`
+                    <p><strong>File:</strong> ${download.name} ${download.version}</p>
+                    <p><strong>Ukuran:</strong> ${download.size}</p>
+                    <p><strong>Platform:</strong> ${download.platform}</p>
+                    <p>Download akan dimulai setelah Anda mengklik "Mulai Download".</p>
+                `);
+
+                // Show modal
+                modal.fadeIn(300);
+                $('body').css('overflow', 'hidden');
+
+                // Handle start download
+                $('#startDownload').off('click').on('click', function() {
+                    startDownloadAnimation(download);
+                });
+            };
+
+            // Start download animation
+            function startDownloadAnimation(download) {
+                const modalActions = $('#modalActions');
+                const progressRing = $('#progressRing');
+                const progressText = $('#progressText');
+                const downloadInfo = $('#downloadInfo');
+                const modalSubtitle = $('#modalSubtitle');
+
+                // Hide actions and show preparing
+                modalActions.hide();
+                modalSubtitle.text('Mempersiapkan download...');
+                downloadInfo.html(`
+                    <p>Menghubungkan ke server...</p>
+                    <p>Memverifikasi file...</p>
+                `);
+
+                // Add downloading class for animation
+                $('.modal-content').addClass('downloading');
+
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15 + 5; // Random progress increment
+                    
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(progressInterval);
+                        completeDownload(download);
+                    }
+
+                    // Update progress ring
+                    const circumference = 2 * Math.PI * 50; // radius = 50
+                    const offset = circumference - (progress / 100 * circumference);
+                    progressRing.css('stroke-dashoffset', offset);
+                    progressText.text(`${Math.round(progress)}%`);
+
+                    // Update status text
+                    if (progress < 30) {
+                        downloadInfo.html(`
+                            <p>Mengunduh file...</p>
+                            <p>Kecepatan: ${(Math.random() * 2 + 1).toFixed(1)} MB/s</p>
+                        `);
+                    } else if (progress < 70) {
+                        downloadInfo.html(`
+                            <p>Download berlangsung...</p>
+                            <p>Tersisa: ${Math.round((100 - progress) * 0.5)} detik</p>
+                        `);
+                    } else {
+                        downloadInfo.html(`
+                            <p>Hampir selesai...</p>
+                            <p>Memverifikasi file...</p>
+                        `);
+                    }
+                }, 200);
+            }
+
+            // Complete download
+            function completeDownload(download) {
+                const modalTitle = $('#modalTitle');
+                const modalSubtitle = $('#modalSubtitle');
+                const progressText = $('#progressText');
+                const downloadInfo = $('#downloadInfo');
+                const modalActions = $('#modalActions');
+
+                // Update UI for completion
+                modalTitle.text('Download Selesai!');
+                modalSubtitle.text('File berhasil diunduh');
+                progressText.text('✓');
+                progressText.css('color', '#10b981');
+                
+                downloadInfo.html(`
+                    <p><strong>✅ ${download.name} berhasil diunduh</strong></p>
+                    <p>File akan terbuka di tab baru.</p>
+                    <p>Terima kasih telah menggunakan layanan kami!</p>
+                `);
+
+                // Show close button
+                modalActions.html(`
+                    <button class="btn-start-download" onclick="closeDownloadModalAndShowThanks()" style="width: 100%;">
+                        Lanjutkan
+                    </button>
+                `);
+                modalActions.show();
+
+                // Remove downloading animation
+                $('.modal-content').removeClass('downloading');
+
+                // Open download link in new tab
+                setTimeout(() => {
+                    window.open(download.downloadUrl, '_blank');
+                }, 500);
+            }
+
+            // Close modal and show thank you page
+            window.closeDownloadModalAndShowThanks = function() {
+                $('#downloadModal').fadeOut(300, function() {
+                    $('body').css('overflow', 'auto');
+                    showThankYouPage();
+                });
+            };
+
+            // Show thank you page
+            function showThankYouPage() {
+                // Hide main content
+                $('.main-content').fadeOut(300, function() {
+                    // Create thank you page content
+                    const thankYouContent = $(`
+                        <div class="thank-you-page" style="
+                            min-height: calc(100vh - 80px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            animation: fadeInUp 0.6s ease-out;
+                        ">
+                            <div style="
+                                background: rgba(255, 255, 255, 0.9);
+                                border-radius: 25px;
+                                padding: 3rem;
+                                text-align: center;
+                                border: 1px solid rgba(226, 232, 240, 0.5);
+                                backdrop-filter: blur(10px);
+                                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+                                max-width: 600px;
+                                width: 100%;
+                            ">
+                                <div style="
+                                    font-size: 4rem;
+                                    margin-bottom: 1.5rem;
+                                    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    background-clip: text;
+                                ">🎉</div>
+                                
+                                <h1 style="
+                                    font-size: 2.5rem;
+                                    font-weight: 800;
+                                    margin-bottom: 1rem;
+                                    background: linear-gradient(135deg, #1e293b, #3b82f6);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    background-clip: text;
+                                ">Terima Kasih!</h1>
+                                
+                                <p style="
+                                    font-size: 1.2rem;
+                                    color: #64748b;
+                                    line-height: 1.6;
+                                    margin-bottom: 2rem;
+                                ">
+                                    Download Anda telah berhasil! File telah dibuka di tab baru dan siap untuk digunakan. 
+                                    Kami berharap tools ini dapat membantu meningkatkan produktivitas Anda.
+                                </p>
+                                
+                                <div style="
+                                    background: rgba(59, 130, 246, 0.1);
+                                    border: 2px solid rgba(59, 130, 246, 0.2);
+                                    border-radius: 20px;
+                                    padding: 2rem;
+                                    margin-bottom: 2rem;
+                                ">
+                                    <h3 style="
+                                        color: #3b82f6;
+                                        font-weight: 700;
+                                        margin-bottom: 1rem;
+                                        font-size: 1.3rem;
+                                    ">Dukung Pengembangan Kami</h3>
+                                    
+                                    <p style="
+                                        color: #374151;
+                                        margin-bottom: 1.5rem;
+                                        line-height: 1.6;
+                                    ">
+                                        Jika tools ini bermanfaat untuk Anda, pertimbangkan untuk mendukung pengembangan 
+                                        tools gratis lainnya dengan memberikan dukungan melalui Trakteer.
+                                    </p>
+                                    
+                                    <a href="https://trakteer.id/teknomaven" target="_blank" style="
+                                        display: inline-flex;
+                                        align-items: center;
+                                        gap: 0.8rem;
+                                        background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+                                        color: white;
+                                        padding: 1rem 2rem;
+                                        border-radius: 50px;
+                                        text-decoration: none;
+                                        font-weight: 600;
+                                        font-size: 1.1rem;
+                                        transition: all 0.3s ease;
+                                        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+                                        margin-bottom: 1rem;
+                                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 40px rgba(255, 107, 107, 0.4)'" 
+                                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(255, 107, 107, 0.3)'">
+                                        <span style="font-size: 1.3rem;">☕</span>
+                                        Dukung via Trakteer
+                                    </a>
+                                    
+                                    <div style="
+                                        font-size: 0.9rem;
+                                        color: #64748b;
+                                        margin-top: 1rem;
+                                    ">
+                                        Dukungan Anda membantu kami terus mengembangkan tools gratis berkualitas
+                                    </div>
+                                </div>
+                                
+                                <div style="
+                                    display: flex;
+                                    gap: 1rem;
+                                    justify-content: center;
+                                    flex-wrap: wrap;
+                                ">
+                                    <a href="downloads.html" style="
+                                        background: rgba(59, 130, 246, 0.1);
+                                        color: #3b82f6;
+                                        border: 2px solid #3b82f6;
+                                        padding: 1rem 2rem;
+                                        border-radius: 50px;
+                                        text-decoration: none;
+                                        font-weight: 600;
+                                        transition: all 0.3s ease;
+                                    " onmouseover="this.style.background='#3b82f6'; this.style.color='white'; this.style.transform='translateY(-2px)'" 
+                                       onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'; this.style.color='#3b82f6'; this.style.transform='translateY(0)'">
+                                        Download Lainnya
+                                    </a>
+                                    
+                                    <a href="index.html" style="
+                                        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+                                        color: white;
+                                        border: none;
+                                        padding: 1rem 2rem;
+                                        border-radius: 50px;
+                                        text-decoration: none;
+                                        font-weight: 600;
+                                        transition: all 0.3s ease;
+                                        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+                                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 40px rgba(59, 130, 246, 0.4)'" 
+                                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(59, 130, 246, 0.3)'">
+                                        Kembali ke Beranda
+                                    </a>
+                                </div>
+                                
+                                <div style="
+                                    margin-top: 2rem;
+                                    padding-top: 2rem;
+                                    border-top: 1px solid rgba(226, 232, 240, 0.5);
+                                    color: #64748b;
+                                    font-size: 0.9rem;
+                                ">
+                                    <p>Butuh bantuan? <a href="contact.html#contact" style="color: #3b82f6; text-decoration: none;">Hubungi support kami</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    
+                    // Replace content with thank you page
+                    $('body').append(thankYouContent);
+                    
+                    // Update page title
+                    document.title = 'Terima Kasih - TeknoMaven';
+                });
+            }
+
+            // Show download info
+            window.showDownloadInfo = function(downloadId) {
+                const download = downloads.find(d => d.id === downloadId);
+                if (!download) return;
+
+                showNotification(`
+                    <strong>${download.name}</strong><br>
+                    Kategori: ${download.category}<br>
+                    Platform: ${download.platform}<br>
+                    Diunduh: ${download.downloads} kali
+                `, 'info');
+            };
+
+            // Close download modal
+            window.closeDownloadModal = function() {
+                $('#downloadModal').fadeOut(300);
+                $('body').css('overflow', 'auto');
+            };
+
+            // Cancel download
+            $('#cancelDownload').click(function() {
+                closeDownloadModal();
+            });
+
+            // Close modal on outside click
+            $('#downloadModal').click(function(e) {
+                if (e.target === this) {
+                    closeDownloadModal();
+                }
+            });
+
+            // Show notification
+            function showNotification(message, type = 'info') {
+                const existingNotification = $('.notification');
+                if (existingNotification.length) {
+                    existingNotification.remove();
+                }
+                
+                const notification = $(`
+                    <div class="notification notification-${type}" style="
+                        position: fixed;
+                        top: 100px;
+                        right: 20px;
+                        padding: 1rem 1.5rem;
+                        border-radius: 10px;
+                        color: white;
+                        font-weight: 500;
+                        z-index: 10000;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        transform: translateX(400px);
+                        transition: transform 0.3s ease;
+                        max-width: 350px;
+                        word-wrap: break-word;
+                        background: ${type === 'success' ? 'linear-gradient(135deg, #10b981, #059669)' : 
+                                   type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 
+                                   'linear-gradient(135deg, #3b82f6, #06b6d4)'};
+                    ">
+                        ${message}
+                    </div>
+                `);
+                
+                $('body').append(notification);
+                
+                setTimeout(() => {
+                    notification.css('transform', 'translateX(0)');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.css('transform', 'translateX(400px)');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 4000);
+            }
+
+            // Show error
+            function showError(message) {
+                const downloadsGrid = $('#downloadsGrid');
+                downloadsGrid.html(`
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 10px; background: rgba(248, 250, 252, 0.5);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                        <h3 style="margin-bottom: 1rem; color: #ef4444;">Error</h3>
+                        <p style="margin-bottom: 1rem;">${message}</p>
+                        <button onclick="loadDownloads()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Coba Lagi
+                        </button>
+                    </div>
+                `);
+            }
+
+            // Event listeners
+            $('#searchInput').on('input', debounce(filterDownloads, 300));
+
+            // Debounce function
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
+
+            // Initialize
+            createParticles();
+            loadDownloads();
+        });
+    </script>
+</body>
+</html>
