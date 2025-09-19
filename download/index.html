@@ -681,98 +681,127 @@
     <script>
         $(document).ready(function() {
             // Sample downloads data
+            // const downloadsData = {
+            //     "downloads": [
+            //         {
+            //             "id": 1,
+            //             "name": "TeknoMaven Security Scanner",
+            //             "version": "v3.2.1",
+            //             "description": "Tool keamanan komprehensif untuk scanning vulnerabilitas pada sistem dan aplikasi web. Deteksi otomatis celah keamanan dengan database terbaru.",
+            //             "icon": "🛡️",
+            //             "badge": "Populer",
+            //             "category": "Security",
+            //             "size": "45.2 MB",
+            //             "platform": "Windows, macOS, Linux",
+            //             "license": "Freeware",
+            //             "downloads": "12,453",
+            //             "features": ["Vulnerability Scanner", "Real-time Protection", "Custom Reports", "Multi-platform", "Free Updates"],
+            //             "downloadUrl": "/"
+            //         },
+            //         {
+            //             "id": 2,
+            //             "name": "CloudSync Pro",
+            //             "version": "v2.8.0",
+            //             "description": "Aplikasi sinkronisasi cloud yang memungkinkan backup dan sync file otomatis ke berbagai platform cloud storage dengan enkripsi end-to-end.",
+            //             "icon": "☁️",
+            //             "badge": "Terbaru",
+            //             "category": "Productivity",
+            //             "size": "28.7 MB",
+            //             "platform": "Windows, macOS",
+            //             "license": "Freemium",
+            //             "downloads": "8,921",
+            //             "features": ["Multi-cloud Support", "Auto Backup", "File Encryption", "Bandwidth Control", "Version History"],
+            //             "downloadUrl": "https://cdn.teknomaven.com/cloudsync-pro-v2.8.0.exe"
+            //         },
+            //         {
+            //             "id": 3,
+            //             "name": "DevTools Collection",
+            //             "version": "v1.5.3",
+            //             "description": "Kumpulan lengkap development tools dan utilities untuk programmer. Termasuk code formatter, minifier, validator, dan berbagai helper tools.",
+            //             "icon": "⚙️",
+            //             "badge": "Essential",
+            //             "category": "Development",
+            //             "size": "156.4 MB",
+            //             "platform": "Cross-platform",
+            //             "license": "Open Source",
+            //             "downloads": "15,677",
+            //             "features": ["Code Formatter", "Minifier Tools", "API Tester", "Database Helper", "Git Integration"],
+            //             "downloadUrl": "https://cdn.teknomaven.com/devtools-collection-v1.5.3.zip"
+            //         },
+            //         {
+            //             "id": 4,
+            //             "name": "Network Monitor Plus",
+            //             "version": "v4.1.2",
+            //             "description": "Tool monitoring jaringan real-time untuk administrator IT. Monitor bandwidth, koneksi, dan performa jaringan dengan dashboard interaktif.",
+            //             "icon": "🌐",
+            //             "badge": null,
+            //             "category": "Network",
+            //             "size": "67.8 MB",
+            //             "platform": "Windows, Linux",
+            //             "license": "Commercial Trial",
+            //             "downloads": "6,234",
+            //             "features": ["Real-time Monitoring", "Bandwidth Analysis", "Alert System", "Custom Dashboard", "Export Reports"],
+            //             "downloadUrl": "https://cdn.teknomaven.com/network-monitor-plus-v4.1.2.msi"
+            //         },
+            //         {
+            //             "id": 5,
+            //             "name": "TeknoMaven API Documentation",
+            //             "version": "v2023.3",
+            //             "description": "Dokumentasi lengkap API TeknoMaven dalam format offline. Termasuk contoh kode, tutorial implementasi, dan reference guide.",
+            //             "icon": "📚",
+            //             "badge": "Docs",
+            //             "category": "Documentation",
+            //             "size": "12.3 MB",
+            //             "platform": "Any Browser",
+            //             "license": "Free",
+            //             "downloads": "3,456",
+            //             "features": ["Interactive Examples", "Search Function", "Code Snippets", "Offline Access", "Regular Updates"],
+            //             "downloadUrl": "https://cdn.teknomaven.com/api-docs-v2023.3.zip"
+            //         },
+            //         {
+            //             "id": 6,
+            //             "name": "Mobile App Template Kit",
+            //             "version": "v1.0.8",
+            //             "description": "Template kit lengkap untuk pengembangan aplikasi mobile dengan React Native. Termasuk 20+ screen template dan komponen UI siap pakai.",
+            //             "icon": "📱",
+            //             "badge": "New",
+            //             "category": "Mobile",
+            //             "size": "89.1 MB",
+            //             "platform": "React Native",
+            //             "license": "MIT License",
+            //             "downloads": "2,187",
+            //             "features": ["20+ Templates", "UI Components", "Navigation Setup", "State Management", "Sample Data"],
+            //             "downloadUrl": "https://cdn.teknomaven.com/mobile-template-kit-v1.0.8.zip"
+            //         }
+            //     ]
+            // };
             const downloadsData = {
                 "downloads": [
                     {
                         "id": 1,
-                        "name": "TeknoMaven Security Scanner",
-                        "version": "v3.2.1",
-                        "description": "Tool keamanan komprehensif untuk scanning vulnerabilitas pada sistem dan aplikasi web. Deteksi otomatis celah keamanan dengan database terbaru.",
-                        "icon": "🛡️",
+                        "name": "TeknoMaven Lyrics Player",
+                        "version": "v1.2.1",
+                        "description": "Aplikasi penampil lirik untuk Visual Jockey (VJ) dengan kontrol manual. Lirik ditampilkan baris per baris sesuai tempo musik menggunakan tombol next/previous.",
+                        "icon": "🎤",
                         "badge": "Populer",
-                        "category": "Security",
-                        "size": "45.2 MB",
-                        "platform": "Windows, macOS, Linux",
+                        "category": "Multimedia",
+                        "size": "Online App",
+                        "platform": "Web",
                         "license": "Freeware",
                         "downloads": "12,453",
-                        "features": ["Vulnerability Scanner", "Real-time Protection", "Custom Reports", "Multi-platform", "Free Updates"],
-                        "downloadUrl": "/"
-                    },
-                    {
-                        "id": 2,
-                        "name": "CloudSync Pro",
-                        "version": "v2.8.0",
-                        "description": "Aplikasi sinkronisasi cloud yang memungkinkan backup dan sync file otomatis ke berbagai platform cloud storage dengan enkripsi end-to-end.",
-                        "icon": "☁️",
-                        "badge": "Terbaru",
-                        "category": "Productivity",
-                        "size": "28.7 MB",
-                        "platform": "Windows, macOS",
-                        "license": "Freemium",
-                        "downloads": "8,921",
-                        "features": ["Multi-cloud Support", "Auto Backup", "File Encryption", "Bandwidth Control", "Version History"],
-                        "downloadUrl": "https://cdn.teknomaven.com/cloudsync-pro-v2.8.0.exe"
-                    },
-                    {
-                        "id": 3,
-                        "name": "DevTools Collection",
-                        "version": "v1.5.3",
-                        "description": "Kumpulan lengkap development tools dan utilities untuk programmer. Termasuk code formatter, minifier, validator, dan berbagai helper tools.",
-                        "icon": "⚙️",
-                        "badge": "Essential",
-                        "category": "Development",
-                        "size": "156.4 MB",
-                        "platform": "Cross-platform",
-                        "license": "Open Source",
-                        "downloads": "15,677",
-                        "features": ["Code Formatter", "Minifier Tools", "API Tester", "Database Helper", "Git Integration"],
-                        "downloadUrl": "https://cdn.teknomaven.com/devtools-collection-v1.5.3.zip"
-                    },
-                    {
-                        "id": 4,
-                        "name": "Network Monitor Plus",
-                        "version": "v4.1.2",
-                        "description": "Tool monitoring jaringan real-time untuk administrator IT. Monitor bandwidth, koneksi, dan performa jaringan dengan dashboard interaktif.",
-                        "icon": "🌐",
-                        "badge": null,
-                        "category": "Network",
-                        "size": "67.8 MB",
-                        "platform": "Windows, Linux",
-                        "license": "Commercial Trial",
-                        "downloads": "6,234",
-                        "features": ["Real-time Monitoring", "Bandwidth Analysis", "Alert System", "Custom Dashboard", "Export Reports"],
-                        "downloadUrl": "https://cdn.teknomaven.com/network-monitor-plus-v4.1.2.msi"
-                    },
-                    {
-                        "id": 5,
-                        "name": "TeknoMaven API Documentation",
-                        "version": "v2023.3",
-                        "description": "Dokumentasi lengkap API TeknoMaven dalam format offline. Termasuk contoh kode, tutorial implementasi, dan reference guide.",
-                        "icon": "📚",
-                        "badge": "Docs",
-                        "category": "Documentation",
-                        "size": "12.3 MB",
-                        "platform": "Any Browser",
-                        "license": "Free",
-                        "downloads": "3,456",
-                        "features": ["Interactive Examples", "Search Function", "Code Snippets", "Offline Access", "Regular Updates"],
-                        "downloadUrl": "https://cdn.teknomaven.com/api-docs-v2023.3.zip"
-                    },
-                    {
-                        "id": 6,
-                        "name": "Mobile App Template Kit",
-                        "version": "v1.0.8",
-                        "description": "Template kit lengkap untuk pengembangan aplikasi mobile dengan React Native. Termasuk 20+ screen template dan komponen UI siap pakai.",
-                        "icon": "📱",
-                        "badge": "New",
-                        "category": "Mobile",
-                        "size": "89.1 MB",
-                        "platform": "React Native",
-                        "license": "MIT License",
-                        "downloads": "2,187",
-                        "features": ["20+ Templates", "UI Components", "Navigation Setup", "State Management", "Sample Data"],
-                        "downloadUrl": "https://cdn.teknomaven.com/mobile-template-kit-v1.0.8.zip"
+                        "features": [
+                            "Navigasi lirik manual (next/previous baris)",
+                            "Mode layar penuh untuk performa live",
+                            "Preset Background Chromakey",
+                            "Integrasi sederhana dengan software VJ",
+                            "Kustomisasi font, warna, dan background",
+                            "Support multi-platform",
+                            "Update gratis"
+                        ],
+                        "downloadUrl": "https://teknomaven.com/download/lyrics-player"
                     }
+
+
                 ]
             };
 
