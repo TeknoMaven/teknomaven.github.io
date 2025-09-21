@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Lirik & Chord dengan Metronom</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Penampil Lirik</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,307 +13,794 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 120px);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .content-area {
-            display: flex;
-            gap: 20px;
-            flex: 1;
-            min-height: 0;
-        }
-
-        .metronome-section {
-            width: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .metronome-visual {
-            width: 120px;
-            height: 120px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            transition: all 0.1s ease;
-            position: relative;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.05);
+            height: 100vh;
         }
 
-        .metronome-visual.beat {
-            background: radial-gradient(circle, #ff4757, #c44569);
-            border-color: #ff4757;
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 71, 87, 0.8);
-        }
-
-        .metronome-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .metronome-info {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .lyrics-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            min-height: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .lyrics-header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .countdown {
-            font-size: 3em;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-            min-height: 80px;
+        /* Main Lyric Area */
+        .lyric-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .countdown.show {
-            animation: pulse 1s ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .lyrics-display {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
-            padding: 30px;
-            overflow-y: auto;
-            min-height: 0;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .lyrics-content {
-            font-family: 'Courier New', monospace;
-            line-height: 1.6;
-            font-size: 16px;
-            color: #e0e0e0;
-            white-space: pre-wrap;
-        }
-
-        .lyric-block {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            flex-direction: column;
+            background-color: #000;
             transition: all 0.3s ease;
-            min-height: 40px;
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            line-height: 1.6;
         }
 
-        .lyric-block.current {
-            background: linear-gradient(135deg, rgba(255, 71, 87, 0.3), rgba(196, 69, 105, 0.3));
-            border: 2px solid #ff4757;
-            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+        .lyric-container.minimized-nav {
+            bottom: 60px;
         }
 
-        .section-header {
-            font-size: 18px;
-            font-weight: bold;
-            color: #feca57;
-            text-align: center;
-            margin-bottom: 10px;
-            background: rgba(254, 202, 87, 0.1);
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .chord-lyric-combined {
-            color: #e0e0e0;
-            white-space: pre-wrap;
-        }
-
-        .chord-lyric-combined .chord {
-            color: #feca57;
-            font-weight: bold;
-        }
-
-        .chord-only {
-            color: #feca57;
-            font-weight: bold;
-            font-size: 16px;
-            text-align: left;
-            padding: 5px 0;
-        }
-
-        .scroll-controls {
+        .lyric-display {
+            width: 100%;
+            height: 100%;
             display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .navigation {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            flex-direction: column;
+            /* justify-content: center; */
+            align-items: center;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .lyric-line {
+            margin: 10px 0;
+            font-size: 3rem;
+            color: #fff;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            font-weight: normal;
+            width: 100%;
+            display: block;
+            /* Enhanced text rendering for capture */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
-        .control-group label {
+        .lyric-line.active {
+            opacity: 1;
             font-weight: bold;
-            min-width: 60px;
-            font-size: 14px;
-            color: #e0e0e0;
         }
 
-        input[type="number"], input[type="range"], select {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #e0e0e0;
-            font-size: 14px;
-            width: 80px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Text effects for chromakey */
+        .text-stroke {
+            -webkit-text-stroke: 2px #000;
+            text-stroke: 2px #000;
         }
 
-        input[type="range"] {
-            width: 120px;
+        .text-shadow-light {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
-        select {
-            width: 120px;
-            cursor: pointer;
+        .text-shadow-heavy {
+            text-shadow: 
+                2px 2px 0px #000,
+                -2px -2px 0px #000,
+                2px -2px 0px #000,
+                -2px 2px 0px #000,
+                0px 2px 0px #000,
+                2px 0px 0px #000,
+                0px -2px 0px #000,
+                -2px 0px 0px #000,
+                4px 4px 8px rgba(0,0,0,0.6);
         }
 
-        select option {
-            background: #2d2d2d;
-            color: #e0e0e0;
+        .text-glow {
+            text-shadow: 
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor,
+                2px 2px 4px rgba(0,0,0,0.8);
         }
 
-        input[type="file"] {
+        .text-outline {
+            -webkit-text-stroke: 3px #000;
+            text-stroke: 3px #000;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+
+        /* Fullscreen mode */
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background-color: #000;
+        }
+
+        .fullscreen .navigator {
+            display: none !important;
+        }
+
+        .fullscreen .lyric-container {
+            bottom: 0 !important;
+            top: 0;
+        }
+
+        /* Ensure textarea stays visible */
+        .navigator .nav-content {
+            display: block;
+        }
+
+        .navigator.minimized .nav-content {
             display: none;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
+        /* Fix textarea container */
+        .textarea-container {
+            flex: 1;
+            height: 100%;
+            margin-right: 10px;
+            min-width: 200px;
+        }
+
+        .lyrics-textarea {
+            width: 100% !important;
+            height: 100% !important;
+            background-color: #333 !important;
+            color: #fff !important;
+            border: 1px solid #555 !important;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 12px;
+            resize: none;
+            font-family: monospace;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .lyric-line.active {
+            opacity: 1;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .lyric-line.hidden {
+            display: none;
+        }
+
+        /* Bottom Navigator */
+        .navigator {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background-color: #222;
+            border-top: 2px solid #444;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navigator.minimized {
+            height: 60px;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navigator.minimized .nav-content {
+            display: none;
+        }
+
+        .navigator.minimized .minimize-controls {
+            display: flex !important;
+        }
+
+        .minimize-controls {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            background-color: #333;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin: 0 10px;
+        }
+
+        .minimize-controls button {
+            background-color: #444;
+            border: 1px solid #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            min-width: 70px;
+        }
+
+        .minimize-controls .counter {
+            background-color: #555;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            border: 1px solid #777;
+        }
+
+        /* Chromakey buttons */
+        .chroma-btn {
+            min-width: 50px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid #333;
+            cursor: pointer;
+        }
+
+        .chroma-btn:hover {
+            border-color: #fff;
+            transform: scale(1.05);
+        }
+
+        .chroma-btn.active {
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* High contrast presets for chromakey */
+        .chroma-green {
+            background-color: #00FF00 !important;
+        }
+        
+        .chroma-blue {
+            background-color: #0000FF !important;
+        }
+        
+        .chroma-magenta {
+            background-color: #FF00FF !important;
+        }
+        
+        /* Enhanced text visibility on chromakey backgrounds */
+        .chroma-optimized .lyric-line {
+            color: #FFFFFF;
+            font-weight: 900;
+            -webkit-text-stroke: 2px #000000;
+            text-stroke: 2px #000000;
+            text-shadow: 
+                3px 3px 0px #000000,
+                -3px -3px 0px #000000,
+                3px -3px 0px #000000,
+                -3px 3px 0px #000000,
+                0px 3px 0px #000000,
+                3px 0px 0px #000000,
+                0px -3px 0px #000000,
+                -3px 0px 0px #000000;
+        }
+
+        /* Fullscreen overlay */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
             border-radius: 8px;
-            font-size: 14px;
+            display: none;
+        }
+
+        .fullscreen-overlay button {
+            background: #444;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .fullscreen .fullscreen-overlay {
+            display: block;
+        }
+
+        .minimize-toggle {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: #444;
+            border: 1px solid #666;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .minimize-toggle:hover {
+            background-color: #555;
+        }
+
+        .nav-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            overflow-y: auto;
+        }
+
+        .nav-row-1 {
+            height: 40px;
+        }
+
+        .nav-row-2 {
+            flex: 1;
+            min-height: 120px;
+        }
+
+        .nav-row-3 {
+            height: 30px;
+        }
+
+        .nav-row-2 {
+            flex: 1;
+            min-height: 120px;
+            height: calc(100% - 50px);
+            display: flex !important;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .nav-row-2 {
+            flex: 1;
+            min-height: 120px;
+            max-height: 140px;
+            height: calc(100% - 50px);
+            display: flex !important;
+            gap: 10px;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* Edit Controls */
+        .edit-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 140px;
+            min-width: 140px;
+            max-width: 140px;
+            max-height: 100%;
+            gap: 8px;
+            padding: 8px;
+            background-color: #333;
+            border-radius: 8px;
+            border: 1px solid #555;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .edit-lyrics-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 100%;
+            text-align: center;
+            line-height: 1.2;
         }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #ff4757, #c44569);
+        .edit-lyrics-btn:hover {
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .edit-lyrics-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .edit-controls .counter {
+            font-size: 10px;
+            color: #ccc;
+            text-align: center;
+            padding: 4px;
+            background-color: #444;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quick-btn {
+            background-color: #666;
             color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            line-height: 1.2;
         }
 
-        .btn-secondary {
-            background: linear-gradient(45deg, #3742fa, #2f3542);
-            color: white;
+        .quick-btn:hover {
+            background-color: #777;
+            transform: translateY(-1px);
         }
 
-        .btn-success {
-            background: linear-gradient(45deg, #1dd1a1, #10ac84);
-            color: white;
+        .quick-btn:active {
+            transform: translateY(0);
         }
 
-        .btn-small {
-            padding: 8px 16px;
+        /* Ensure edit-controls scrolls properly */
+        .edit-controls::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .edit-controls::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .edit-controls::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 2px;
+        }
+
+        .edit-controls::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+         /* Ensure edit-controls scrolls properly */
+        .nav-row::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .nav-row::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .nav-row::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 2px;
+        }
+
+        .nav-row::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        
+
+        /* Line navigation scrollbar */
+        .line-navigation::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .line-navigation::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .line-navigation::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+        .line-navigation::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Lyrics Modal Styling */
+        .lyrics-modal-content {
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lyrics-edit-area {
+            flex: 1;
+            margin: 20px 0;
+            min-height: 400px;
+            display: flex;
+        }
+
+        .lyrics-textarea-popup {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            background-color: #2a2a2a;
+            color: #fff;
+            border: 2px solid #555;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            resize: none;
+            line-height: 1.6;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .lyrics-textarea-popup:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .lyrics-modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0 0 0;
+            border-top: 1px solid #555;
+        }
+
+        .lyrics-info {
+            color: #ccc;
             font-size: 12px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .lyrics-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .lyrics-actions button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        /* Modal Styles */
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #777;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #da190b;
+        }
+
+        .minimize-controls {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            background-color: #333;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin: 0 10px;
+        }
+
+        .minimize-toggle {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: #444;
+            border: 1px solid #666;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .minimize-toggle:hover {
+            background-color: #555;
+        }
+
+        /* Controls */
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        select, input, button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        button {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .lyric-line.locked-random {
+            border-left: 3px solid #4CAF50;
+            padding-left: 10px;
+        }
+
+        button.active {
+            background-color: #4CAF50;
+            color: #fff;
+            font-weight: bold;
+            position: relative;
+        }
+
+        button.active::after {
+            content: " ✓";
+            font-size: 10px;
+        }
+
+        .align-buttons {
+            display: flex;
+            gap: 2px;
+        }
+
+        .align-buttons button {
+            min-width: 60px;
+            font-size: 10px;
+            padding: 5px 4px;
+        }
+
+        /* Alignment specific styles */
+        .lyric-display.align-left {
+            align-items: flex-start;
+        }
+
+        .lyric-display.align-center {
+            align-items: center;
+        }
+
+        .lyric-display.align-right {
+            align-items: flex-end;
+        }
+
+        .lyric-line.align-left {
+            text-align: left;
+        }
+
+        .lyric-line.align-center {
+            text-align: center;
+        }
+
+        .lyric-line.align-right {
+            text-align: right;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        input[type="color"] {
+            width: 30px;
+            height: 25px;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .line-navigation {
+            flex: 1;
+            height: 100%;
+            max-height: 100%;
+            min-width: 200px;
+            background-color: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 8px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .line-btn {
+            display: block;
+            width: 100%;
+            margin: 2px 0;
+            padding: 4px 8px;
+            font-size: 11px;
+            text-align: left;
+            background-color: #444;
+            border: 1px solid #666;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .line-btn:hover {
+            background-color: #555;
+        }
+
+        .line-btn.current {
+            background-color: #4CAF50;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .line-btn {
+            display: block;
+            width: 100%;
+            margin: 2px 0;
+            padding: 4px 8px;
+            font-size: 11px;
+            text-align: left;
+            background-color: #444;
+            border: 1px solid #666;
+        }
+
+        .line-btn.current {
+            background-color: #4CAF50;
+        }
+
+        /* Counter */
+        .counter {
+            font-size: 12px;
+            color: #ccc;
+            white-space: nowrap;
+        }
+
+        /* Chromakey buttons */
+        .chroma-btn {
+            min-width: 50px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid #333;
+            cursor: pointer;
+        }
+
+        .chroma-btn:hover {
+            border-color: #fff;
+            transform: scale(1.05);
+        }
+
+        .chroma-btn.active {
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Font Modal */
         .modal {
             display: none;
             position: fixed;
@@ -322,1320 +809,1054 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.8);
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background-color: #333;
             margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .close {
-            color: #e0e0e0;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            position: absolute;
-            right: 20px;
-            top: 20px;
-        }
-
-        .close:hover {
-            color: #ff4757;
-        }
-
-        .modal h2 {
-            margin-bottom: 25px;
-            color: #feca57;
-            text-align: center;
-        }
-
-        .song-list {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
             padding: 20px;
-            margin-bottom: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #555;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
         }
 
-        .song-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
         }
 
-        .song-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .song-item.active {
-            background: linear-gradient(45deg, #1dd1a1, #10ac84);
-        }
-
-        .delete-btn, .edit-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .edit-btn {
-            background: #3742fa;
-        }
-
-        .delete-btn:hover {
-            background: #ff3838;
-            transform: scale(1.1);
-        }
-
-        .edit-btn:hover {
-            background: #2f3640;
-            transform: scale(1.1);
-        }
-
-        .import-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .form-group label {
+        .close {
+            color: #aaa;
+            font-size: 28px;
             font-weight: bold;
-            color: #ffd93d;
+            cursor: pointer;
         }
 
-        .form-group input {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+        .close:hover {
+            color: #fff;
+        }
+
+        .font-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+
+        .font-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #555;
+        }
+
+        .font-preview {
+            flex: 1;
             font-size: 16px;
         }
 
-        .lyric-line-container {
+        .font-actions {
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 5px;
         }
 
-        .lyric-line-input {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            resize: none;
-            height: 80px;
-            transition: all 0.3s ease;
-            line-height: 1.4;
-        }
-
-        .lyric-line-input:focus {
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 10px rgba(255, 215, 61, 0.5);
-            outline: none;
-        }
-
-        .remove-line-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            min-width: 50px;
-            height: 50px;
-        }
-
-        .remove-line-btn:hover {
-            background: #ff3838;
-            transform: scale(1.1);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .format-help {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .format-help code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .status {
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-
-        .status.success {
-            background: rgba(29, 209, 161, 0.3);
-            border: 1px solid #1dd1a1;
-            color: #e0e0e0;
-        }
-
-        .status.error {
-            background: rgba(255, 71, 87, 0.3);
-            border: 1px solid #ff4757;
-            color: #e0e0e0;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .content-area {
-                flex-direction: column;
+            .lyric-line {
+                font-size: 2rem;
             }
             
-            .metronome-section {
-                width: auto;
-                flex-direction: row;
-                justify-content: space-around;
+            .navigator {
+                height: 200px;
+                padding: 8px;
             }
             
-            .navigation {
-                flex-direction: column;
+            .navigator.minimized {
+                height: 50px;
+                padding: 5px;
+            }
+            
+            .lyric-container {
+                bottom: 200px;
+            }
+            
+            .lyric-container.minimized-nav {
+                bottom: 50px;
+            }
+            
+            .nav-row {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .nav-row-1 {
+                height: 35px;
+                min-height: 35px;
+                max-height: 35px;
+            }
+            
+            .nav-row-2 {
+                height: calc(100% - 45px);
+                min-height: 120px;
+                max-height: 140px;
+                gap: 5px;
+                overflow: hidden;
+            }
+            
+            .edit-controls {
+                width: 100px;
+                min-width: 100px;
+                max-width: 100px;
+                padding: 6px;
+                gap: 6px;
+                max-height: 100%;
+                overflow-y: auto;
+            }
+            
+            .edit-lyrics-btn {
+                font-size: 10px;
+                padding: 8px 6px;
+            }
+            
+            .edit-controls .counter {
+                font-size: 9px;
+                padding: 3px;
+            }
+            
+            .quick-btn {
+                font-size: 9px;
+                padding: 4px 6px;
+            }
+            
+            .line-navigation {
+                min-width: 150px;
+                padding: 6px;
+            }
+            
+            .line-btn {
+                font-size: 10px;
+                padding: 3px 6px;
+                margin: 1px 0;
+            }
+            
+            .control-group {
+                margin: 2px;
+                flex-wrap: wrap;
+            }
+            
+            .minimize-controls {
                 gap: 10px;
             }
             
-            .modal-content {
-                margin: 2% auto;
+            .minimize-controls button,
+            .minimize-controls .counter {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+            
+            .fullscreen-overlay {
+                top: 5px;
+                right: 5px;
+                padding: 5px;
+            }
+            
+            .fullscreen-overlay button {
+                font-size: 10px;
+                padding: 3px 6px;
+                margin: 1px;
+            }
+            
+            .chroma-btn {
+                min-width: 40px;
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            
+            /* Mobile Modal */
+            .lyrics-modal-content {
                 width: 95%;
-                padding: 20px;
+                max-height: 95vh;
+                margin: 2.5vh auto;
+            }
+            
+            .lyrics-textarea-popup {
+                font-size: 12px;
+                min-height: 300px;
+            }
+            
+            .lyrics-actions {
+                flex-direction: column;
+                gap: 5px;
+                width: 100%;
+            }
+            
+            .lyrics-actions button {
+                width: 100%;
+            }
+            
+            .lyrics-modal-footer {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <div class="header">
-            <h1>🎵 Aplikasi Lirik & Chord 🎵</h1>
-            <p>Dengan Metronom Visual & Audio</p>
-            <p>Made with ❤️ Teknomaven</p>
+    <!-- Main Lyric Display -->
+    <div class="lyric-container">
+        <div class="lyric-display" id="lyricDisplay">
+            <div class="lyric-line">Masukkan lirik lagu di bawah...</div>
         </div>
+    </div>
 
-        <div class="content-area">
-            <!-- Metronome Section -->
-            <div class="metronome-section">
-                <div class="metronome-visual" id="metronomeVisual">
-                    <span id="beatCount">1</span>
+    <!-- Bottom Navigator -->
+    <div class="navigator" id="navigator">
+        <!-- Minimize Toggle Button -->
+        <button class="minimize-toggle" id="minimizeToggle">▼ Hide</button>
+        
+        <!-- Full Navigator Content -->
+        <div class="nav-content">
+            <!-- Row 1: Font and Style Controls -->
+            <div class="nav-row nav-row-1">
+                <div class="control-group">
+                    <label>Font:</label>
+                    <select id="fontSelector">
+                        <option value="Arial">Arial</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Courier New">Courier New</option>
+                    </select>
+                    <button id="randomFontBtn">Font Acak</button>
+                    <button id="randomSizeBtn">Size Acak</button>
+                    <button id="manageFontBtn">Kelola Font</button>
                 </div>
                 
-                <div class="metronome-info">
-                    <div><strong>BPM: <span id="currentBPM">120</span></strong></div>
-                    <div>Beat: <span id="beatIndicator">1/4</span></div>
+                <div class="control-group">
+                    <label>Size:</label>
+                    <input type="number" id="fontSize" min="1" max="10" value="3">
                 </div>
                 
-                <div class="metronome-controls" id="metronomeControlsNormal">
-                    <button class="btn btn-primary btn-small" id="metronomePlayBtn">▶️ Play</button>
-                    <button class="btn btn-secondary btn-small" id="metronomePauseBtn" disabled>⏸️ Pause</button>
-                    <button class="btn btn-secondary btn-small" id="metronomeStopBtn" disabled>⏹️ Stop</button>
+                <div class="control-group">
+                    <label>Font:</label>
+                    <input type="color" id="fontColor" value="#ffffff">
+                    <label>BG:</label>
+                    <input type="color" id="bgColor" value="#000000">
                 </div>
                 
-                <div class="metronome-controls" id="metronomeControlsCombined" style="display: none;">
-                    <button class="btn btn-primary btn-small" id="combinedPlayBtn">▶️ Play All</button>
-                    <button class="btn btn-secondary btn-small" id="combinedPauseBtn" disabled>⏸️ Pause</button>
-                    <button class="btn btn-secondary btn-small" id="combinedStopBtn" disabled>⏹️ Stop</button>
+                <div class="control-group">
+                    <label>Chromakey:</label>
+                    <button id="chromaGreen" class="chroma-btn" style="background: #00FF00; color: #000;">Green</button>
+                    <button id="chromaBlue" class="chroma-btn" style="background: #0000FF; color: #FFF;">Blue</button>
+                    <button id="chromaMagenta" class="chroma-btn" style="background: #FF00FF; color: #000;">Magenta</button>
+                    <button id="chromaBlack" class="chroma-btn" style="background: #000; color: #FFF;">Black</button>
+                    <button id="chromaOptimize" class="chroma-btn">🎯 Optimize</button>
                 </div>
+                
+                <div class="control-group">
+                    <label>Text FX:</label>
+                    <select id="textEffect">
+                        <option value="">Normal</option>
+                        <option value="text-stroke">Stroke</option>
+                        <option value="text-shadow-light">Shadow Light</option>
+                        <option value="text-shadow-heavy">Shadow Heavy</option>
+                        <option value="text-glow">Glow</option>
+                        <option value="text-outline">Outline</option>
+                    </select>
+                    <button id="fullscreenBtn">📺 Fullscreen</button>
+                    <button id="fixTextareaBtn" style="background: #ff6b6b;" title="Fix layout if textarea moves down">🔧 Fix Layout</button>
+                </div>
+                
+                <div class="control-group">
+                    <label>Align:</label>
+                    <div class="align-buttons">
+                        <button id="alignLeft" title="Rata Kiri">◀ Kiri</button>
+                        <button id="alignCenter" class="active" title="Rata Tengah">■ Tengah</button>
+                        <button id="alignRight" title="Rata Kanan">Kanan ▶</button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <button id="prevBtn">◀ Prev</button>
+                    <button id="playBtn">▶ Play</button>
+                    <button id="nextBtn">Next ▶</button>
+                </div>
+                
+                <div class="counter" id="counter">Baris 1 dari 1</div>
             </div>
 
-            <!-- Lyrics Section -->
-            <div class="lyrics-section">
-                <div class="lyrics-header">
-                    <h3 id="currentSongTitle">Pilih lagu untuk dimainkan</h3>
-                    
-                    <div class="scroll-controls">
-                        <button class="btn btn-primary btn-small" id="scrollPlayBtn">▶️ Mulai Scroll</button>
-                        <button class="btn btn-secondary btn-small" id="scrollPauseBtn" disabled>⏸️ Pause</button>
-                        <button class="btn btn-secondary btn-small" id="scrollStopBtn" disabled>⏹️ Stop</button>
-                        <button class="btn btn-secondary btn-small" id="scrollResetBtn">🔄 Reset</button>
-                        <span id="scrollModeIndicator" style="margin-left: 15px; font-size: 12px; color: #feca57;"></span>
-                    </div>
+            <!-- Row 2: Line Navigation Only -->
+            <div class="nav-row nav-row-2">
+                <div class="edit-controls">
+                    <button id="editLyricsBtn" class="edit-lyrics-btn">📝 Edit Lirik</button>
+                    <div class="counter" id="counter">1/1</div>
+                    <button id="quickJumpBtn" class="quick-btn" title="Jump to line">🎯 Jump</button>
+                    <button id="resetBtn" class="quick-btn" title="Reset to beginning">⏮️ Reset</button>
                 </div>
+                <div class="line-navigation" id="lineNavigation">
+                    <button class="line-btn current">Klik di sini untuk navigasi baris...</button>
+                </div>
+            </div>
+        </div>
 
-                <!-- Countdown -->
-                <div class="countdown" id="countdown"></div>
+        <!-- Minimized Controls (Only visible when minimized) -->
+        <div class="minimize-controls">
+            <button id="minimizedPrevBtn">◀ Prev</button>
+            <button id="minimizedPlayBtn">▶ Play</button>
+            <button id="minimizedNextBtn">Next ▶</button>
+            <div class="counter" id="minimizedCounter">Baris 1 dari 1</div>
+        </div>
+    </div>
 
-                <!-- Lyrics Display -->
-                <div class="lyrics-display" id="lyricsDisplay">
-                    <div class="lyrics-content" id="lyricsContent">
-                        <div class="lyric-block">
-                            <div class="lyric-line">Pilih lagu dan tekan "Mulai Scroll" untuk memulai</div>
-                            <div class="lyric-line">Aplikasi siap digunakan! 🎵</div>
-                        </div>
-                        <div class="lyric-block">
-                            <div class="lyric-line">Import lagu baru atau pilih dari daftar</div>
-                            <div class="lyric-line">Selamat bermusik!</div>
-                        </div>
-                    </div>
+    <!-- Fullscreen Overlay Controls -->
+    <div class="fullscreen-overlay" id="fullscreenOverlay">
+        <button id="exitFullscreen">❌ Exit</button>
+        <button id="fsNext">▶ Next</button>
+        <button id="fsPlay">▶ Play</button>
+        <button id="fsPrev">◀ Prev</button>
+    </div>
+
+    <!-- Lyrics Edit Modal -->
+    <div id="lyricsModal" class="modal">
+        <div class="modal-content lyrics-modal-content">
+            <div class="modal-header">
+                <h3>📝 Edit Lirik Lagu</h3>
+                <span class="close" id="closeLyricsModal">&times;</span>
+            </div>
+            
+            <div class="lyrics-edit-area">
+                <textarea class="lyrics-textarea-popup" id="lyricsInput" placeholder="Masukkan lirik lagu di sini...&#10;&#10;Tips:&#10;• Setiap baris akan menjadi satu bagian navigasi&#10;• Gunakan enter untuk baris baru&#10;• Baris kosong akan dihapus otomatis&#10;• Paste dari Word/Google Docs akan otomatis dibersihkan&#10;&#10;Contoh:&#10;Baris pertama lirik&#10;Baris kedua lirik&#10;Chorus dimulai di sini&#10;Dan seterusnya..."></textarea>
+                <!-- Hidden backup textarea for compatibility -->
+                <textarea id="lyricsInputBackup" style="display: none;"></textarea>
+            </div>
+            
+            <div class="lyrics-modal-footer">
+                <div class="lyrics-info">
+                    <span id="lyricsCount">0 baris</span> • 
+                    <span id="lyricsChars">0 karakter</span>
+                </div>
+                <div class="lyrics-actions">
+                    <button id="clearLyricsBtn" class="btn-danger">🗑️ Clear All</button>
+                    <button id="cancelLyricsBtn" class="btn-secondary">❌ Cancel</button>
+                    <button id="saveLyricsBtn" class="btn-primary">✅ Save & Apply</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <div class="navigation">
-        <button class="btn btn-success" id="importBtn">📝 Import Lagu</button>
-        <button class="btn btn-secondary" id="selectSongBtn">📋 Pilih Lagu</button>
-        <button class="btn btn-secondary" id="downloadConfigBtn">💾 Download Config</button>
-        <button class="btn btn-secondary" id="importConfigBtn">📂 Import Config</button>
-        <input type="file" id="configFileInput" accept=".json" style="display: none;">
-        
-        <div class="control-group">
-            <label>BPM:</label>
-            <input type="number" id="bpmInput" value="120" min="60" max="200" step="5">
-        </div>
-        
-        <div class="control-group">
-            <label>Volume:</label>
-            <input type="range" id="volumeInput" value="50" min="0" max="100" step="10">
-            <span id="volumeValue">50</span>
-        </div>
-        
-        <div class="control-group">
-            <label>Kecepatan Scroll:</label>
-            <input type="range" id="scrollSpeedInput" value="30" min="10" max="80" step="5">
-            <span id="scrollSpeedValue">30</span>
-        </div>
-        
-        <div class="control-group">
-            <label>Mode Scroll:</label>
-            <select id="scrollModeSelect">
-                <option value="auto">Otomatis</option>
-                <option value="metronome">Ikuti Metronom</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Import Modal -->
-    <div id="importModal" class="modal">
+    <!-- Font Management Modal -->
+    <div id="fontModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>📝 Import Lagu Baru</h2>
-            
-            <div class="format-help">
-                <strong>Format Input Per Blok:</strong><br/>
-                • <strong>1 textarea = 1 blok</strong> - chord dan lirik akan digabung dalam satu box<br/>
-                • Baris 1: <code>G A</code> (chord)<br/>
-                • Baris 2: <code>tlah ku baca dan aku mengerti</code> (lirik)<br/>
-                • Section: <code>[Intro]</code>, <code>[Chorus]</code>, dll.<br/>
-                • Output: Chord di atas lirik dalam satu kotak yang sama
+            <div class="modal-header">
+                <h3>Kelola Font</h3>
+                <span class="close" id="closeModal">&times;</span>
             </div>
             
-            <div class="import-form">
-                <div class="form-group">
-                    <label for="modalSongTitle">Judul Lagu:</label>
-                    <input type="text" id="modalSongTitle" placeholder="Masukkan judul lagu">
-                </div>
-                
-                <div class="form-group">
-                    <label>Lirik dan Chord (Per Blok):</label>
-                    <div id="lyricsLines">
-                        <div class="lyric-line-container">
-                            <textarea class="lyric-line-input" placeholder="Contoh section:
-[Intro]"></textarea>
-                            <button type="button" class="remove-line-btn">🗑️</button>
-                        </div>
-                        <div class="lyric-line-container">
-                            <textarea class="lyric-line-input" placeholder="Contoh chord + lirik:
-G A
-tlah ku baca dan aku mengerti"></textarea>
-                            <button type="button" class="remove-line-btn">🗑️</button>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-secondary" id="addLineBtn">➕ Tambah Blok</button>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-success" id="modalSaveBtn">💾 Simpan Lagu</button>
-                    <button class="btn btn-secondary" id="modalClearBtn">🗑️ Bersihkan Semua</button>
-                </div>
+            <div class="control-group">
+                <input type="text" id="fontName" placeholder="Nama Font" style="width: 150px;">
+                <input type="text" id="fontUrl" placeholder="Google Fonts URL" style="width: 250px;">
+                <button id="addFontBtn">Tambah Font</button>
             </div>
             
-            <div id="modalStatusMessage"></div>
-        </div>
-    </div>
-
-    <!-- Song List Modal -->
-    <div id="songListModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>📋 Daftar Lagu</h2>
-            
-            <div class="song-list" id="modalSongList">
-                <p style="text-align: center; color: #ccc;">Belum ada lagu tersimpan</p>
-            </div>
+            <div class="font-list" id="fontList"></div>
         </div>
     </div>
 
     <script>
-        class LyricsChordApp {
-            constructor() {
-                this.songs = [];
-                this.currentSong = null;
-                this.currentBlockIndex = 0;
-                this.isScrolling = false;
-                this.isMetronomePlaying = false;
-                this.scrollMode = 'auto'; // 'auto' or 'metronome'
-                this.metronomeInterval = null;
-                this.scrollInterval = null;
-                this.beatCount = 1;
-                this.beatInMeasure = 1;
-                this.scrollOnBeat = 1; // Which beat to scroll on
-                this.audioContext = null;
-                this.countdownTimer = null;
+        $(document).ready(function() {
+            // Application State
+            let currentLine = 0;
+            let lyrics = [];
+            let isPlaying = false;
+            let playInterval = null;
+            let randomFontMode = false;
+            let randomSizeMode = false;
+            let currentAlign = 'center';
+            let isNavigatorMinimized = false;
+            let isFullscreenMode = false;
+            
+            // Store random fonts and sizes for each line in current cycle
+            let cycleRandomFonts = {};
+            let cycleRandomSizes = {};
+            let currentCycleStart = 0;
+            
+            // Font Management
+            let customFonts = [];
+            let loadedFonts = new Set();
+
+            // Default Google Fonts
+            const defaultGoogleFonts = [
+                { name: 'Roboto', url: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap' },
+                { name: 'Open Sans', url: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap' },
+                { name: 'Lato', url: 'https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap' },
+                { name: 'Montserrat', url: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap' },
+                { name: 'Poppins', url: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap' },
+                { name: 'Playfair Display', url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap' },
+                { name: 'Dancing Script', url: 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap' },
+                { name: 'Oswald', url: 'https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap' }
+            ];
+
+            // Initialize
+            function init() {
+                initializeFonts();
+                applyChromakey('#00FF00');
+                $('.lyric-display').addClass('align-center');
+                updateDisplay();
+                bindEvents();
                 
-                this.init();
-                this.loadDefaultSongs();
+                // Set initial lyrics
+                lyrics = ['','Klik "📝 Edit Lirik" untuk memasukkan lirik lagu','Made with ❤️ Teknomaven'];
+                updateLineNavigation();
+                updateCounter();
+                
+                console.log('✅ Application initialized with popup textarea');
             }
 
-            init() {
-                this.bindEvents();
-                this.updateBPMDisplay();
-                this.updateVolumeDisplay();
-                this.updateScrollSpeedDisplay();
-                this.updateScrollMode();
-            }
-
-            loadDefaultSongs() {
-                const defaultSongs = [
-                    {
-                        title: "Contoh Format Gabungan",
-                        content: `[Intro]
-
-D  Bm  G  A
-
-D         Bm
-Contoh lirik pertama
-
-G           A
-tlah ku baca dan aku mengerti
-
-[Chorus]
-
-F          C
-Ini bagian chorus
-G               Am
-Dengan melodi yang indah`
-                    },
-                    {
-                        title: "Demo Lagu",
-                        content: `[Intro]
-
-D  Bm  G  A  x4
-
-D         Bm
-Baris pertama dengan chord
-
-G           A
-Baris kedua melanjutkan
-
-D           Bm
-Baris ketiga dengan harmoni
-
-G          C            Bm
-Baris keempat menutup verse
-
-[Chorus]
-
-F#m     G      Bm    C
-Bagian chorus yang indah`
-                    }
-                ];
-
-                this.songs = defaultSongs.map(song => ({
-                    ...song,
-                    blocks: this.parseLyrics(song.content)
-                }));
+            // Initialize fonts
+            function initializeFonts() {
+                customFonts = [...defaultGoogleFonts];
+                updateFontSelector();
+                updateFontList();
                 
-                this.updateModalSongList();
-            }
-
-            bindEvents() {
-                // Metronome controls
-                $('#metronomePlayBtn').click(() => this.startMetronome());
-                $('#metronomePauseBtn').click(() => this.pauseMetronome());
-                $('#metronomeStopBtn').click(() => this.stopMetronome());
-
-                // Combined controls (metronome + scroll)
-                $('#combinedPlayBtn').click(() => this.startCombined());
-                $('#combinedPauseBtn').click(() => this.pauseCombined());
-                $('#combinedStopBtn').click(() => this.stopCombined());
-
-                // Scroll controls
-                $('#scrollPlayBtn').click(() => this.startScrollCountdown());
-                $('#scrollPauseBtn').click(() => this.pauseScroll());
-                $('#scrollStopBtn').click(() => this.stopScroll());
-                $('#scrollResetBtn').click(() => this.resetScroll());
-                
-                // Navigation controls
-                $('#importBtn').click(() => this.showImportModal());
-                $('#selectSongBtn').click(() => this.showSongListModal());
-                $('#downloadConfigBtn').click(() => this.downloadConfig());
-                $('#importConfigBtn').click(() => $('#configFileInput').click());
-                $('#configFileInput').on('change', (e) => this.importConfig(e));
-                
-                $('#bpmInput').on('input', () => this.updateBPM());
-                $('#volumeInput').on('input', () => this.updateVolume());
-                $('#scrollSpeedInput').on('input', () => this.updateScrollSpeed());
-                $('#scrollModeSelect').on('change', () => this.updateScrollMode());
-                
-                // Modal events
-                $('.close').click((e) => this.closeModal($(e.target).closest('.modal')));
-                $('#modalSaveBtn').click(() => this.saveSong());
-                $('#modalClearBtn').click(() => this.clearModalInput());
-                $('#addLineBtn').click(() => this.addLyricLine());
-                
-                // Event delegation for dynamic elements
-                $(document).on('click', '.remove-line-btn', (e) => this.removeLyricLine($(e.target)));
-                
-                // Song selection
-                $(document).on('click', '.song-item', (e) => {
-                    if (!$(e.target).hasClass('delete-btn') && !$(e.target).hasClass('edit-btn')) {
-                        this.selectSong($(e.currentTarget).data('index'));
-                    }
-                });
-                
-                $(document).on('click', '.delete-btn', (e) => {
-                    e.stopPropagation();
-                    this.deleteSong($(e.currentTarget).data('index'));
-                });
-
-                $(document).on('click', '.edit-btn', (e) => {
-                    e.stopPropagation();
-                    this.editSong($(e.currentTarget).data('index'));
-                });
-
-                // Close modal when clicking outside
-                $('.modal').click((e) => {
-                    if (e.target === e.currentTarget) {
-                        this.closeModal($(e.currentTarget));
-                    }
+                // Load default Google fonts
+                defaultGoogleFonts.forEach(font => {
+                    loadGoogleFont(font.url);
                 });
             }
 
-            showImportModal(songToEdit = null) {
-                if (songToEdit) {
-                    this.populateEditForm(songToEdit);
-                } else {
-                    this.clearModalInput();
-                }
-                $('#importModal').show();
-            }
-
-            showSongListModal() {
-                this.updateModalSongList();
-                $('#songListModal').show();
-            }
-
-            closeModal($modal) {
-                $modal.hide();
-            }
-
-            async initAudioContext() {
-                if (!this.audioContext) {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (this.audioContext.state === 'suspended') {
-                    await this.audioContext.resume();
+            // Load Google Font
+            function loadGoogleFont(url) {
+                if (!loadedFonts.has(url)) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = url;
+                    document.head.appendChild(link);
+                    loadedFonts.add(url);
                 }
             }
 
-            playBeep(frequency = 800, duration = 100) {
-                if (!this.audioContext) return;
+            // Update font selector
+            function updateFontSelector() {
+                const selector = $('#fontSelector');
+                const currentValue = selector.val();
                 
-                const oscillator = this.audioContext.createOscillator();
-                const gainNode = this.audioContext.createGain();
+                selector.empty();
                 
-                oscillator.connect(gainNode);
-                gainNode.connect(this.audioContext.destination);
-                
-                const volume = parseInt($('#volumeInput').val()) / 100;
-                gainNode.gain.setValueAtTime(volume * 0.1, this.audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration / 1000);
-                
-                oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
-                oscillator.type = 'sine';
-                
-                oscillator.start(this.audioContext.currentTime);
-                oscillator.stop(this.audioContext.currentTime + duration / 1000);
-            }
-
-            // Combined control methods (NEW - Added to fix the error)
-            async startCombined() {
-                if (!this.currentSong) {
-                    this.showStatus('Pilih lagu terlebih dahulu!', 'error');
-                    return;
-                }
-
-                await this.initAudioContext();
-                
-                // Start metronome first
-                this.isMetronomePlaying = true;
-                
-                // Enable combined controls
-                $('#combinedPlayBtn').prop('disabled', true);
-                $('#combinedPauseBtn').prop('disabled', false);
-                $('#combinedStopBtn').prop('disabled', false);
-                
-                const bpm = parseInt($('#bpmInput').val());
-                const interval = 60000 / bpm;
-                
-                let beatInMeasure = 1;
-                let beatCount = 0;
-                
-                this.metronomeInterval = setInterval(() => {
-                    const visual = $('#metronomeVisual');
-                    visual.addClass('beat');
-                    setTimeout(() => visual.removeClass('beat'), 100);
-                    
-                    const frequency = beatInMeasure === 1 ? 1200 : 800;
-                    this.playBeep(frequency, 100);
-                    
-                    $('#beatCount').text(beatInMeasure);
-                    $('#beatIndicator').text(`${beatInMeasure}/4`);
-                    
-                    // Check if we should scroll on this beat
-                    if (this.scrollMode === 'metronome' && beatInMeasure === this.scrollOnBeat) {
-                        if (this.isScrolling) {
-                            this.scrollToNextBlock();
-                        }
-                    }
-                    
-                    beatInMeasure = beatInMeasure === 4 ? 1 : beatInMeasure + 1;
-                }, interval);
-
-                // Start countdown for scrolling
-                let count = 3;
-                const countdown = $('#countdown');
-                
-                const countdownInterval = setInterval(async () => {
-                    countdown.text(count).addClass('show');
-                    
-                    setTimeout(() => countdown.removeClass('show'), 500);
-                    
-                    count--;
-                    
-                    if (count < 0) {
-                        clearInterval(countdownInterval);
-                        countdown.text('');
-                        
-                        // Start scrolling
-                        this.isScrolling = true;
-                    }
-                }, 1000);
-            }
-
-            pauseCombined() {
-                // Pause metronome
-                if (this.metronomeInterval) {
-                    clearInterval(this.metronomeInterval);
-                    this.metronomeInterval = null;
-                }
-                
-                // Pause scrolling
-                this.isMetronomePlaying = false;
-                this.isScrolling = false;
-                
-                $('#combinedPlayBtn').prop('disabled', false);
-                $('#combinedPauseBtn').prop('disabled', true);
-            }
-
-            stopCombined() {
-                this.pauseCombined();
-                
-                $('#combinedStopBtn').prop('disabled', true);
-                $('#beatCount').text('1');
-                $('#beatIndicator').text('1/4');
-                $('#metronomeVisual').removeClass('beat');
-                
-                // Reset scroll
-                this.resetScroll();
-            }
-
-            // Metronome functions
-            async startMetronome() {
-                await this.initAudioContext();
-                
-                this.isMetronomePlaying = true;
-                $('#metronomePlayBtn').prop('disabled', true);
-                $('#metronomePauseBtn').prop('disabled', false);
-                $('#metronomeStopBtn').prop('disabled', false);
-                
-                const bpm = parseInt($('#bpmInput').val());
-                const interval = 60000 / bpm;
-                
-                let beatInMeasure = 1;
-                
-                this.metronomeInterval = setInterval(() => {
-                    const visual = $('#metronomeVisual');
-                    visual.addClass('beat');
-                    setTimeout(() => visual.removeClass('beat'), 100);
-                    
-                    const frequency = beatInMeasure === 1 ? 1200 : 800;
-                    this.playBeep(frequency, 100);
-                    
-                    $('#beatCount').text(beatInMeasure);
-                    $('#beatIndicator').text(`${beatInMeasure}/4`);
-                    
-                    beatInMeasure = beatInMeasure === 4 ? 1 : beatInMeasure + 1;
-                }, interval);
-            }
-
-            pauseMetronome() {
-                if (this.metronomeInterval) {
-                    clearInterval(this.metronomeInterval);
-                    this.metronomeInterval = null;
-                }
-                
-                this.isMetronomePlaying = false;
-                $('#metronomePlayBtn').prop('disabled', false);
-                $('#metronomePauseBtn').prop('disabled', true);
-            }
-
-            stopMetronome() {
-                this.pauseMetronome();
-                $('#metronomeStopBtn').prop('disabled', true);
-                $('#beatCount').text('1');
-                $('#beatIndicator').text('1/4');
-                $('#metronomeVisual').removeClass('beat');
-            }
-
-            // Scroll functions
-            async startScrollCountdown() {
-                if (!this.currentSong) {
-                    this.showStatus('Pilih lagu terlebih dahulu!', 'error');
-                    return;
-                }
-
-                await this.initAudioContext();
-                
-                $('#scrollPlayBtn').prop('disabled', true);
-                
-                let count = 3;
-                const countdown = $('#countdown');
-                
-                const countdownInterval = setInterval(async () => {
-                    countdown.text(count).addClass('show');
-                    this.playBeep(1000, 200);
-                    
-                    setTimeout(() => countdown.removeClass('show'), 500);
-                    
-                    count--;
-                    
-                    if (count < 0) {
-                        clearInterval(countdownInterval);
-                        countdown.text('');
-                        this.startScroll();
-                    }
-                }, 1000);
-            }
-
-            startScroll() {
-                if (!this.currentSong) return;
-                
-                this.isScrolling = true;
-                $('#scrollPlayBtn').prop('disabled', true);
-                $('#scrollPauseBtn').prop('disabled', false);
-                $('#scrollStopBtn').prop('disabled', false);
-                
-                if (this.scrollMode === 'auto') {
-                    // Automatic scrolling based on speed setting
-                    const speed = parseInt($('#scrollSpeedInput').val());
-                    const interval = 8000 - (speed * 75);
-                    
-                    this.scrollInterval = setInterval(() => {
-                        this.scrollToNextBlock();
-                    }, interval);
-                } else if (this.scrollMode === 'metronome') {
-                    // Metronome-based scrolling
-                    if (!this.isMetronomePlaying) {
-                        this.showStatus('Nyalakan metronom untuk mode ikuti metronom!', 'error');
-                        this.stopScroll();
-                        return;
-                    }
-                    // Scrolling will be handled by metronome beats
-                    // No interval needed, just mark as scrolling
-                }
-            }
-
-            pauseScroll() {
-                if (this.scrollInterval) {
-                    clearInterval(this.scrollInterval);
-                    this.scrollInterval = null;
-                }
-                
-                this.isScrolling = false;
-                $('#scrollPlayBtn').prop('disabled', false);
-                $('#scrollPauseBtn').prop('disabled', true);
-            }
-
-            stopScroll() {
-                this.pauseScroll();
-                $('#scrollStopBtn').prop('disabled', true);
-                this.resetScroll();
-            }
-
-            resetScroll() {
-                this.currentBlockIndex = 0;
-                $('.lyric-block').removeClass('current');
-                $('#lyricsDisplay').scrollTop(0);
-                
-                if (this.currentSong && this.currentSong.blocks.length > 0) {
-                    $('.lyric-block').first().addClass('current');
-                }
-            }
-
-            scrollToNextBlock() {
-                if (!this.currentSong || this.currentBlockIndex >= this.currentSong.blocks.length - 1) {
-                    this.stopScroll();
-                    return;
-                }
-                
-                this.currentBlockIndex++;
-                this.highlightCurrentBlock();
-            }
-
-            highlightCurrentBlock() {
-                $('.lyric-block').removeClass('current');
-                const currentBlock = $('.lyric-block').eq(this.currentBlockIndex);
-                currentBlock.addClass('current');
-                
-                // Auto scroll to current block
-                const container = $('#lyricsDisplay');
-                const blockTop = currentBlock.position().top;
-                const containerHeight = container.height();
-                
-                container.scrollTop(container.scrollTop() + blockTop - containerHeight / 3);
-            }
-
-            // Song management functions
-            addLyricLine() {
-                const container = $('#lyricsLines');
-                const newLine = $(`
-                    <div class="lyric-line-container">
-                        <textarea class="lyric-line-input" placeholder="Masukkan blok chord + lirik:
-G A
-tlah ku baca dan aku mengerti
-
-Atau hanya chord:
-G    A    D
-
-Atau section:
-[Chorus]"></textarea>
-                        <button type="button" class="remove-line-btn">🗑️</button>
-                    </div>
-                `);
-                container.append(newLine);
-                newLine.find('textarea').focus();
-            }
-
-            removeLyricLine($btn) {
-                const container = $('#lyricsLines');
-                const lineContainers = container.find('.lyric-line-container');
-                
-                if (lineContainers.length > 2) {
-                    $btn.closest('.lyric-line-container').remove();
-                } else {
-                    this.showModalStatus('Minimal harus ada 2 blok!', 'error');
-                }
-            }
-
-            saveSong() {
-                const title = $('#modalSongTitle').val().trim();
-                
-                const blocks = [];
-                $('.lyric-line-input').each(function() {
-                    const value = $(this).val().trim();
-                    if (value) {
-                        blocks.push(value);
-                    }
+                // Add default fonts
+                ['Arial', 'Georgia', 'Times New Roman', 'Verdana', 'Courier New'].forEach(font => {
+                    selector.append(`<option value="${font}">${font}</option>`);
                 });
                 
-                if (!title || blocks.length === 0) {
-                    this.showModalStatus('Judul dan minimal satu blok harus diisi!', 'error');
-                    return;
-                }
+                // Add custom fonts
+                customFonts.forEach(font => {
+                    selector.append(`<option value="${font.name}">${font.name}</option>`);
+                });
                 
-                const content = blocks.join('\n\n');
-                
-                const song = {
-                    title: title,
-                    content: content,
-                    blocks: this.parseLyrics(content)
-                };
-                
-                const existingIndex = this.songs.findIndex(s => s.title === title);
-                if (existingIndex !== -1) {
-                    this.songs[existingIndex] = song;
-                    this.showModalStatus('Lagu berhasil diperbarui!', 'success');
-                } else {
-                    this.songs.push(song);
-                    this.showModalStatus('Lagu berhasil disimpan!', 'success');
-                }
-                
-                this.updateModalSongList();
-                this.clearModalInput();
-                
-                setTimeout(() => {
-                    this.closeModal($('#importModal'));
-                }, 1500);
-            }
-
-            deleteSong(index) {
-                if (confirm('Yakin ingin menghapus lagu ini?')) {
-                    const deletedSong = this.songs[index];
-                    this.songs.splice(index, 1);
-                    
-                    if (this.currentSong && this.currentSong.title === deletedSong.title) {
-                        this.currentSong = null;
-                        $('#currentSongTitle').text('Pilih lagu untuk dimainkan');
-                        this.displayDefaultMessage();
-                        this.resetScroll();
-                    }
-                    
-                    this.updateModalSongList();
-                    this.showStatus('Lagu berhasil dihapus!', 'success');
+                // Restore selection
+                if (currentValue) {
+                    selector.val(currentValue);
                 }
             }
 
-            clearModalInput() {
-                $('#modalSongTitle').val('');
+            // Update font list in modal
+            function updateFontList() {
+                const list = $('#fontList');
+                list.empty();
                 
-                const container = $('#lyricsLines');
-                container.html(`
-                    <div class="lyric-line-container">
-                        <textarea class="lyric-line-input" placeholder="Contoh section:
-[Intro]"></textarea>
-                        <button type="button" class="remove-line-btn">🗑️</button>
-                    </div>
-                    <div class="lyric-line-container">
-                        <textarea class="lyric-line-input" placeholder="Contoh chord + lirik:
-G A
-tlah ku baca dan aku mengerti"></textarea>
-                        <button type="button" class="remove-line-btn">🗑️</button>
-                    </div>
-                `);
-            }
-
-            editSong(index) {
-                const song = this.songs[index];
-                this.closeModal($('#songListModal'));
-                this.showImportModal(song);
-            }
-
-            populateEditForm(song) {
-                $('#modalSongTitle').val(song.title);
-                
-                const blocks = song.content.split('\n\n').filter(block => block.trim());
-                const container = $('#lyricsLines');
-                container.empty();
-                
-                blocks.forEach((block, index) => {
-                    const lineContainer = $(`
-                        <div class="lyric-line-container">
-                            <textarea class="lyric-line-input">${block}</textarea>
-                            <button type="button" class="remove-line-btn">🗑️</button>
+                customFonts.forEach((font, index) => {
+                    const item = $(`
+                        <div class="font-item">
+                            <div class="font-preview" style="font-family: '${font.name}', sans-serif;">
+                                ${font.name} - Sample Text
+                            </div>
+                            <div class="font-actions">
+                                <button class="delete-font" data-index="${index}">Hapus</button>
+                            </div>
                         </div>
                     `);
-                    container.append(lineContainer);
+                    list.append(item);
                 });
-                
-                if (blocks.length < 2) {
-                    for (let i = blocks.length; i < 2; i++) {
-                        this.addLyricLine();
+            }
+
+            // Parse lyrics - simplified 
+            function parseLyrics() {
+                try {
+                    const text = $('#lyricsInput').val() || '';
+                    lyrics = text.split('\n').filter(line => line.trim() !== '');
+                    
+                    if (lyrics.length === 0) {
+                        lyrics = ['Masukkan lirik lagu di bawah...'];
                     }
+                    
+                    currentLine = 0;
+                    
+                    // Reset random fonts and sizes when lyrics change
+                    cycleRandomFonts = {};
+                    cycleRandomSizes = {};
+                    currentCycleStart = 0;
+                    
+                    updateDisplay();
+                    updateLineNavigation();
+                    updateCounter();
+                    
+                } catch (error) {
+                    console.error('Error parsing lyrics:', error);
                 }
             }
 
-            selectSong(index) {
-                this.currentSong = this.songs[index];
-                $('#currentSongTitle').text(this.currentSong.title);
+            // Update display
+            function updateDisplay() {
+                const display = $('#lyricDisplay');
+                display.empty();
                 
-                $('.song-item').removeClass('active');
-                $(`.song-item[data-index="${index}"]`).addClass('active');
+                if (lyrics.length === 0) return;
                 
-                this.displaySongLyrics();
-                this.resetScroll();
-                this.showStatus(`Lagu "${this.currentSong.title}" dipilih`, 'success');
-                this.closeModal($('#songListModal'));
-            }
-
-            displaySongLyrics() {
-                if (!this.currentSong) {
-                    this.displayDefaultMessage();
-                    return;
-                }
-
-                const lyricsContent = $('#lyricsContent');
-                let html = '';
-
-                this.currentSong.blocks.forEach((block, index) => {
-                    html += '<div class="lyric-block">';
+                // Calculate cycle position (every 4 lines reset)
+                const cyclePosition = currentLine % 4; // 0, 1, 2, 3
+                const cycleStart = currentLine - cyclePosition; // Start of current 4-line cycle
+                const linesToShow = cyclePosition + 1; // Show 1, 2, 3, or 4 lines
+                
+                // Show lines from cycle start up to current line
+                for (let i = cycleStart; i < cycleStart + linesToShow; i++) {
+                    if (i >= lyrics.length) break;
                     
-                    if (block.isSection) {
-                        html += `<div class="section-header">${block.content}</div>`;
-                    } else if (block.isChordLine) {
-                        html += `<div class="chord-only">${block.content}</div>`;
-                    } else if (block.chords && block.lyrics) {
-                        // Gabungkan chord dan lirik dalam satu box seperti foto
-                        html += `<div class="chord-lyric-combined">`;
-                        html += `<span class="chord">${block.chords}</span>\n`;
-                        html += `${block.lyrics}`;
-                        html += `</div>`;
-                    } else {
-                        html += `<div class="chord-lyric-combined">${block.content || ''}</div>`;
+                    const lineDiv = $('<div class="lyric-line"></div>');
+                    lineDiv.text(lyrics[i]);
+                    
+                    if (i === currentLine) {
+                        lineDiv.addClass('active');
                     }
                     
-                    html += '</div>';
-                });
-
-                lyricsContent.html(html);
-                $('.lyric-block').first().addClass('current');
-            }
-
-            displayDefaultMessage() {
-                const lyricsContent = $('#lyricsContent');
-                lyricsContent.html(`
-                    <div class="lyric-block current">
-                        <div class="chord-lyric-combined">Pilih lagu dan tekan "Mulai Scroll" untuk memulai\nAplikasi siap digunakan! 🎵</div>
-                    </div>
-                    <div class="lyric-block">
-                        <div class="chord-lyric-combined">Import lagu baru atau pilih dari daftar\nSelamat bermusik!</div>
-                    </div>
-                `);
-            }
-
-            downloadConfig() {
-                if (this.songs.length === 0) {
-                    this.showStatus('Tidak ada lagu untuk di-download!', 'error');
-                    return;
-                }
-
-                const config = {
-                    version: "1.0",
-                    exported_at: new Date().toISOString(),
-                    songs: this.songs
-                };
-
-                const dataStr = JSON.stringify(config, null, 2);
-                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                
-                const exportFileDefaultName = `lyrics_chord_config_${new Date().toISOString().split('T')[0]}.json`;
-                
-                const linkElement = document.createElement('a');
-                linkElement.setAttribute('href', dataUri);
-                linkElement.setAttribute('download', exportFileDefaultName);
-                linkElement.click();
-                
-                this.showStatus('Config berhasil di-download!', 'success');
-            }
-
-            importConfig(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const config = JSON.parse(e.target.result);
-                        
-                        if (!config.songs || !Array.isArray(config.songs)) {
-                            throw new Error('Format file tidak valid');
-                        }
-
-                        // Validate and parse imported songs
-                        const importedSongs = config.songs.map(song => {
-                            if (!song.title || !song.content) {
-                                throw new Error('Data lagu tidak lengkap');
-                            }
-                            
-                            return {
-                                title: song.title,
-                                content: song.content,
-                                blocks: this.parseLyrics(song.content)
-                            };
-                        });
-
-                        // Merge with existing songs (avoid duplicates)
-                        importedSongs.forEach(importedSong => {
-                            const existingIndex = this.songs.findIndex(s => s.title === importedSong.title);
-                            if (existingIndex !== -1) {
-                                // Update existing song
-                                this.songs[existingIndex] = importedSong;
-                            } else {
-                                // Add new song
-                                this.songs.push(importedSong);
-                            }
-                        });
-
-                        this.updateModalSongList();
-                        this.showStatus(`${importedSongs.length} lagu berhasil di-import!`, 'success');
-                        
-                    } catch (error) {
-                        this.showStatus(`Error: ${error.message}`, 'error');
-                    }
-                };
-                
-                reader.readAsText(file);
-                
-                // Reset file input
-                event.target.value = '';
-            }
-
-            parseLyrics(content) {
-                const blocks = content.split('\n\n').filter(block => block.trim());
-                const parsedBlocks = [];
-                
-                blocks.forEach(block => {
-                    const lines = block.split('\n').filter(line => line.trim());
+                    // Apply styles
+                    const fontSize = $('#fontSize').val();
+                    const fontColor = $('#fontColor').val();
+                    const selectedFont = $('#fontSelector').val();
                     
-                    if (lines.length === 0) return;
-                    
-                    if (lines.length === 1 && lines[0].match(/^\[.*\]$/)) {
-                        parsedBlocks.push({
-                            content: lines[0],
-                            isSection: true
-                        });
-                        return;
+                    // Determine font family
+                    let fontFamily = selectedFont;
+                    if (randomFontMode) {
+                        fontFamily = getRandomFont();
                     }
                     
-                    const chordPattern = /^[A-G#b\/\s\d\-x]+$/;
-                    if (lines.length === 1 && chordPattern.test(lines[0]) && lines[0].length > 2) {
-                        parsedBlocks.push({
-                            content: lines[0],
-                            isChordLine: true
-                        });
-                        return;
+                    // Determine font size
+                    let finalFontSize = fontSize + 'rem';
+                    if (randomSizeMode) {
+                        const randomSize = (Math.random() * 4 + 1.5); // 1.5-5.5 rem
+                        finalFontSize = randomSize + 'rem';
                     }
                     
-                    if (lines.length === 2) {
-                        const firstLine = lines[0];
-                        const secondLine = lines[1];
-                        
-                        if (chordPattern.test(firstLine) && firstLine.length > 2) {
-                            parsedBlocks.push({
-                                chords: firstLine,
-                                lyrics: secondLine,
-                                content: `${firstLine}\n${secondLine}`
-                            });
-                            return;
-                        }
-                    }
-                    
-                    lines.forEach(line => {
-                        const inlineChordMatches = line.match(/\[([^\]]+)\]/g);
-                        if (inlineChordMatches) {
-                            const chords = inlineChordMatches.map(match => match.slice(1, -1)).join(' ');
-                            const lyrics = line.replace(/\[([^\]]+)\]/g, '').trim();
-                            parsedBlocks.push({
-                                chords: chords,
-                                lyrics: lyrics,
-                                content: line
-                            });
-                        } else if (chordPattern.test(line) && line.length > 2) {
-                            parsedBlocks.push({
-                                content: line,
-                                isChordLine: true
-                            });
-                        } else {
-                            parsedBlocks.push({
-                                content: line,
-                                lyrics: line
-                            });
-                        }
+                    // Apply all styles
+                    lineDiv.css({
+                        'font-family': fontFamily,
+                        'font-size': finalFontSize,
+                        'color': fontColor,
+                        'width': '100%',
+                        'display': 'block'
                     });
-                });
+                    
+                    // Add alignment class
+                    lineDiv.addClass(`align-${currentAlign}`);
+                    
+                    // Apply current text effect
+                    const currentEffect = $('#textEffect').val();
+                    if (currentEffect) {
+                        lineDiv.addClass(currentEffect);
+                    }
+                    
+                    // Add visual indicator for locked random lines
+                    if ((randomFontMode && cycleRandomFonts[i]) || (randomSizeMode && cycleRandomSizes[i])) {
+                        lineDiv.addClass('locked-random');
+                    }
+                    
+                    display.append(lineDiv);
+                }
                 
-                return parsedBlocks;
+                // Update background
+                const bgColor = $('#bgColor').val();
+                $('.lyric-container').css('background-color', bgColor);
+                
+                // Apply alignment to the entire display container
+                $('.lyric-display')
+                    .removeClass('align-left align-center align-right')
+                    .addClass(`align-${currentAlign}`);
+                
+                // Also apply to individual lines for consistency
+                $('.lyric-line')
+                    .removeClass('align-left align-center align-right')
+                    .addClass(`align-${currentAlign}`);
             }
 
-            updateModalSongList() {
-                const songList = $('#modalSongList');
+            // Get random font
+            function getRandomFont() {
+                const allFonts = ['Arial', 'Georgia', 'Times New Roman', 'Verdana', 'Courier New']
+                    .concat(customFonts.map(f => f.name));
+                return allFonts[Math.floor(Math.random() * allFonts.length)];
+            }
+
+            // Update line navigation
+            function updateLineNavigation() {
+                const nav = $('#lineNavigation');
+                nav.empty();
                 
-                if (this.songs.length === 0) {
-                    songList.html('<p style="text-align: center; color: #ccc;">Belum ada lagu tersimpan</p>');
+                if (lyrics.length === 0) {
+                    nav.append('<button class="line-btn">Tidak ada lirik...</button>');
                     return;
                 }
                 
-                const html = this.songs.map((song, index) => `
-                    <div class="song-item" data-index="${index}">
-                        <span>${song.title}</span>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="edit-btn" data-index="${index}">✏️ Edit</button>
-                            <button class="delete-btn" data-index="${index}">🗑️ Hapus</button>
-                        </div>
-                    </div>
-                `).join('');
-                
-                songList.html(html);
+                lyrics.forEach((line, index) => {
+                    const btn = $('<button class="line-btn"></button>');
+                    // Truncate long lines to fit in navigation
+                    const displayText = line.length > 25 ? line.substring(0, 25) + '...' : line;
+                    btn.text(`${index + 1}. ${displayText}`);
+                    btn.data('index', index);
+                    btn.attr('title', `Baris ${index + 1}: ${line}`); // Full text in tooltip
+                    
+                    if (index === currentLine) {
+                        btn.addClass('current');
+                    }
+                    
+                    nav.append(btn);
+                });
             }
 
-            updateBPM() {
-                const bpm = $('#bpmInput').val();
-                $('#currentBPM').text(bpm);
+            // Toggle fullscreen mode
+            function toggleFullscreen() {
+                isFullscreenMode = !isFullscreenMode;
                 
-                if (this.isMetronomePlaying) {
-                    this.stopMetronome();
-                    setTimeout(() => this.startMetronome(), 100);
+                if (isFullscreenMode) {
+                    $('body').addClass('fullscreen');
+                    $('#fullscreenBtn').text('📺 Exit FS');
+                } else {
+                    $('body').removeClass('fullscreen');
+                    $('#fullscreenBtn').text('📺 Fullscreen');
+                }
+                
+                updateDisplay();
+            }
+
+            // Apply chromakey background
+            function applyChromakey(color) {
+                $('#bgColor').val(color);
+                $('.lyric-container').css('background-color', color);
+                
+                // Remove active class from all chroma buttons
+                $('.chroma-btn').removeClass('active');
+                
+                // Add active class to clicked button
+                $(`#chroma${color === '#00FF00' ? 'Green' : color === '#0000FF' ? 'Blue' : color === '#FF00FF' ? 'Magenta' : 'Black'}`).addClass('active');
+            }
+
+            // Apply text effects
+            function applyTextEffect(effectClass) {
+                $('.lyric-line').removeClass('text-stroke text-shadow-light text-shadow-heavy text-glow text-outline');
+                
+                if (effectClass) {
+                    $('.lyric-line').addClass(effectClass);
                 }
             }
 
-            updateBPMDisplay() {
-                $('#currentBPM').text($('#bpmInput').val());
+            // Lyrics Modal Management
+            let originalLyricsContent = '';
+            
+            function openLyricsModal() {
+                originalLyricsContent = $('#lyricsInput').val();
+                $('#lyricsModal').show();
+                updateLyricsStats();
+                $('#lyricsInput').focus();
             }
-
-            updateVolume() {
-                this.updateVolumeDisplay();
+            
+            function closeLyricsModal() {
+                $('#lyricsModal').hide();
             }
-
-            updateVolumeDisplay() {
-                const volume = $('#volumeInput').val();
-                $('#volumeValue').text(`${volume}%`);
+            
+            function saveLyricsModal() {
+                parseLyrics();
+                closeLyricsModal();
+                console.log('✅ Lyrics saved and applied');
             }
-
-            updateScrollSpeed() {
-                if (this.scrollMode === 'metronome') {
-                    this.scrollOnBeat = parseInt($('#scrollSpeedInput').val());
-                    $('#scrollSpeedValue').text(`${this.scrollOnBeat} (beat ${this.scrollOnBeat})`);
+            
+            function cancelLyricsModal() {
+                if (confirm('Apakah Anda yakin ingin membatalkan perubahan?')) {
+                    $('#lyricsInput').val(originalLyricsContent);
+                    closeLyricsModal();
+                }
+            }
+            
+            function clearLyricsModal() {
+                if (confirm('Apakah Anda yakin ingin menghapus semua lirik?')) {
+                    $('#lyricsInput').val('');
+                    updateLyricsStats();
+                    $('#lyricsInput').focus();
+                }
+            }
+            
+            function updateLyricsStats() {
+                const text = $('#lyricsInput').val();
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                const chars = text.length;
+                
+                $('#lyricsCount').text(`${lines.length} baris`);
+                $('#lyricsChars').text(`${chars} karakter`);
+            }
+            function toggleChromaOptimize() {
+                const container = $('.lyric-container');
+                const btn = $('#chromaOptimize');
+                
+                if (container.hasClass('chroma-optimized')) {
+                    container.removeClass('chroma-optimized');
+                    btn.removeClass('active').text('🎯 Optimize');
                 } else {
-                    this.updateScrollSpeedDisplay();
+                    container.addClass('chroma-optimized');
+                    btn.addClass('active').text('🎯 Optimized');
+                }
+            }
+
+            // Toggle minimize navigator
+            function toggleNavigatorMinimize() {
+                isNavigatorMinimized = !isNavigatorMinimized;
+                const navigator = $('#navigator');
+                const lyricContainer = $('.lyric-container');
+                const toggleBtn = $('#minimizeToggle');
+                
+                if (isNavigatorMinimized) {
+                    navigator.addClass('minimized');
+                    lyricContainer.addClass('minimized-nav');
+                    toggleBtn.html('▲ Show');
+                } else {
+                    navigator.removeClass('minimized');
+                    lyricContainer.removeClass('minimized-nav');
+                    toggleBtn.html('▼ Hide');
+                }
+            }
+            function toggleNavigatorMinimize() {
+                isNavigatorMinimized = !isNavigatorMinimized;
+                const navigator = $('#navigator');
+                const lyricContainer = $('.lyric-container');
+                const toggleBtn = $('#minimizeToggle');
+                
+                if (isNavigatorMinimized) {
+                    navigator.addClass('minimized');
+                    lyricContainer.addClass('minimized-nav');
+                    toggleBtn.html('▲ Show');
+                } else {
+                    navigator.removeClass('minimized');
+                    lyricContainer.removeClass('minimized-nav');
+                    toggleBtn.html('▼ Hide');
+                }
+            }
+
+            // Update both counters
+            function updateCounter() {
+                const counterText = `Baris ${currentLine + 1} dari ${lyrics.length}`;
+                const compactText = `${currentLine + 1}/${lyrics.length}`;
+                
+                $('#counter').text(compactText); // Use compact format for edit-controls
+                $('#minimizedCounter').text(counterText); // Full text for minimized controls
+                
+                // Update nav-row-1 counter if exists (add full text there)
+                $('.nav-row-1 .counter').text(counterText);
+            }
+
+            // Navigation functions
+            function goToLine(index) {
+                if (index >= 0 && index < lyrics.length) {
+                    const oldCycleStart = Math.floor(currentLine / 4) * 4;
+                    const newCycleStart = Math.floor(index / 4) * 4;
                     
-                    if (this.isScrolling && this.scrollMode === 'auto') {
-                        this.pauseScroll();
-                        setTimeout(() => this.startScroll(), 100);
+                    // If jumping to different cycle, reset random data
+                    if (oldCycleStart !== newCycleStart) {
+                        cycleRandomFonts = {};
+                        cycleRandomSizes = {};
+                    }
+                    
+                    currentLine = index;
+                    updateDisplay();
+                    updateLineNavigation();
+                    updateCounter();
+                }
+            }
+
+            function nextLine() {
+                if (currentLine < lyrics.length - 1) {
+                    goToLine(currentLine + 1);
+                }
+            }
+
+            function prevLine() {
+                if (currentLine > 0) {
+                    goToLine(currentLine - 1);
+                }
+            }
+
+            // Play/Pause functionality
+            function togglePlay() {
+                isPlaying = !isPlaying;
+                
+                const playText = isPlaying ? '⏸ Pause' : '▶ Play';
+                $('#playBtn').text(playText);
+                $('#minimizedPlayBtn').text(playText);
+                $('#fsPlay').text(playText);
+                
+                if (isPlaying) {
+                    playInterval = setInterval(() => {
+                        nextLine();
+                        if (currentLine >= lyrics.length - 1) {
+                            togglePlay(); // Auto stop at end
+                        }
+                    }, 3000); // 3 seconds per line
+                } else {
+                    if (playInterval) {
+                        clearInterval(playInterval);
+                        playInterval = null;
                     }
                 }
             }
 
-            updateScrollSpeedDisplay() {
-                const speedValue = $('#scrollSpeedInput').val();
+            // Event bindings
+            function bindEvents() {
+                // Lyrics modal events
+                $('#editLyricsBtn').on('click', openLyricsModal);
+                $('#closeLyricsModal').on('click', closeLyricsModal);
+                $('#saveLyricsBtn').on('click', saveLyricsModal);
+                $('#cancelLyricsBtn').on('click', cancelLyricsModal);
+                $('#clearLyricsBtn').on('click', clearLyricsModal);
                 
-                if (this.scrollMode === 'auto') {
-                    const interval = 8000 - (speedValue * 75);
-                    const seconds = (interval / 1000).toFixed(1);
-                    $('#scrollSpeedValue').text(`${speedValue} (${seconds}s)`);
-                } else {
-                    $('#scrollSpeedValue').text(`${speedValue} (metronom)`);
-                }
-            }
-
-            updateScrollMode() {
-                this.scrollMode = $('#scrollModeSelect').val();
-                this.updateScrollSpeedDisplay();
+                // Quick action buttons
+                $('#quickJumpBtn').on('click', function() {
+                    const lineNum = prompt('Jump ke baris nomor:', currentLine + 1);
+                    if (lineNum && !isNaN(lineNum)) {
+                        const targetLine = parseInt(lineNum) - 1;
+                        if (targetLine >= 0 && targetLine < lyrics.length) {
+                            goToLine(targetLine);
+                        } else {
+                            alert('Nomor baris tidak valid!');
+                        }
+                    }
+                });
                 
-                // Stop current activities
-                if (this.isScrolling) {
-                    this.pauseScroll();
-                }
-                if (this.isMetronomePlaying) {
-                    this.pauseMetronome();
-                }
+                $('#resetBtn').on('click', function() {
+                    goToLine(0);
+                    if (isPlaying) {
+                        togglePlay(); // Stop if playing
+                    }
+                });
                 
-                // Update controls visibility and configuration
-                const speedGroup = $('#scrollSpeedInput').closest('.control-group');
-                const indicator = $('#scrollModeIndicator');
-                const scrollControls = $('#scrollPlayBtn').closest('.scroll-controls');
+                // Update stats while typing
+                $('#lyricsInput').on('input keyup paste', function() {
+                    updateLyricsStats();
+                });
                 
-                if (this.scrollMode === 'metronome') {
-                    // Hide separate scroll controls, show combined metronome controls
-                    scrollControls.hide();
-                    $('#metronomeControlsNormal').hide();
-                    $('#metronomeControlsCombined').show();
+                // Font controls
+                $('#fontSelector').on('change', updateDisplay);
+                $('#fontSize').on('input', updateDisplay);
+                $('#fontColor').on('change', updateDisplay);
+                $('#bgColor').on('change', updateDisplay);
+                
+                // Random font mode
+                $('#randomFontBtn').on('click', function() {
+                    randomFontMode = !randomFontMode;
+                    $(this).toggleClass('active', randomFontMode);
                     
-                    // Configure beat selection
-                    speedGroup.find('label').text('Beat Scroll:');
-                    $('#scrollSpeedInput').attr('min', '1').attr('max', '4').attr('step', '1').val('1');
-                    this.scrollOnBeat = 1;
-                    $('#scrollSpeedValue').text('1 (beat 1)');
-                    indicator.text('📏 Mode: Ikuti Metronom - Gunakan Play All');
-                } else {
-                    // Show separate controls
-                    scrollControls.show();
-                    $('#metronomeControlsNormal').show();
-                    $('#metronomeControlsCombined').hide();
+                    // If turning off random font mode, clear stored fonts
+                    if (!randomFontMode) {
+                        cycleRandomFonts = {};
+                    }
                     
-                    // Configure speed selection
-                    speedGroup.find('label').text('Kecepatan Scroll:');
-                    $('#scrollSpeedInput').attr('min', '10').attr('max', '80').attr('step', '5').val('30');
-                    this.updateScrollSpeedDisplay();
-                    indicator.text('⏱️ Mode: Otomatis');
-                }
-            }
-
-            showStatus(message, type) {
-                const statusDiv = $('<div class="status ' + type + '" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000;">' + message + '</div>');
-                $('body').append(statusDiv);
+                    updateDisplay();
+                });
                 
-                setTimeout(() => {
-                    statusDiv.remove();
-                }, 3000);
-            }
-
-            showModalStatus(message, type) {
-                const statusDiv = $('#modalStatusMessage');
-                statusDiv.html(`<div class="status ${type}">${message}</div>`);
+                // Random size mode
+                $('#randomSizeBtn').on('click', function() {
+                    randomSizeMode = !randomSizeMode;
+                    $(this).toggleClass('active', randomSizeMode);
+                    
+                    // If turning off random size mode, clear stored sizes
+                    if (!randomSizeMode) {
+                        cycleRandomSizes = {};
+                    }
+                    
+                    updateDisplay();
+                });
                 
-                setTimeout(() => {
-                    statusDiv.empty();
-                }, 3000);
+                // Alignment buttons
+                $('#alignLeft').on('click', function() {
+                    currentAlign = 'left';
+                    $('.align-buttons button').removeClass('active');
+                    $(this).addClass('active');
+                    $('.lyric-display')
+                        .removeClass('align-left align-center align-right')
+                        .addClass('align-left');
+                    updateDisplay();
+                });
+                
+                $('#alignCenter').on('click', function() {
+                    currentAlign = 'center';
+                    $('.align-buttons button').removeClass('active');
+                    $(this).addClass('active');
+                    $('.lyric-display')
+                        .removeClass('align-left align-center align-right')
+                        .addClass('align-center');
+                    updateDisplay();
+                });
+                
+                $('#alignRight').on('click', function() {
+                    currentAlign = 'right';
+                    $('.align-buttons button').removeClass('active');
+                    $(this).addClass('active');
+                    $('.lyric-display')
+                        .removeClass('align-left align-center align-right')
+                        .addClass('align-right');
+                    updateDisplay();
+                });
+                
+                // Navigation buttons (both normal and minimized)
+                $('#prevBtn, #minimizedPrevBtn').on('click', prevLine);
+                $('#nextBtn, #minimizedNextBtn').on('click', nextLine);
+                $('#playBtn, #minimizedPlayBtn').on('click', togglePlay);
+                
+                // Minimize toggle
+                $('#minimizeToggle').on('click', toggleNavigatorMinimize);
+                
+                // Chromakey presets
+                $('#chromaGreen').on('click', () => applyChromakey('#00FF00'));
+                $('#chromaBlue').on('click', () => applyChromakey('#0000FF'));
+                $('#chromaMagenta').on('click', () => applyChromakey('#FF00FF'));
+                $('#chromaBlack').on('click', () => applyChromakey('#000000'));
+                $('#chromaOptimize').on('click', toggleChromaOptimize);
+                
+                // Text effects
+                $('#textEffect').on('change', function() {
+                    applyTextEffect($(this).val());
+                });
+                
+                // Fullscreen mode
+                $('#fullscreenBtn').on('click', toggleFullscreen);
+                $('#exitFullscreen').on('click', toggleFullscreen);
+                
+                // Quick open lyrics modal
+                $('#fixTextareaBtn').on('click', function() {
+                    openLyricsModal();
+                    console.log('🔧 Lyrics modal opened');
+                });
+                
+                // Fullscreen navigation
+                $('#fsNext').on('click', nextLine);
+                $('#fsPrev').on('click', prevLine);
+                $('#fsPlay').on('click', togglePlay);
+                
+                // Line navigation
+                $(document).on('click', '.line-btn', function() {
+                    const index = $(this).data('index');
+                    if (index !== undefined) {
+                        goToLine(index);
+                    }
+                });
+                
+                // Font management
+                $('#manageFontBtn').on('click', function() {
+                    $('#fontModal').show();
+                });
+                
+                $('#closeModal').on('click', function() {
+                    $('#fontModal').hide();
+                });
+                
+                $('#addFontBtn').on('click', function() {
+                    const name = $('#fontName').val().trim();
+                    const url = $('#fontUrl').val().trim();
+                    
+                    if (name && url) {
+                        // Validate URL
+                        if (url.includes('fonts.googleapis.com') || url.includes('fonts.google.com')) {
+                            customFonts.push({ name, url });
+                            loadGoogleFont(url);
+                            updateFontSelector();
+                            updateFontList();
+                            $('#fontName').val('');
+                            $('#fontUrl').val('');
+                        } else {
+                            alert('Silakan masukkan URL Google Fonts yang valid');
+                        }
+                    }
+                });
+                
+                // Delete font
+                $(document).on('click', '.delete-font', function() {
+                    const index = $(this).data('index');
+                    customFonts.splice(index, 1);
+                    updateFontSelector();
+                    updateFontList();
+                });
+                
+                // Keyboard shortcuts
+                $(document).on('keydown', function(e) {
+                    // Don't interfere if modal is open and user is typing
+                    if ($('#lyricsModal').is(':visible') && e.target.tagName.toLowerCase() === 'textarea') {
+                        if (e.keyCode === 27) { // ESC key
+                            e.preventDefault();
+                            cancelLyricsModal();
+                        }
+                        return; // Allow normal typing in modal
+                    }
+                    
+                    // Don't interfere with other text input
+                    if (e.target.tagName.toLowerCase() === 'textarea' || e.target.tagName.toLowerCase() === 'input') {
+                        return;
+                    }
+                    
+                    switch(e.keyCode) {
+                        case 37: // Left arrow
+                            e.preventDefault();
+                            prevLine();
+                            break;
+                        case 39: // Right arrow
+                            e.preventDefault();
+                            nextLine();
+                            break;
+                        case 32: // Spacebar
+                            e.preventDefault();
+                            togglePlay();
+                            break;
+                        case 77: // M key
+                            e.preventDefault();
+                            toggleNavigatorMinimize();
+                            break;
+                        case 70: // F key
+                            e.preventDefault();
+                            toggleFullscreen();
+                            break;
+                        case 69: // E key
+                            e.preventDefault();
+                            openLyricsModal();
+                            break;
+                        case 27: // ESC key
+                            if ($('#lyricsModal').is(':visible')) {
+                                e.preventDefault();
+                                cancelLyricsModal();
+                            }
+                            break;
+                    }
+                });
+                
+                // Close modal on outside click
+                $(window).on('click', function(e) {
+                    if (e.target.id === 'fontModal') {
+                        $('#fontModal').hide();
+                    }
+                    if (e.target.id === 'lyricsModal') {
+                        cancelLyricsModal();
+                    }
+                });
             }
-        }
 
-        $(document).ready(() => {
-            new LyricsChordApp();
+            // Initialize app
+            init();
         });
     </script>
 </body>
