@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penampil Lirik</title>
+    <title>Aplikasi Penampil Lirik - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         * {
@@ -13,1850 +14,761 @@
         }
 
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
         }
 
-        /* Main Lyric Area */
-        .lyric-container {
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            background-color: #000;
-            transition: all 0.3s ease;
-        }
-
-        .lyric-container.minimized-nav {
-            bottom: 60px;
-        }
-
-        .lyric-display {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            /* justify-content: center; */
-            align-items: center;
-            padding: 20px;
-        }
-
-        .lyric-line {
-            margin: 10px 0;
-            font-size: 3rem;
-            color: #fff;
-            transition: all 0.3s ease;
-            opacity: 0.7;
-            font-weight: normal;
-            width: 100%;
-            display: block;
-            /* Enhanced text rendering for capture */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-        }
-
-        .lyric-line.active {
-            opacity: 1;
-            font-weight: bold;
-        }
-
-        /* Text effects for chromakey */
-        .text-stroke {
-            -webkit-text-stroke: 2px #000;
-            text-stroke: 2px #000;
-        }
-
-        .text-shadow-light {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .text-shadow-heavy {
-            text-shadow: 
-                2px 2px 0px #000,
-                -2px -2px 0px #000,
-                2px -2px 0px #000,
-                -2px 2px 0px #000,
-                0px 2px 0px #000,
-                2px 0px 0px #000,
-                0px -2px 0px #000,
-                -2px 0px 0px #000,
-                4px 4px 8px rgba(0,0,0,0.6);
-        }
-
-        .text-glow {
-            text-shadow: 
-                0 0 10px currentColor,
-                0 0 20px currentColor,
-                0 0 30px currentColor,
-                2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .text-outline {
-            -webkit-text-stroke: 3px #000;
-            text-stroke: 3px #000;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
-        }
-
-        /* Fullscreen mode */
-        .fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            background-color: #000;
-        }
-
-        .fullscreen .navigator {
-            display: none !important;
-        }
-
-        .fullscreen .lyric-container {
-            bottom: 0 !important;
-            top: 0;
-        }
-
-        /* Ensure textarea stays visible */
-        .navigator .nav-content {
-            display: block;
-        }
-
-        .navigator.minimized .nav-content {
-            display: none;
-        }
-
-        /* Fix textarea container */
-        .textarea-container {
-            flex: 1;
-            height: 100%;
-            margin-right: 10px;
-            min-width: 200px;
-        }
-
-        .lyrics-textarea {
-            width: 100% !important;
-            height: 100% !important;
-            background-color: #333 !important;
-            color: #fff !important;
-            border: 1px solid #555 !important;
-            border-radius: 4px;
-            padding: 8px;
-            font-size: 12px;
-            resize: none;
-            font-family: monospace;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        .lyric-line.active {
-            opacity: 1;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-
-        .lyric-line.hidden {
-            display: none;
-        }
-
-        /* Bottom Navigator */
-        .navigator {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            background-color: #222;
-            border-top: 2px solid #444;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .navigator.minimized {
-            height: 60px;
-            padding: 10px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .navigator.minimized .nav-content {
-            display: none;
-        }
-
-        .navigator.minimized .minimize-controls {
-            display: flex !important;
-        }
-
-        .minimize-controls {
-            display: none;
-            align-items: center;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-            background-color: #333;
-            border-radius: 20px;
-            padding: 8px 15px;
-            margin: 0 10px;
-        }
-
-        .minimize-controls button {
-            background-color: #444;
-            border: 1px solid #666;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            min-width: 70px;
-        }
-
-        .minimize-controls .counter {
-            background-color: #555;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 11px;
-            border: 1px solid #777;
-        }
-
-        /* Chromakey buttons */
-        .chroma-btn {
-            min-width: 50px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            border: 2px solid #333;
-            cursor: pointer;
-        }
-
-        .chroma-btn:hover {
-            border-color: #fff;
-            transform: scale(1.05);
-        }
-
-        .chroma-btn.active {
-            border-color: #FFD700;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        /* High contrast presets for chromakey */
-        .chroma-green {
-            background-color: #00FF00 !important;
-        }
-        
-        .chroma-blue {
-            background-color: #0000FF !important;
-        }
-        
-        .chroma-magenta {
-            background-color: #FF00FF !important;
-        }
-        
-        /* Enhanced text visibility on chromakey backgrounds */
-        .chroma-optimized .lyric-line {
-            color: #FFFFFF;
-            font-weight: 900;
-            -webkit-text-stroke: 2px #000000;
-            text-stroke: 2px #000000;
-            text-shadow: 
-                3px 3px 0px #000000,
-                -3px -3px 0px #000000,
-                3px -3px 0px #000000,
-                -3px 3px 0px #000000,
-                0px 3px 0px #000000,
-                3px 0px 0px #000000,
-                0px -3px 0px #000000,
-                -3px 0px 0px #000000;
-        }
-
-        /* Fullscreen overlay */
-        .fullscreen-overlay {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 10000;
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .fullscreen-overlay button {
-            background: #444;
-            color: #fff;
-            border: 1px solid #666;
-            padding: 5px 10px;
-            margin: 2px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .fullscreen .fullscreen-overlay {
-            display: block;
-        }
-
-        .minimize-toggle {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background-color: #444;
-            border: 1px solid #666;
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .minimize-toggle:hover {
-            background-color: #555;
-        }
-
-        .nav-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            overflow-y: auto;
-        }
-
-        .nav-row-1 {
-            height: 40px;
-        }
-
-        .nav-row-2 {
-            flex: 1;
-            min-height: 120px;
-        }
-
-        .nav-row-3 {
-            height: 30px;
-        }
-
-        .nav-row-2 {
-            flex: 1;
-            min-height: 120px;
-            height: calc(100% - 50px);
-            display: flex !important;
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        .nav-row-2 {
-            flex: 1;
-            min-height: 120px;
-            max-height: 140px;
-            height: calc(100% - 50px);
-            display: flex !important;
-            gap: 10px;
-            align-items: stretch;
-            overflow: hidden;
-        }
-
-        /* Edit Controls */
-        .edit-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            width: 140px;
-            min-width: 140px;
-            max-width: 140px;
-            max-height: 100%;
-            gap: 8px;
-            padding: 8px;
-            background-color: #333;
-            border-radius: 8px;
-            border: 1px solid #555;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .edit-lyrics-btn {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            width: 100%;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        .edit-lyrics-btn:hover {
-            background: linear-gradient(135deg, #45a049, #4CAF50);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .edit-lyrics-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .edit-controls .counter {
-            font-size: 10px;
-            color: #ccc;
-            text-align: center;
-            padding: 4px;
-            background-color: #444;
-            border-radius: 4px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .quick-btn {
-            background-color: #666;
-            color: white;
-            border: none;
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        .quick-btn:hover {
-            background-color: #777;
-            transform: translateY(-1px);
-        }
-
-        .quick-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Ensure edit-controls scrolls properly */
-        .edit-controls::-webkit-scrollbar {
             width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .edit-controls::-webkit-scrollbar-track {
-            background: #222;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        .edit-controls::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 2px;
-        }
-
-        .edit-controls::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-
-         /* Ensure edit-controls scrolls properly */
-        .nav-row::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .nav-row::-webkit-scrollbar-track {
-            background: #222;
-        }
-
-        .nav-row::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 2px;
-        }
-
-        .nav-row::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-
-        
-
-        /* Line navigation scrollbar */
-        .line-navigation::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .line-navigation::-webkit-scrollbar-track {
-            background: #222;
-        }
-
-        .line-navigation::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 3px;
-        }
-
-        .line-navigation::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-
-        /* Lyrics Modal Styling */
-        .lyrics-modal-content {
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .lyrics-edit-area {
-            flex: 1;
-            margin: 20px 0;
-            min-height: 400px;
-            display: flex;
-        }
-
-        .lyrics-textarea-popup {
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
             width: 100%;
-            height: 100%;
-            min-height: 400px;
-            background-color: #2a2a2a;
-            color: #fff;
-            border: 2px solid #555;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 14px;
-            font-family: 'Courier New', monospace;
-            resize: none;
-            line-height: 1.6;
-            outline: none;
-            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
 
-        .lyrics-textarea-popup:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
-        }
-
-        .lyrics-modal-footer {
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0 0 0;
-            border-top: 1px solid #555;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .lyrics-info {
-            color: #ccc;
-            font-size: 12px;
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .lyrics-actions {
+        .nav-links {
             display: flex;
-            gap: 10px;
+            list-style: none;
+            gap: 2rem;
         }
 
-        .lyrics-actions button {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #45a049;
-        }
-
-        .btn-secondary {
-            background: #666;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #777;
-        }
-
-        .btn-danger {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #da190b;
-        }
-
-        .minimize-controls {
-            display: none;
-            align-items: center;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-            background-color: #333;
-            border-radius: 20px;
-            padding: 8px 15px;
-            margin: 0 10px;
-        }
-
-        .minimize-toggle {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background-color: #444;
-            border: 1px solid #666;
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .minimize-toggle:hover {
-            background-color: #555;
-        }
-
-        /* Controls */
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        select, input, button {
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 5px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        button {
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
-        .lyric-line.locked-random {
-            border-left: 3px solid #4CAF50;
-            padding-left: 10px;
-        }
-
-        button.active {
-            background-color: #4CAF50;
-            color: #fff;
-            font-weight: bold;
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        button.active::after {
-            content: " ✓";
-            font-size: 10px;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        .align-buttons {
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .app-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+
+        .app-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .app-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 3;
+        }
+
+        .app-content {
+            padding: 2.5rem;
+        }
+
+        .app-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .app-version {
+            color: #3b82f6;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-description {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .app-mode {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .mode-title {
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             display: flex;
-            gap: 2px;
-        }
-
-        .align-buttons button {
-            min-width: 60px;
-            font-size: 10px;
-            padding: 5px 4px;
-        }
-
-        /* Alignment specific styles */
-        .lyric-display.align-left {
-            align-items: flex-start;
-        }
-
-        .lyric-display.align-center {
             align-items: center;
+            gap: 0.5rem;
         }
 
-        .lyric-display.align-right {
-            align-items: flex-end;
+        .mode-description {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
-        .lyric-line.align-left {
-            text-align: left;
+        .mode-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
-        .lyric-line.align-center {
+        .mode-feature {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .app-details {
+            margin-bottom: 2rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .detail-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .app-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-try {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 1.2rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            width: 100%;
+        }
+
+        .btn-try:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .comparison-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #1e293b;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-header {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
             text-align: center;
         }
 
-        .lyric-line.align-right {
-            text-align: right;
+        .comparison-row {
+            display: contents;
         }
 
-        input[type="number"] {
-            width: 50px;
-        }
-
-        input[type="color"] {
-            width: 30px;
-            height: 25px;
-            padding: 0;
-            cursor: pointer;
-        }
-
-        .line-navigation {
-            flex: 1;
-            height: 100%;
-            max-height: 100%;
-            min-width: 200px;
-            background-color: #333;
-            border: 1px solid #555;
-            border-radius: 4px;
-            padding: 8px;
-            overflow-y: auto;
-            box-sizing: border-box;
-        }
-
-        .line-btn {
-            display: block;
-            width: 100%;
-            margin: 2px 0;
-            padding: 4px 8px;
-            font-size: 11px;
-            text-align: left;
-            background-color: #444;
-            border: 1px solid #666;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            word-wrap: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .line-btn:hover {
-            background-color: #555;
-        }
-
-        .line-btn.current {
-            background-color: #4CAF50;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .line-btn {
-            display: block;
-            width: 100%;
-            margin: 2px 0;
-            padding: 4px 8px;
-            font-size: 11px;
-            text-align: left;
-            background-color: #444;
-            border: 1px solid #666;
-        }
-
-        .line-btn.current {
-            background-color: #4CAF50;
-        }
-
-        /* Counter */
-        .counter {
-            font-size: 12px;
-            color: #ccc;
-            white-space: nowrap;
-        }
-
-        /* Chromakey buttons */
-        .chroma-btn {
-            min-width: 50px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            border: 2px solid #333;
-            cursor: pointer;
-        }
-
-        .chroma-btn:hover {
-            border-color: #fff;
-            transform: scale(1.05);
-        }
-
-        .chroma-btn.active {
-            border-color: #FFD700;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        /* Font Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-        }
-
-        .modal-content {
-            background-color: #333;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #555;
+        .comparison-cell {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1rem;
             border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
-            color: #fff;
-        }
-
-        .modal-header {
+            border: 1px solid rgba(226, 232, 240, 0.3);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            justify-content: center;
+            text-align: center;
         }
 
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #fff;
-        }
-
-        .font-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin: 10px 0;
-        }
-
-        .font-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #555;
-        }
-
-        .font-preview {
-            flex: 1;
-            font-size: 16px;
-        }
-
-        .font-actions {
-            display: flex;
-            gap: 5px;
+        .comparison-feature {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            font-weight: 600;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .lyric-line {
-                font-size: 2rem;
+            .main-content {
+                padding: 1rem;
             }
-            
-            .navigator {
-                height: 200px;
-                padding: 8px;
+
+            .page-title {
+                font-size: 2.2rem;
             }
-            
-            .navigator.minimized {
-                height: 50px;
-                padding: 5px;
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
-            
-            .lyric-container {
-                bottom: 200px;
-            }
-            
-            .lyric-container.minimized-nav {
-                bottom: 50px;
-            }
-            
-            .nav-row {
-                flex-wrap: wrap;
-                gap: 5px;
-            }
-            
-            .nav-row-1 {
-                height: 35px;
-                min-height: 35px;
-                max-height: 35px;
-            }
-            
-            .nav-row-2 {
-                height: calc(100% - 45px);
-                min-height: 120px;
-                max-height: 140px;
-                gap: 5px;
-                overflow: hidden;
-            }
-            
-            .edit-controls {
-                width: 100px;
-                min-width: 100px;
-                max-width: 100px;
-                padding: 6px;
-                gap: 6px;
-                max-height: 100%;
-                overflow-y: auto;
-            }
-            
-            .edit-lyrics-btn {
-                font-size: 10px;
-                padding: 8px 6px;
-            }
-            
-            .edit-controls .counter {
-                font-size: 9px;
-                padding: 3px;
-            }
-            
-            .quick-btn {
-                font-size: 9px;
-                padding: 4px 6px;
-            }
-            
-            .line-navigation {
-                min-width: 150px;
-                padding: 6px;
-            }
-            
-            .line-btn {
-                font-size: 10px;
-                padding: 3px 6px;
-                margin: 1px 0;
-            }
-            
-            .control-group {
-                margin: 2px;
-                flex-wrap: wrap;
-            }
-            
-            .minimize-controls {
-                gap: 10px;
-            }
-            
-            .minimize-controls button,
-            .minimize-controls .counter {
-                font-size: 11px;
-                padding: 3px 6px;
-            }
-            
-            .fullscreen-overlay {
-                top: 5px;
-                right: 5px;
-                padding: 5px;
-            }
-            
-            .fullscreen-overlay button {
-                font-size: 10px;
-                padding: 3px 6px;
-                margin: 1px;
-            }
-            
-            .chroma-btn {
-                min-width: 40px;
-                font-size: 10px;
-                padding: 3px 6px;
-            }
-            
-            /* Mobile Modal */
-            .lyrics-modal-content {
-                width: 95%;
-                max-height: 95vh;
-                margin: 2.5vh auto;
-            }
-            
-            .lyrics-textarea-popup {
-                font-size: 12px;
-                min-height: 300px;
-            }
-            
-            .lyrics-actions {
+
+            .app-actions {
                 flex-direction: column;
-                gap: 5px;
-                width: 100%;
             }
-            
-            .lyrics-actions button {
-                width: 100%;
+
+            .comparison-table {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
-            
-            .lyrics-modal-footer {
-                flex-direction: column;
-                gap: 10px;
-                align-items: stretch;
+
+            .comparison-cell {
+                text-align: left;
             }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Demo Modal */
+        .demo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .demo-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .demo-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .demo-body {
+            padding: 2rem;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-screen {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 2rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            min-height: 200px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .demo-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .close-demo {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-demo:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
     </style>
 </head>
 <body>
-    <!-- Main Lyric Display -->
-    <div class="lyric-container">
-        <div class="lyric-display" id="lyricDisplay">
-            <div class="lyric-line">Masukkan lirik lagu di bawah...</div>
-        </div>
-    </div>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
 
-    <!-- Bottom Navigator -->
-    <div class="navigator" id="navigator">
-        <!-- Minimize Toggle Button -->
-        <button class="minimize-toggle" id="minimizeToggle">▼ Hide</button>
-        
-        <!-- Full Navigator Content -->
-        <div class="nav-content">
-            <!-- Row 1: Font and Style Controls -->
-            <div class="nav-row nav-row-1">
-                <div class="control-group">
-                    <label>Font:</label>
-                    <select id="fontSelector">
-                        <option value="Arial">Arial</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Verdana">Verdana</option>
-                        <option value="Courier New">Courier New</option>
-                    </select>
-                    <button id="randomFontBtn">Font Acak</button>
-                    <button id="randomSizeBtn">Size Acak</button>
-                    <button id="manageFontBtn">Kelola Font</button>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">TeknoMaven</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#services">Layanan</a></li>
+                <li><a href="#contact">Kontak</a></li>
+                <li><a href="#" style="color: #3b82f6;">Aplikasi Lirik</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Aplikasi Penampil Lirik</h1>
+            <p class="page-subtitle">Solusi profesional untuk menampilkan lirik lagu dengan berbagai mode presentasi yang dapat disesuaikan dengan kebutuhan performa Anda</p>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="apps-grid">
+            <!-- Line by Line App -->
+            <div class="app-card fade-in">
+                <div class="app-header">
+                    <div class="app-icon">🎤</div>
+                    <div class="app-badge">Populer</div>
                 </div>
-                
-                <div class="control-group">
-                    <label>Size:</label>
-                    <input type="number" id="fontSize" min="1" max="10" value="3">
-                </div>
-                
-                <div class="control-group">
-                    <label>Font:</label>
-                    <input type="color" id="fontColor" value="#ffffff">
-                    <label>BG:</label>
-                    <input type="color" id="bgColor" value="#000000">
-                </div>
-                
-                <div class="control-group">
-                    <label>Chromakey:</label>
-                    <button id="chromaGreen" class="chroma-btn" style="background: #00FF00; color: #000;">Green</button>
-                    <button id="chromaBlue" class="chroma-btn" style="background: #0000FF; color: #FFF;">Blue</button>
-                    <button id="chromaMagenta" class="chroma-btn" style="background: #FF00FF; color: #000;">Magenta</button>
-                    <button id="chromaBlack" class="chroma-btn" style="background: #000; color: #FFF;">Black</button>
-                    <button id="chromaOptimize" class="chroma-btn">🎯 Optimize</button>
-                </div>
-                
-                <div class="control-group">
-                    <label>Text FX:</label>
-                    <select id="textEffect">
-                        <option value="">Normal</option>
-                        <option value="text-stroke">Stroke</option>
-                        <option value="text-shadow-light">Shadow Light</option>
-                        <option value="text-shadow-heavy">Shadow Heavy</option>
-                        <option value="text-glow">Glow</option>
-                        <option value="text-outline">Outline</option>
-                    </select>
-                    <button id="fullscreenBtn">📺 Fullscreen</button>
-                    <button id="fixTextareaBtn" style="background: #ff6b6b;" title="Fix layout if textarea moves down">🔧 Fix Layout</button>
-                </div>
-                
-                <div class="control-group">
-                    <label>Align:</label>
-                    <div class="align-buttons">
-                        <button id="alignLeft" title="Rata Kiri">◀ Kiri</button>
-                        <button id="alignCenter" class="active" title="Rata Tengah">■ Tengah</button>
-                        <button id="alignRight" title="Rata Kanan">Kanan ▶</button>
+                <div class="app-content">
+                    <h3 class="app-title">Lyrics Player - Line Mode</h3>
+                    <div class="app-version">v1.2.1</div>
+                    <p class="app-description">
+                        Aplikasi penampil lirik dengan mode baris per baris yang sempurna untuk performa live, karaoke, dan presentasi musik. Kontrol manual yang mudah dengan tampilan yang jelas dan profesional.
+                    </p>
+                    
+                    <div class="app-mode">
+                        <div class="mode-title">
+                            📝 Mode Baris per Baris
+                        </div>
+                        <div class="mode-description">
+                            Menampilkan lirik satu baris pada satu waktu dengan kontrol navigasi manual menggunakan tombol next/previous. Ideal untuk vokal yang membutuhkan fokus pada baris tertentu.
+                        </div>
+                        <div class="mode-features">
+                            <span class="mode-feature">Navigasi Manual</span>
+                            <span class="mode-feature">Fokus Per Baris</span>
+                            <span class="mode-feature">Kontrol Tempo</span>
+                        </div>
+                    </div>
+                    
+                    <div class="app-details">
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Platform</div>
+                                <div class="detail-value">Web Browser</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Mode Display</div>
+                                <div class="detail-value">Fullscreen</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Kontrol</div>
+                                <div class="detail-value">Keyboard & Mouse</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Background</div>
+                                <div class="detail-value">Chromakey Ready</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="app-actions">
+                        <a href="https://teknomaven.com/download/lyrics-player/mode-perbaris" target="_blank" class="btn-try">
+                            🚀 Coba Sekarang
+                        </a>
                     </div>
                 </div>
+            </div>
+
+            <!-- Word by Word App -->
+            <div class="app-card fade-in">
+                <div class="app-header">
+                    <div class="app-icon">🎵</div>
+                    <div class="app-badge">Terbaru</div>
+                </div>
+                <div class="app-content">
+                    <h3 class="app-title">Lyrics Player - Word Mode</h3>
+                    <div class="app-version">v1.0.5</div>
+                    <p class="app-description">
+                        Aplikasi penampil lirik dengan mode kata per kata yang memberikan presisi tinggi untuk pembelajaran vokal dan latihan pronunciation. Setiap kata ditampilkan secara individual dengan timing yang dapat diatur.
+                    </p>
+                    
+                    <div class="app-mode">
+                        <div class="mode-title">
+                            🔤 Mode Kata per Kata
+                        </div>
+                        <div class="mode-description">
+                            Menampilkan lirik kata demi kata dengan kontrol timing yang presisi. Sangat cocok untuk pembelajaran, latihan pronunciation, dan analisis lirik yang detail.
+                        </div>
+                        <div class="mode-features">
+                            <span class="mode-feature">Presisi Timing</span>
+                            <span class="mode-feature">Learning Mode</span>
+                            <span class="mode-feature">Auto/Manual</span>
+                        </div>
+                    </div>
+                    
+                    <div class="app-details">
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Platform</div>
+                                <div class="detail-value">Web Browser</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Mode Display</div>
+                                <div class="detail-value">Adaptive</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Speed Control</div>
+                                <div class="detail-value">Variable BPM</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Learning</div>
+                                <div class="detail-value">Progressive</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="app-actions">
+                        <a href="https://teknomaven.com/download/lyrics-player/mode-perkata" target="_blank" class="btn-try">
+                            🚀 Coba Sekarang
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+            <h2 class="comparison-title">Perbandingan Mode Aplikasi</h2>
+            <div class="comparison-table">
+                <div class="comparison-header">Fitur</div>
+                <div class="comparison-header">Mode Baris per Baris</div>
+                <div class="comparison-header">Mode Kata per Kata</div>
                 
-                <div class="control-group">
-                    <button id="prevBtn">◀ Prev</button>
-                    <button id="playBtn">▶ Play</button>
-                    <button id="nextBtn">Next ▶</button>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Unit Display</div>
+                    <div class="comparison-cell">Satu baris lengkap</div>
+                    <div class="comparison-cell">Satu kata individual</div>
                 </div>
                 
-                <div class="counter" id="counter">Baris 1 dari 1</div>
-            </div>
-
-            <!-- Row 2: Line Navigation Only -->
-            <div class="nav-row nav-row-2">
-                <div class="edit-controls">
-                    <button id="editLyricsBtn" class="edit-lyrics-btn">📝 Edit Lirik</button>
-                    <div class="counter" id="counter">1/1</div>
-                    <button id="quickJumpBtn" class="quick-btn" title="Jump to line">🎯 Jump</button>
-                    <button id="resetBtn" class="quick-btn" title="Reset to beginning">⏮️ Reset</button>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Kontrol</div>
+                    <div class="comparison-cell">Next/Previous baris</div>
+                    <div class="comparison-cell">Next/Previous kata</div>
                 </div>
-                <div class="line-navigation" id="lineNavigation">
-                    <button class="line-btn current">Klik di sini untuk navigasi baris...</button>
+                
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Ideal Untuk</div>
+                    <div class="comparison-cell">Performa live, karaoke</div>
+                    <div class="comparison-cell">Pembelajaran, latihan</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Minimized Controls (Only visible when minimized) -->
-        <div class="minimize-controls">
-            <button id="minimizedPrevBtn">◀ Prev</button>
-            <button id="minimizedPlayBtn">▶ Play</button>
-            <button id="minimizedNextBtn">Next ▶</button>
-            <div class="counter" id="minimizedCounter">Baris 1 dari 1</div>
-        </div>
-    </div>
-
-    <!-- Fullscreen Overlay Controls -->
-    <div class="fullscreen-overlay" id="fullscreenOverlay">
-        <button id="exitFullscreen">❌ Exit</button>
-        <button id="fsNext">▶ Next</button>
-        <button id="fsPlay">▶ Play</button>
-        <button id="fsPrev">◀ Prev</button>
-    </div>
-
-    <!-- Lyrics Edit Modal -->
-    <div id="lyricsModal" class="modal">
-        <div class="modal-content lyrics-modal-content">
-            <div class="modal-header">
-                <h3>📝 Edit Lirik Lagu</h3>
-                <span class="close" id="closeLyricsModal">&times;</span>
-            </div>
-            
-            <div class="lyrics-edit-area">
-                <textarea class="lyrics-textarea-popup" id="lyricsInput" placeholder="Masukkan lirik lagu di sini...&#10;&#10;Tips:&#10;• Setiap baris akan menjadi satu bagian navigasi&#10;• Gunakan enter untuk baris baru&#10;• Baris kosong akan dihapus otomatis&#10;• Paste dari Word/Google Docs akan otomatis dibersihkan&#10;&#10;Contoh:&#10;Baris pertama lirik&#10;Baris kedua lirik&#10;Chorus dimulai di sini&#10;Dan seterusnya..."></textarea>
-                <!-- Hidden backup textarea for compatibility -->
-                <textarea id="lyricsInputBackup" style="display: none;"></textarea>
-            </div>
-            
-            <div class="lyrics-modal-footer">
-                <div class="lyrics-info">
-                    <span id="lyricsCount">0 baris</span> • 
-                    <span id="lyricsChars">0 karakter</span>
+                
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Fokus</div>
+                    <div class="comparison-cell">Kelancaran bernyanyi</div>
+                    <div class="comparison-cell">Pronunciation detail</div>
                 </div>
-                <div class="lyrics-actions">
-                    <button id="clearLyricsBtn" class="btn-danger">🗑️ Clear All</button>
-                    <button id="cancelLyricsBtn" class="btn-secondary">❌ Cancel</button>
-                    <button id="saveLyricsBtn" class="btn-primary">✅ Save & Apply</button>
+                
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Kecepatan</div>
+                    <div class="comparison-cell">Tempo normal</div>
+                    <div class="comparison-cell">Variable, bisa lambat</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Complexity</div>
+                    <div class="comparison-cell">Sederhana</div>
+                    <div class="comparison-cell">Advanced</div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Font Management Modal -->
-    <div id="fontModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Kelola Font</h3>
-                <span class="close" id="closeModal">&times;</span>
-            </div>
-            
-            <div class="control-group">
-                <input type="text" id="fontName" placeholder="Nama Font" style="width: 150px;">
-                <input type="text" id="fontUrl" placeholder="Google Fonts URL" style="width: 250px;">
-                <button id="addFontBtn">Tambah Font</button>
-            </div>
-            
-            <div class="font-list" id="fontList"></div>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Application State
-            let currentLine = 0;
-            let lyrics = [];
-            let isPlaying = false;
-            let playInterval = null;
-            let randomFontMode = false;
-            let randomSizeMode = false;
-            let currentAlign = 'center';
-            let isNavigatorMinimized = false;
-            let isFullscreenMode = false;
-            
-            // Store random fonts and sizes for each line in current cycle
-            let cycleRandomFonts = {};
-            let cycleRandomSizes = {};
-            let currentCycleStart = 0;
-            
-            // Font Management
-            let customFonts = [];
-            let loadedFonts = new Set();
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 50;
 
-            // Default Google Fonts
-            const defaultGoogleFonts = [
-                { name: 'Roboto', url: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap' },
-                { name: 'Open Sans', url: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap' },
-                { name: 'Lato', url: 'https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap' },
-                { name: 'Montserrat', url: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap' },
-                { name: 'Poppins', url: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap' },
-                { name: 'Playfair Display', url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap' },
-                { name: 'Dancing Script', url: 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap' },
-                { name: 'Oswald', url: 'https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap' }
-            ];
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 3 + 3) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
 
             // Initialize
-            function init() {
-                initializeFonts();
-                applyChromakey('#00FF00');
-                $('.lyric-display').addClass('align-center');
-                updateDisplay();
-                bindEvents();
-                
-                // Set initial lyrics
-                lyrics = ['','Klik "📝 Edit Lirik" untuk memasukkan lirik lagu','Made with ❤️ Teknomaven'];
-                updateLineNavigation();
-                updateCounter();
-                
-                console.log('✅ Application initialized with popup textarea');
-            }
-
-            // Initialize fonts
-            function initializeFonts() {
-                customFonts = [...defaultGoogleFonts];
-                updateFontSelector();
-                updateFontList();
-                
-                // Load default Google fonts
-                defaultGoogleFonts.forEach(font => {
-                    loadGoogleFont(font.url);
-                });
-            }
-
-            // Load Google Font
-            function loadGoogleFont(url) {
-                if (!loadedFonts.has(url)) {
-                    const link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = url;
-                    document.head.appendChild(link);
-                    loadedFonts.add(url);
-                }
-            }
-
-            // Update font selector
-            function updateFontSelector() {
-                const selector = $('#fontSelector');
-                const currentValue = selector.val();
-                
-                selector.empty();
-                
-                // Add default fonts
-                ['Arial', 'Georgia', 'Times New Roman', 'Verdana', 'Courier New'].forEach(font => {
-                    selector.append(`<option value="${font}">${font}</option>`);
-                });
-                
-                // Add custom fonts
-                customFonts.forEach(font => {
-                    selector.append(`<option value="${font.name}">${font.name}</option>`);
-                });
-                
-                // Restore selection
-                if (currentValue) {
-                    selector.val(currentValue);
-                }
-            }
-
-            // Update font list in modal
-            function updateFontList() {
-                const list = $('#fontList');
-                list.empty();
-                
-                customFonts.forEach((font, index) => {
-                    const item = $(`
-                        <div class="font-item">
-                            <div class="font-preview" style="font-family: '${font.name}', sans-serif;">
-                                ${font.name} - Sample Text
-                            </div>
-                            <div class="font-actions">
-                                <button class="delete-font" data-index="${index}">Hapus</button>
-                            </div>
-                        </div>
-                    `);
-                    list.append(item);
-                });
-            }
-
-            // Parse lyrics - simplified 
-            function parseLyrics() {
-                try {
-                    const text = $('#lyricsInput').val() || '';
-                    lyrics = text.split('\n').filter(line => line.trim() !== '');
-                    
-                    if (lyrics.length === 0) {
-                        lyrics = ['Masukkan lirik lagu di bawah...'];
-                    }
-                    
-                    currentLine = 0;
-                    
-                    // Reset random fonts and sizes when lyrics change
-                    cycleRandomFonts = {};
-                    cycleRandomSizes = {};
-                    currentCycleStart = 0;
-                    
-                    updateDisplay();
-                    updateLineNavigation();
-                    updateCounter();
-                    
-                } catch (error) {
-                    console.error('Error parsing lyrics:', error);
-                }
-            }
-
-            // Update display
-            function updateDisplay() {
-                const display = $('#lyricDisplay');
-                display.empty();
-                
-                if (lyrics.length === 0) return;
-                
-                // Calculate cycle position (every 4 lines reset)
-                const cyclePosition = currentLine % 4; // 0, 1, 2, 3
-                const cycleStart = currentLine - cyclePosition; // Start of current 4-line cycle
-                const linesToShow = cyclePosition + 1; // Show 1, 2, 3, or 4 lines
-                
-                // Show lines from cycle start up to current line
-                for (let i = cycleStart; i < cycleStart + linesToShow; i++) {
-                    if (i >= lyrics.length) break;
-                    
-                    const lineDiv = $('<div class="lyric-line"></div>');
-                    lineDiv.text(lyrics[i]);
-                    
-                    if (i === currentLine) {
-                        lineDiv.addClass('active');
-                    }
-                    
-                    // Apply styles
-                    const fontSize = $('#fontSize').val();
-                    const fontColor = $('#fontColor').val();
-                    const selectedFont = $('#fontSelector').val();
-                    
-                    // Determine font family
-                    let fontFamily = selectedFont;
-                    if (randomFontMode) {
-                        fontFamily = getRandomFont();
-                    }
-                    
-                    // Determine font size
-                    let finalFontSize = fontSize + 'rem';
-                    if (randomSizeMode) {
-                        const randomSize = (Math.random() * 4 + 1.5); // 1.5-5.5 rem
-                        finalFontSize = randomSize + 'rem';
-                    }
-                    
-                    // Apply all styles
-                    lineDiv.css({
-                        'font-family': fontFamily,
-                        'font-size': finalFontSize,
-                        'color': fontColor,
-                        'width': '100%',
-                        'display': 'block'
-                    });
-                    
-                    // Add alignment class
-                    lineDiv.addClass(`align-${currentAlign}`);
-                    
-                    // Apply current text effect
-                    const currentEffect = $('#textEffect').val();
-                    if (currentEffect) {
-                        lineDiv.addClass(currentEffect);
-                    }
-                    
-                    // Add visual indicator for locked random lines
-                    if ((randomFontMode && cycleRandomFonts[i]) || (randomSizeMode && cycleRandomSizes[i])) {
-                        lineDiv.addClass('locked-random');
-                    }
-                    
-                    display.append(lineDiv);
-                }
-                
-                // Update background
-                const bgColor = $('#bgColor').val();
-                $('.lyric-container').css('background-color', bgColor);
-                
-                // Apply alignment to the entire display container
-                $('.lyric-display')
-                    .removeClass('align-left align-center align-right')
-                    .addClass(`align-${currentAlign}`);
-                
-                // Also apply to individual lines for consistency
-                $('.lyric-line')
-                    .removeClass('align-left align-center align-right')
-                    .addClass(`align-${currentAlign}`);
-            }
-
-            // Get random font
-            function getRandomFont() {
-                const allFonts = ['Arial', 'Georgia', 'Times New Roman', 'Verdana', 'Courier New']
-                    .concat(customFonts.map(f => f.name));
-                return allFonts[Math.floor(Math.random() * allFonts.length)];
-            }
-
-            // Update line navigation
-            function updateLineNavigation() {
-                const nav = $('#lineNavigation');
-                nav.empty();
-                
-                if (lyrics.length === 0) {
-                    nav.append('<button class="line-btn">Tidak ada lirik...</button>');
-                    return;
-                }
-                
-                lyrics.forEach((line, index) => {
-                    const btn = $('<button class="line-btn"></button>');
-                    // Truncate long lines to fit in navigation
-                    const displayText = line.length > 25 ? line.substring(0, 25) + '...' : line;
-                    btn.text(`${index + 1}. ${displayText}`);
-                    btn.data('index', index);
-                    btn.attr('title', `Baris ${index + 1}: ${line}`); // Full text in tooltip
-                    
-                    if (index === currentLine) {
-                        btn.addClass('current');
-                    }
-                    
-                    nav.append(btn);
-                });
-            }
-
-            // Toggle fullscreen mode
-            function toggleFullscreen() {
-                isFullscreenMode = !isFullscreenMode;
-                
-                if (isFullscreenMode) {
-                    $('body').addClass('fullscreen');
-                    $('#fullscreenBtn').text('📺 Exit FS');
-                } else {
-                    $('body').removeClass('fullscreen');
-                    $('#fullscreenBtn').text('📺 Fullscreen');
-                }
-                
-                updateDisplay();
-            }
-
-            // Apply chromakey background
-            function applyChromakey(color) {
-                $('#bgColor').val(color);
-                $('.lyric-container').css('background-color', color);
-                
-                // Remove active class from all chroma buttons
-                $('.chroma-btn').removeClass('active');
-                
-                // Add active class to clicked button
-                $(`#chroma${color === '#00FF00' ? 'Green' : color === '#0000FF' ? 'Blue' : color === '#FF00FF' ? 'Magenta' : 'Black'}`).addClass('active');
-            }
-
-            // Apply text effects
-            function applyTextEffect(effectClass) {
-                $('.lyric-line').removeClass('text-stroke text-shadow-light text-shadow-heavy text-glow text-outline');
-                
-                if (effectClass) {
-                    $('.lyric-line').addClass(effectClass);
-                }
-            }
-
-            // Lyrics Modal Management
-            let originalLyricsContent = '';
-            
-            function openLyricsModal() {
-                originalLyricsContent = $('#lyricsInput').val();
-                $('#lyricsModal').show();
-                updateLyricsStats();
-                $('#lyricsInput').focus();
-            }
-            
-            function closeLyricsModal() {
-                $('#lyricsModal').hide();
-            }
-            
-            function saveLyricsModal() {
-                parseLyrics();
-                closeLyricsModal();
-                console.log('✅ Lyrics saved and applied');
-            }
-            
-            function cancelLyricsModal() {
-                if (confirm('Apakah Anda yakin ingin membatalkan perubahan?')) {
-                    $('#lyricsInput').val(originalLyricsContent);
-                    closeLyricsModal();
-                }
-            }
-            
-            function clearLyricsModal() {
-                if (confirm('Apakah Anda yakin ingin menghapus semua lirik?')) {
-                    $('#lyricsInput').val('');
-                    updateLyricsStats();
-                    $('#lyricsInput').focus();
-                }
-            }
-            
-            function updateLyricsStats() {
-                const text = $('#lyricsInput').val();
-                const lines = text.split('\n').filter(line => line.trim() !== '');
-                const chars = text.length;
-                
-                $('#lyricsCount').text(`${lines.length} baris`);
-                $('#lyricsChars').text(`${chars} karakter`);
-            }
-            function toggleChromaOptimize() {
-                const container = $('.lyric-container');
-                const btn = $('#chromaOptimize');
-                
-                if (container.hasClass('chroma-optimized')) {
-                    container.removeClass('chroma-optimized');
-                    btn.removeClass('active').text('🎯 Optimize');
-                } else {
-                    container.addClass('chroma-optimized');
-                    btn.addClass('active').text('🎯 Optimized');
-                }
-            }
-
-            // Toggle minimize navigator
-            function toggleNavigatorMinimize() {
-                isNavigatorMinimized = !isNavigatorMinimized;
-                const navigator = $('#navigator');
-                const lyricContainer = $('.lyric-container');
-                const toggleBtn = $('#minimizeToggle');
-                
-                if (isNavigatorMinimized) {
-                    navigator.addClass('minimized');
-                    lyricContainer.addClass('minimized-nav');
-                    toggleBtn.html('▲ Show');
-                } else {
-                    navigator.removeClass('minimized');
-                    lyricContainer.removeClass('minimized-nav');
-                    toggleBtn.html('▼ Hide');
-                }
-            }
-            function toggleNavigatorMinimize() {
-                isNavigatorMinimized = !isNavigatorMinimized;
-                const navigator = $('#navigator');
-                const lyricContainer = $('.lyric-container');
-                const toggleBtn = $('#minimizeToggle');
-                
-                if (isNavigatorMinimized) {
-                    navigator.addClass('minimized');
-                    lyricContainer.addClass('minimized-nav');
-                    toggleBtn.html('▲ Show');
-                } else {
-                    navigator.removeClass('minimized');
-                    lyricContainer.removeClass('minimized-nav');
-                    toggleBtn.html('▼ Hide');
-                }
-            }
-
-            // Update both counters
-            function updateCounter() {
-                const counterText = `Baris ${currentLine + 1} dari ${lyrics.length}`;
-                const compactText = `${currentLine + 1}/${lyrics.length}`;
-                
-                $('#counter').text(compactText); // Use compact format for edit-controls
-                $('#minimizedCounter').text(counterText); // Full text for minimized controls
-                
-                // Update nav-row-1 counter if exists (add full text there)
-                $('.nav-row-1 .counter').text(counterText);
-            }
-
-            // Navigation functions
-            function goToLine(index) {
-                if (index >= 0 && index < lyrics.length) {
-                    const oldCycleStart = Math.floor(currentLine / 4) * 4;
-                    const newCycleStart = Math.floor(index / 4) * 4;
-                    
-                    // If jumping to different cycle, reset random data
-                    if (oldCycleStart !== newCycleStart) {
-                        cycleRandomFonts = {};
-                        cycleRandomSizes = {};
-                    }
-                    
-                    currentLine = index;
-                    updateDisplay();
-                    updateLineNavigation();
-                    updateCounter();
-                }
-            }
-
-            function nextLine() {
-                if (currentLine < lyrics.length - 1) {
-                    goToLine(currentLine + 1);
-                }
-            }
-
-            function prevLine() {
-                if (currentLine > 0) {
-                    goToLine(currentLine - 1);
-                }
-            }
-
-            // Play/Pause functionality
-            function togglePlay() {
-                isPlaying = !isPlaying;
-                
-                const playText = isPlaying ? '⏸ Pause' : '▶ Play';
-                $('#playBtn').text(playText);
-                $('#minimizedPlayBtn').text(playText);
-                $('#fsPlay').text(playText);
-                
-                if (isPlaying) {
-                    playInterval = setInterval(() => {
-                        nextLine();
-                        if (currentLine >= lyrics.length - 1) {
-                            togglePlay(); // Auto stop at end
-                        }
-                    }, 3000); // 3 seconds per line
-                } else {
-                    if (playInterval) {
-                        clearInterval(playInterval);
-                        playInterval = null;
-                    }
-                }
-            }
-
-            // Event bindings
-            function bindEvents() {
-                // Lyrics modal events
-                $('#editLyricsBtn').on('click', openLyricsModal);
-                $('#closeLyricsModal').on('click', closeLyricsModal);
-                $('#saveLyricsBtn').on('click', saveLyricsModal);
-                $('#cancelLyricsBtn').on('click', cancelLyricsModal);
-                $('#clearLyricsBtn').on('click', clearLyricsModal);
-                
-                // Quick action buttons
-                $('#quickJumpBtn').on('click', function() {
-                    const lineNum = prompt('Jump ke baris nomor:', currentLine + 1);
-                    if (lineNum && !isNaN(lineNum)) {
-                        const targetLine = parseInt(lineNum) - 1;
-                        if (targetLine >= 0 && targetLine < lyrics.length) {
-                            goToLine(targetLine);
-                        } else {
-                            alert('Nomor baris tidak valid!');
-                        }
-                    }
-                });
-                
-                $('#resetBtn').on('click', function() {
-                    goToLine(0);
-                    if (isPlaying) {
-                        togglePlay(); // Stop if playing
-                    }
-                });
-                
-                // Update stats while typing
-                $('#lyricsInput').on('input keyup paste', function() {
-                    updateLyricsStats();
-                });
-                
-                // Font controls
-                $('#fontSelector').on('change', updateDisplay);
-                $('#fontSize').on('input', updateDisplay);
-                $('#fontColor').on('change', updateDisplay);
-                $('#bgColor').on('change', updateDisplay);
-                
-                // Random font mode
-                $('#randomFontBtn').on('click', function() {
-                    randomFontMode = !randomFontMode;
-                    $(this).toggleClass('active', randomFontMode);
-                    
-                    // If turning off random font mode, clear stored fonts
-                    if (!randomFontMode) {
-                        cycleRandomFonts = {};
-                    }
-                    
-                    updateDisplay();
-                });
-                
-                // Random size mode
-                $('#randomSizeBtn').on('click', function() {
-                    randomSizeMode = !randomSizeMode;
-                    $(this).toggleClass('active', randomSizeMode);
-                    
-                    // If turning off random size mode, clear stored sizes
-                    if (!randomSizeMode) {
-                        cycleRandomSizes = {};
-                    }
-                    
-                    updateDisplay();
-                });
-                
-                // Alignment buttons
-                $('#alignLeft').on('click', function() {
-                    currentAlign = 'left';
-                    $('.align-buttons button').removeClass('active');
-                    $(this).addClass('active');
-                    $('.lyric-display')
-                        .removeClass('align-left align-center align-right')
-                        .addClass('align-left');
-                    updateDisplay();
-                });
-                
-                $('#alignCenter').on('click', function() {
-                    currentAlign = 'center';
-                    $('.align-buttons button').removeClass('active');
-                    $(this).addClass('active');
-                    $('.lyric-display')
-                        .removeClass('align-left align-center align-right')
-                        .addClass('align-center');
-                    updateDisplay();
-                });
-                
-                $('#alignRight').on('click', function() {
-                    currentAlign = 'right';
-                    $('.align-buttons button').removeClass('active');
-                    $(this).addClass('active');
-                    $('.lyric-display')
-                        .removeClass('align-left align-center align-right')
-                        .addClass('align-right');
-                    updateDisplay();
-                });
-                
-                // Navigation buttons (both normal and minimized)
-                $('#prevBtn, #minimizedPrevBtn').on('click', prevLine);
-                $('#nextBtn, #minimizedNextBtn').on('click', nextLine);
-                $('#playBtn, #minimizedPlayBtn').on('click', togglePlay);
-                
-                // Minimize toggle
-                $('#minimizeToggle').on('click', toggleNavigatorMinimize);
-                
-                // Chromakey presets
-                $('#chromaGreen').on('click', () => applyChromakey('#00FF00'));
-                $('#chromaBlue').on('click', () => applyChromakey('#0000FF'));
-                $('#chromaMagenta').on('click', () => applyChromakey('#FF00FF'));
-                $('#chromaBlack').on('click', () => applyChromakey('#000000'));
-                $('#chromaOptimize').on('click', toggleChromaOptimize);
-                
-                // Text effects
-                $('#textEffect').on('change', function() {
-                    applyTextEffect($(this).val());
-                });
-                
-                // Fullscreen mode
-                $('#fullscreenBtn').on('click', toggleFullscreen);
-                $('#exitFullscreen').on('click', toggleFullscreen);
-                
-                // Quick open lyrics modal
-                $('#fixTextareaBtn').on('click', function() {
-                    openLyricsModal();
-                    console.log('🔧 Lyrics modal opened');
-                });
-                
-                // Fullscreen navigation
-                $('#fsNext').on('click', nextLine);
-                $('#fsPrev').on('click', prevLine);
-                $('#fsPlay').on('click', togglePlay);
-                
-                // Line navigation
-                $(document).on('click', '.line-btn', function() {
-                    const index = $(this).data('index');
-                    if (index !== undefined) {
-                        goToLine(index);
-                    }
-                });
-                
-                // Font management
-                $('#manageFontBtn').on('click', function() {
-                    $('#fontModal').show();
-                });
-                
-                $('#closeModal').on('click', function() {
-                    $('#fontModal').hide();
-                });
-                
-                $('#addFontBtn').on('click', function() {
-                    const name = $('#fontName').val().trim();
-                    const url = $('#fontUrl').val().trim();
-                    
-                    if (name && url) {
-                        // Validate URL
-                        if (url.includes('fonts.googleapis.com') || url.includes('fonts.google.com')) {
-                            customFonts.push({ name, url });
-                            loadGoogleFont(url);
-                            updateFontSelector();
-                            updateFontList();
-                            $('#fontName').val('');
-                            $('#fontUrl').val('');
-                        } else {
-                            alert('Silakan masukkan URL Google Fonts yang valid');
-                        }
-                    }
-                });
-                
-                // Delete font
-                $(document).on('click', '.delete-font', function() {
-                    const index = $(this).data('index');
-                    customFonts.splice(index, 1);
-                    updateFontSelector();
-                    updateFontList();
-                });
-                
-                // Keyboard shortcuts
-                $(document).on('keydown', function(e) {
-                    // Don't interfere if modal is open and user is typing
-                    if ($('#lyricsModal').is(':visible') && e.target.tagName.toLowerCase() === 'textarea') {
-                        if (e.keyCode === 27) { // ESC key
-                            e.preventDefault();
-                            cancelLyricsModal();
-                        }
-                        return; // Allow normal typing in modal
-                    }
-                    
-                    // Don't interfere with other text input
-                    if (e.target.tagName.toLowerCase() === 'textarea' || e.target.tagName.toLowerCase() === 'input') {
-                        return;
-                    }
-                    
-                    switch(e.keyCode) {
-                        case 37: // Left arrow
-                            e.preventDefault();
-                            prevLine();
-                            break;
-                        case 39: // Right arrow
-                            e.preventDefault();
-                            nextLine();
-                            break;
-                        case 32: // Spacebar
-                            e.preventDefault();
-                            togglePlay();
-                            break;
-                        case 77: // M key
-                            e.preventDefault();
-                            toggleNavigatorMinimize();
-                            break;
-                        case 70: // F key
-                            e.preventDefault();
-                            toggleFullscreen();
-                            break;
-                        case 69: // E key
-                            e.preventDefault();
-                            openLyricsModal();
-                            break;
-                        case 27: // ESC key
-                            if ($('#lyricsModal').is(':visible')) {
-                                e.preventDefault();
-                                cancelLyricsModal();
-                            }
-                            break;
-                    }
-                });
-                
-                // Close modal on outside click
-                $(window).on('click', function(e) {
-                    if (e.target.id === 'fontModal') {
-                        $('#fontModal').hide();
-                    }
-                    if (e.target.id === 'lyricsModal') {
-                        cancelLyricsModal();
-                    }
-                });
-            }
-
-            // Initialize app
-            init();
+            createParticles();
         });
     </script>
 </body>
