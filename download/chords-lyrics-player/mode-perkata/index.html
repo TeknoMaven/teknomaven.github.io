@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penampil Lirik Chromakey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&family=Times+New+Roman:wght@400;700&family=Helvetica:wght@400;700&family=Georgia:wght@400;700&family=Verdana:wght@400;700&family=Comic+Sans+MS:wght@400;700&family=Impact:wght@400;700&family=Trebuchet+MS:wght@400;700&family=Courier+New:wght@400;700&family=Lucida+Console:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Main Lyric Area */
+        .lyric-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: #000;
+            transition: all 0.3s ease;
+        }
+
+        .lyric-container.minimized-nav {
+            bottom: 80px;
+        }
+
+        .lyric-container.chromakey-green {
+            background-color: #00FF00 !important;
+        }
+
+        .lyric-container.chromakey-blue {
+            background-color: #0000FF !important;
+        }
+
+        .lyric-container.chromakey-magenta {
+            background-color: #FF00FF !important;
+        }
+
+        .lyric-display {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lyric-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+            word-wrap: break-word;
+            line-height: 1.2;
+            transition: all 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Text effects for chromakey */
+        .text-stroke {
+            -webkit-text-stroke: 2px #000;
+            text-stroke: 2px #000;
+        }
+
+        .text-shadow-light {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .text-shadow-heavy {
+            text-shadow: 
+                2px 2px 0px #000,
+                -2px -2px 0px #000,
+                2px -2px 0px #000,
+                -2px 2px 0px #000,
+                0px 2px 0px #000,
+                2px 0px 0px #000,
+                0px -2px 0px #000,
+                -2px 0px 0px #000,
+                4px 4px 8px rgba(0,0,0,0.6);
+        }
+
+        .text-glow {
+            text-shadow: 
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor,
+                2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .text-outline {
+            -webkit-text-stroke: 3px #000;
+            text-stroke: 3px #000;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+
+        /* Enhanced text visibility on chromakey backgrounds */
+        .chromakey-optimized .lyric-text {
+            color: #FFFFFF;
+            font-weight: 900;
+            -webkit-text-stroke: 2px #000000;
+            text-stroke: 2px #000000;
+            text-shadow: 
+                3px 3px 0px #000000,
+                -3px -3px 0px #000000,
+                3px -3px 0px #000000,
+                -3px 3px 0px #000000,
+                0px 3px 0px #000000,
+                3px 0px 0px #000000,
+                0px -3px 0px #000000,
+                -3px 0px 0px #000000;
+        }
+
+        /* Bottom Navigator */
+        .navigator {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background-color: #222;
+            border-top: 2px solid #444;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navigator.minimized {
+            height: 80px;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .minimize-toggle {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: #444;
+            border: 1px solid #666;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+
+        .minimize-toggle:hover {
+            background-color: #555;
+        }
+
+        .nav-content {
+            display: block;
+        }
+
+        .navigator.minimized .nav-content {
+            display: none;
+        }
+
+        .minimize-controls {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            background-color: #333;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin: 0 10px;
+        }
+
+        .navigator.minimized .minimize-controls {
+            display: flex !important;
+        }
+
+        .minimize-controls button {
+            background-color: #444;
+            border: 1px solid #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            min-width: 70px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .minimize-controls button:hover {
+            background-color: #555;
+        }
+
+        .minimize-controls .counter {
+            background-color: #555;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            border: 1px solid #777;
+            color: #fff;
+        }
+
+        /* Navigation Rows */
+        .nav-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            overflow-y: auto;
+        }
+
+        .nav-row-1 {
+            height: 40px;
+        }
+
+        .nav-row-2 {
+            flex: 1;
+            min-height: 120px;
+            max-height: 140px;
+            height: calc(100% - 50px);
+            display: flex !important;
+            gap: 10px;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* Preview Section */
+        .preview-section {
+            background: #444;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .preview-title {
+            color: #007bff;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .preview-text {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        /* Controls */
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #333;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+
+        .control-group label {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            min-width: max-content;
+        }
+
+        select, input, button {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #555;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.active {
+            background-color: #4CAF50;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        button.active::after {
+            content: " ✓";
+            font-size: 10px;
+        }
+
+        .btn-danger {
+            background-color: #f44336;
+        }
+
+        .btn-danger:hover {
+            background-color: #da190b;
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+        }
+
+        .btn-success:hover {
+            background-color: #45a049;
+        }
+
+        /* Chromakey buttons */
+        .chroma-btn {
+            min-width: 50px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chroma-btn:hover {
+            border-color: #fff;
+            transform: scale(1.05);
+        }
+
+        .chroma-btn.active {
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Input Areas Container */
+        .input-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 280px;
+            height: 130px;
+            overflow-y: auto;
+        }
+
+        /* Line Navigation */
+        .line-navigation {
+            flex: 1;
+            height: 130px;
+            min-width: 220px;
+            max-width: 350px;
+            background-color: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 8px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .line-navigation::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .line-navigation::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .line-navigation::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+        .line-navigation::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Input Areas */
+        .textarea-group {
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .textarea-group label {
+            color: #fff;
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 500;
+            font-size: 11px;
+        }
+
+        .textarea-group textarea {
+            width: 100%;
+            height: 60px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #fff;
+            padding: 6px;
+            font-size: 11px;
+            resize: none;
+            font-family: monospace;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .textarea-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Navigation Info */
+        .navigation-info {
+            color: #ccc;
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.4;
+            padding: 5px 0;
+            background: #2a2a2a;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        /* Keyboard Shortcuts */
+        .keyboard-shortcuts {
+            background: #2a2a2a;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #444;
+        }
+
+        .shortcuts-title {
+            color: #007bff;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .shortcuts-list {
+            color: #ccc;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .shortcuts-list strong {
+            color: #fff;
+            background: #444;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+        }
+
+        /* Scrollbar untuk nav-content */
+        .nav-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .nav-content::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .nav-content::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+        .nav-content::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Scrollbar untuk input-section */
+        .input-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .input-section::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        .input-section::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 2px;
+        }
+
+        .input-section::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Size Display */
+        .size-display {
+            color: #fff;
+            font-size: 12px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* Range Slider */
+        input[type="range"] {
+            width: 80px;
+            accent-color: #4CAF50;
+        }
+
+        input[type="color"] {
+            width: 30px;
+            height: 25px;
+            padding: 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #333;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lyric-text {
+                font-size: 32px;
+            }
+            
+            .navigator {
+                height: 240px;
+                padding: 8px;
+            }
+            
+            .navigator.minimized {
+                height: 60px;
+                padding: 5px;
+            }
+            
+            .lyric-container {
+                bottom: 240px;
+            }
+            
+            .lyric-container.minimized-nav {
+                bottom: 60px;
+            }
+            
+            .nav-content {
+                gap: 8px;
+            }
+            
+            .nav-row {
+                gap: 5px;
+            }
+            
+            .nav-row-1 {
+                min-height: 45px;
+                padding-bottom: 6px;
+                margin-bottom: 4px;
+            }
+            
+            .nav-row-2 {
+                min-height: 120px;
+                flex-direction: column;
+                gap: 8px;
+                padding-bottom: 6px;
+                margin-bottom: 4px;
+            }
+            
+            .nav-row-3 {
+                min-height: 70px;
+                gap: 6px;
+            }
+            
+            .input-section {
+                min-width: auto;
+                width: 100%;
+                height: 100px;
+                order: 2;
+            }
+            
+            .line-navigation {
+                min-width: auto;
+                width: 100%;
+                height: 80px;
+                order: 1;
+            }
+            
+            .control-group {
+                margin: 2px;
+                padding: 4px 6px;
+                gap: 3px;
+            }
+            
+            .control-group label {
+                font-size: 10px;
+            }
+            
+            select, input, button {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            
+            .minimize-controls {
+                gap: 8px;
+                padding: 6px 12px;
+                flex-wrap: wrap;
+            }
+            
+            .minimize-controls button {
+                font-size: 10px;
+                padding: 4px 8px;
+                min-width: 50px;
+            }
+            
+            .minimize-controls .counter {
+                font-size: 9px;
+                padding: 4px 8px;
+            }
+            
+            .preview-section {
+                padding: 6px 8px;
+                margin-bottom: 6px;
+            }
+            
+            .preview-title {
+                font-size: 9px;
+                margin-bottom: 2px;
+            }
+            
+            .preview-text {
+                font-size: 10px;
+            }
+            
+            .textarea-group textarea {
+                height: 45px;
+                font-size: 10px;
+                padding: 5px;
+            }
+            
+            .textarea-group label {
+                font-size: 10px;
+            }
+            
+            .navigation-info {
+                font-size: 10px;
+                padding: 4px;
+            }
+            
+            .keyboard-shortcuts {
+                padding: 6px 8px;
+            }
+            
+            .shortcuts-title {
+                font-size: 9px;
+                margin-bottom: 3px;
+            }
+            
+            .shortcuts-list {
+                font-size: 9px;
+            }
+            
+            .shortcuts-list strong {
+                font-size: 8px;
+                padding: 1px 2px;
+            }
+            
+            .chroma-btn {
+                min-width: 40px;
+                font-size: 9px;
+                padding: 3px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Lyric Display -->
+    <div class="lyric-container" id="lyricContainer">
+        <div class="lyric-display" id="lyricDisplay">
+            <div class="lyric-text" id="lyricText"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigator -->
+    <div class="navigator" id="navigator">
+        <!-- Minimize Toggle Button -->
+        <button class="minimize-toggle" id="minimizeToggle">▼ Hide</button>
+        
+        <!-- Full Navigator Content -->
+        <div class="nav-content">
+            <!-- Preview Section -->
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-title">Lirik Selanjutnya</div>
+                <div class="preview-text" id="previewText"></div>
+            </div>
+
+            <!-- Row 1: Controls -->
+            <div class="nav-row nav-row-1">
+                <div class="control-group">
+                    <button class="btn-success" onclick="loadLyrics()">Load Lirik</button>
+                    <button onclick="clearLyrics()" class="btn-danger">Clear Lirik</button>
+                    <button onclick="clearScreen()">Clear Layar</button>
+                    <button onclick="resetToStart()">↺ Reset</button>
+                </div>
+                
+                <div class="control-group">
+                    <button onclick="previousItem()">◀ Previous</button>
+                    <button onclick="nextItem()">Next ▶</button>
+                </div>
+                
+                <div class="control-group">
+                    <label>Font:</label>
+                    <select id="fontSelect" onchange="changeFont()">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Lucida Console">Lucida Console</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Size:</label>
+                    <input type="range" id="fontSizeSlider" min="20" max="120" value="48" oninput="changeFontSize()">
+                    <span class="size-display" id="sizeDisplay">48px</span>
+                </div>
+
+                <div class="control-group">
+                    <label>Warna:</label>
+                    <input type="color" id="textColor" value="#ffffff" onchange="changeTextColor()">
+                    <select id="textColorSelect" onchange="changeTextColor()">
+                        <option value="#FFFFFF">Putih</option>
+                        <option value="#000000">Hitam</option>
+                        <option value="#FF0000">Merah</option>
+                        <option value="#00FF00">Hijau</option>
+                        <option value="#0000FF">Biru</option>
+                        <option value="#FFFF00">Kuning</option>
+                        <option value="#FF6600">Oranye</option>
+                        <option value="#9900FF">Ungu</option>
+                        <option value="#FF1493">Pink</option>
+                        <option value="#00FFFF">Cyan</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Chromakey:</label>
+                    <button id="chromaGreen" class="chroma-btn" style="background: #00FF00; color: #000;">Green</button>
+                    <button id="chromaBlue" class="chroma-btn" style="background: #0000FF; color: #FFF;">Blue</button>
+                    <button id="chromaMagenta" class="chroma-btn" style="background: #FF00FF; color: #000;">Magenta</button>
+                    <button id="chromaBlack" class="chroma-btn" style="background: #000; color: #FFF;">Black</button>
+                    <button id="chromaOptimize" class="chroma-btn">🎯 Optimize</button>
+                </div>
+                
+                <div class="control-group">
+                    <label>Text FX:</label>
+                    <select id="textEffect">
+                        <option value="">Normal</option>
+                        <option value="text-stroke">Stroke</option>
+                        <option value="text-shadow-light">Shadow Light</option>
+                        <option value="text-shadow-heavy">Shadow Heavy</option>
+                        <option value="text-glow">Glow</option>
+                        <option value="text-outline">Outline</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Mode:</label>
+                    <select id="displayMode" onchange="resetCurrentIndex()">
+                        <option value="word">Per Kata</option>
+                        <option value="sentence">Per Kalimat (,)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 2: Input and Navigation -->
+            <div class="nav-row nav-row-2">
+                <div class="input-section">
+                    <div class="textarea-group">
+                        <label>Input Lirik Tipe 1 (Format Bebas):</label>
+                        <textarea id="lyricInput1" placeholder="Masukkan lirik di sini...&#10;Contoh:&#10;Aku ingin menjadi seperti bintang&#10;Yang selalu bersinar di malam hari"></textarea>
+                    </div>
+
+                    <div class="textarea-group">
+                        <label>Input Lirik Tipe 2 (Format dengan Koma):</label>
+                        <textarea id="lyricInput2" placeholder="Masukkan lirik dengan pemisah koma...&#10;Contoh:&#10;Aku ingin menjadi, seperti bintang, yang selalu bersinar, di malam hari"></textarea>
+                    </div>
+                </div>
+
+                <div class="line-navigation" id="lineNavigation">
+                    <div style="padding: 15px; text-align: center; color: #666; font-size: 12px;">
+                        Load lirik untuk melihat navigasi...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Info and Shortcuts -->
+            <div class="nav-row nav-row-3">
+                <div class="navigation-info" id="navigationInfo">
+                    Masukkan lirik dan klik "Load Lirik".
+                </div>
+
+                <div class="keyboard-shortcuts">
+                    <div class="shortcuts-title">Keyboard Shortcuts:</div>
+                    <div class="shortcuts-list">
+                        <span><strong>Space/→</strong>: Next</span> •
+                        <span><strong>←</strong>: Previous</span> •
+                        <span><strong>Home</strong>: Reset</span> •
+                        <span><strong>Esc</strong>: Clear Layar</span> •
+                        <span><strong>Delete</strong>: Clear Lirik</span> •
+                        <span><strong>M</strong>: Minimize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Minimized Controls -->
+        <div class="minimize-controls" id="minimizeControls">
+            <div class="preview-section" id="previewSectionMin" style="display: none; margin: 0; padding: 6px 10px;">
+                <div class="preview-title">Selanjutnya</div>
+                <div class="preview-text" id="previewTextMin"></div>
+            </div>
+            
+            <button onclick="previousItem()">◀ Previous</button>
+            <button onclick="nextItem()">Next ▶</button>
+            <button onclick="clearScreen()">Clear Layar</button>
+            <button onclick="resetToStart()">↺ Reset</button>
+            <button onclick="clearLyrics()" class="btn-danger">Clear Lirik</button>
+            <button onclick="loadLyrics()" class="btn-success">Load Lirik</button>
+            <div class="counter" id="minimizedCounter">Masukkan lirik</div>
+        </div>
+    </div>
+
+    <script>
+        let lyrics = [];
+        let currentIndex = -1;
+        let startIndex = 0;
+        let isMinimized = false;
+        let currentChromakey = 'none';
+
+        function toggleMinimize() {
+            const navigator = document.getElementById('navigator');
+            const lyricContainer = document.getElementById('lyricContainer');
+            const toggleBtn = document.getElementById('minimizeToggle');
+            
+            isMinimized = !isMinimized;
+            
+            if (isMinimized) {
+                navigator.classList.add('minimized');
+                lyricContainer.classList.add('minimized-nav');
+                toggleBtn.textContent = '▲ Show';
+            } else {
+                navigator.classList.remove('minimized');
+                lyricContainer.classList.remove('minimized-nav');
+                toggleBtn.textContent = '▼ Hide';
+            }
+            
+            updatePreview();
+        }
+
+        function changeFont() {
+            const fontSelect = document.getElementById('fontSelect');
+            const lyricText = document.getElementById('lyricText');
+            lyricText.style.fontFamily = fontSelect.value;
+        }
+
+        function changeFontSize() {
+            const slider = document.getElementById('fontSizeSlider');
+            const lyricText = document.getElementById('lyricText');
+            const sizeDisplay = document.getElementById('sizeDisplay');
+            
+            const size = slider.value + 'px';
+            lyricText.style.fontSize = size;
+            sizeDisplay.textContent = size;
+        }
+
+        function changeTextColor() {
+            const colorSelect = document.getElementById('textColorSelect');
+            const colorPicker = document.getElementById('textColor');
+            const lyricText = document.getElementById('lyricText');
+            
+            let color = colorSelect.value;
+            if (color) {
+                colorPicker.value = color;
+                lyricText.style.color = color;
+            } else {
+                color = colorPicker.value;
+                lyricText.style.color = color;
+            }
+        }
+
+        function loadLyrics() {
+            const input1 = document.getElementById('lyricInput1').value.trim();
+            const input2 = document.getElementById('lyricInput2').value.trim();
+            const mode = document.getElementById('displayMode').value;
+            
+            let textToProcess = '';
+            
+            if (input1) {
+                textToProcess = input1;
+            } else if (input2) {
+                textToProcess = input2;
+            } else {
+                alert('Silakan masukkan lirik di salah satu textarea!');
+                return;
+            }
+
+            if (mode === 'word') {
+                lyrics = textToProcess.split(/\s+/).filter(word => word.length > 0);
+            } else {
+                lyrics = textToProcess.split(',').map(sentence => sentence.trim()).filter(sentence => sentence.length > 0);
+            }
+
+            currentIndex = -1;
+            startIndex = 0;
+            updateDisplay();
+            updateNavigationInfo();
+            updatePreview();
+            updateLineNavigation();
+        }
+
+        function updateDisplay() {
+            const lyricText = document.getElementById('lyricText');
+            
+            if (lyrics.length === 0) {
+                lyricText.textContent = '';
+                return;
+            }
+
+            if (currentIndex === -1) {
+                lyricText.textContent = '';
+                return;
+            }
+
+            if (currentIndex >= 0 && currentIndex < lyrics.length) {
+                const displayedLyrics = lyrics.slice(startIndex, currentIndex + 1);
+                const mode = document.getElementById('displayMode').value;
+                
+                if (mode === 'word') {
+                    lyricText.textContent = displayedLyrics.join(' ');
+                } else {
+                    lyricText.textContent = displayedLyrics.join(', ');
+                }
+            }
+        }
+
+        function updateNavigationInfo() {
+            const info = document.getElementById('navigationInfo');
+            const minCounter = document.getElementById('minimizedCounter');
+            
+            if (lyrics.length === 0) {
+                info.textContent = 'Masukkan lirik dan klik "Load Lirik".';
+                minCounter.textContent = 'Masukkan lirik';
+                return;
+            }
+
+            const mode = document.getElementById('displayMode').value;
+            const modeText = mode === 'word' ? 'kata' : 'kalimat';
+            
+            if (currentIndex === -1) {
+                const text = `Siap menampilkan ${lyrics.length} ${modeText}. Tekan Next untuk mulai.`;
+                info.textContent = text;
+                minCounter.textContent = text;
+            } else if (currentIndex >= lyrics.length) {
+                const text = `Selesai - Semua ${lyrics.length} ${modeText} telah ditampilkan.`;
+                info.textContent = text;
+                minCounter.textContent = text;
+            } else {
+                let statusText;
+                if (startIndex === 0) {
+                    statusText = `Menampilkan ${modeText} 1-${currentIndex + 1} dari ${lyrics.length}`;
+                } else {
+                    statusText = `Menampilkan ${modeText} ${startIndex + 1}-${currentIndex + 1} dari ${lyrics.length}`;
+                }
+                info.textContent = statusText;
+                minCounter.textContent = `${currentIndex + 1}/${lyrics.length}`;
+            }
+        }
+
+        function updatePreview() {
+            const previewSection = document.getElementById('previewSection');
+            const previewText = document.getElementById('previewText');
+            const previewSectionMin = document.getElementById('previewSectionMin');
+            const previewTextMin = document.getElementById('previewTextMin');
+            
+            if (lyrics.length === 0 || currentIndex >= lyrics.length - 1) {
+                previewSection.style.display = 'none';
+                previewSectionMin.style.display = 'none';
+                return;
+            }
+
+            const nextIndex = currentIndex + 1;
+            const maxPreview = Math.min(nextIndex + 3, lyrics.length);
+            const nextItems = lyrics.slice(nextIndex, maxPreview);
+            
+            if (nextItems.length > 0) {
+                let preview = nextItems.join(' • ');
+                if (maxPreview < lyrics.length) {
+                    preview += ' • ...';
+                }
+                
+                previewSection.style.display = 'block';
+                previewText.textContent = preview;
+                previewSectionMin.style.display = 'block';
+                previewTextMin.textContent = preview;
+            } else {
+                previewSection.style.display = 'none';
+                previewSectionMin.style.display = 'none';
+            }
+        }
+
+        function updateLineNavigation() {
+            const nav = document.getElementById('lineNavigation');
+            nav.innerHTML = '';
+            
+            if (lyrics.length === 0) {
+                nav.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Load lirik untuk melihat navigasi...</div>';
+                return;
+            }
+            
+            lyrics.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'line-btn';
+                btn.style.cssText = `
+                    display: block;
+                    width: 100%;
+                    margin: 2px 0;
+                    padding: 4px 8px;
+                    font-size: 11px;
+                    text-align: left;
+                    background-color: ${index === currentIndex ? '#4CAF50' : '#444'};
+                    border: 1px solid #666;
+                    border-radius: 3px;
+                    color: #fff;
+                    cursor: pointer;
+                    word-wrap: break-word;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                `;
+                
+                const displayText = item.length > 25 ? item.substring(0, 25) + '...' : item;
+                btn.textContent = `${index + 1}. ${displayText}`;
+                btn.title = `${modeText} ${index + 1}: ${item}`;
+                btn.onclick = () => goToItem(index);
+                
+                btn.addEventListener('mouseenter', () => {
+                    if (index !== currentIndex) {
+                        btn.style.backgroundColor = '#555';
+                    }
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    if (index !== currentIndex) {
+                        btn.style.backgroundColor = '#444';
+                    }
+                });
+                
+                nav.appendChild(btn);
+            });
+        }
+
+        function goToItem(index) {
+            if (index >= 0 && index < lyrics.length) {
+                currentIndex = index;
+                updateDisplay();
+                updateNavigationInfo();
+                updatePreview();
+                updateLineNavigation();
+            }
+        }
+
+        function nextItem() {
+            if (lyrics.length === 0) {
+                alert('Silakan load lirik terlebih dahulu!');
+                return;
+            }
+            
+            if (currentIndex < lyrics.length - 1) {
+                currentIndex++;
+                updateDisplay();
+                updateNavigationInfo();
+                updatePreview();
+                updateLineNavigation();
+            }
+        }
+
+        function previousItem() {
+            if (lyrics.length === 0) {
+                alert('Silakan load lirik terlebih dahulu!');
+                return;
+            }
+            
+            if (currentIndex > -1) {
+                currentIndex--;
+                updateDisplay();
+                updateNavigationInfo();
+                updatePreview();
+                updateLineNavigation();
+            }
+        }
+
+        function clearScreen() {
+            const lyricText = document.getElementById('lyricText');
+            lyricText.textContent = '';
+            if (currentIndex >= -1) {
+                startIndex = currentIndex + 1;
+            }
+        }
+
+        function clearLyrics() {
+            const lyricText = document.getElementById('lyricText');
+            lyricText.textContent = '';
+            lyrics = [];
+            currentIndex = -1;
+            startIndex = 0;
+            updateNavigationInfo();
+            updatePreview();
+            updateLineNavigation();
+        }
+
+        function resetToStart() {
+            if (lyrics.length === 0) {
+                alert('Silakan load lirik terlebih dahulu!');
+                return;
+            }
+            
+            currentIndex = -1;
+            startIndex = 0;
+            updateDisplay();
+            updateNavigationInfo();
+            updatePreview();
+            updateLineNavigation();
+        }
+
+        function resetCurrentIndex() {
+            currentIndex = -1;
+            startIndex = 0;
+            if (lyrics.length > 0) {
+                updateDisplay();
+                updateNavigationInfo();
+                updatePreview();
+                updateLineNavigation();
+            }
+        }
+
+        // Chromakey functions
+        function applyChromakey(color, className) {
+            const container = document.getElementById('lyricContainer');
+            container.className = 'lyric-container' + (isMinimized ? ' minimized-nav' : '');
+            
+            if (className) {
+                container.classList.add(className);
+            }
+            
+            // Remove active class from all chroma buttons
+            document.querySelectorAll('.chroma-btn').forEach(btn => btn.classList.remove('active'));
+            
+            currentChromakey = className || 'none';
+        }
+
+        function toggleChromaOptimize() {
+            const container = document.getElementById('lyricContainer');
+            const btn = document.getElementById('chromaOptimize');
+            
+            if (container.classList.contains('chromakey-optimized')) {
+                container.classList.remove('chromakey-optimized');
+                btn.classList.remove('active');
+                btn.textContent = '🎯 Optimize';
+            } else {
+                container.classList.add('chromakey-optimized');
+                btn.classList.add('active');
+                btn.textContent = '🎯 Optimized';
+            }
+        }
+
+        function applyTextEffect() {
+            const effect = document.getElementById('textEffect').value;
+            const lyricText = document.getElementById('lyricText');
+            
+            // Remove all effect classes
+            lyricText.classList.remove('text-stroke', 'text-shadow-light', 'text-shadow-heavy', 'text-glow', 'text-outline');
+            
+            if (effect) {
+                lyricText.classList.add(effect);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('minimizeToggle').addEventListener('click', toggleMinimize);
+        document.getElementById('textEffect').addEventListener('change', applyTextEffect);
+
+        // Chromakey buttons
+        document.getElementById('chromaGreen').addEventListener('click', function() {
+            applyChromakey('#00FF00', 'chromakey-green');
+            this.classList.add('active');
+        });
+
+        document.getElementById('chromaBlue').addEventListener('click', function() {
+            applyChromakey('#0000FF', 'chromakey-blue');
+            this.classList.add('active');
+        });
+
+        document.getElementById('chromaMagenta').addEventListener('click', function() {
+            applyChromakey('#FF00FF', 'chromakey-magenta');
+            this.classList.add('active');
+        });
+
+        document.getElementById('chromaBlack').addEventListener('click', function() {
+            applyChromakey('#000000', '');
+            this.classList.add('active');
+        });
+
+        document.getElementById('chromaOptimize').addEventListener('click', toggleChromaOptimize);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName.toLowerCase() === 'textarea' || e.target.tagName.toLowerCase() === 'input') {
+                return;
+            }
+            
+            switch(e.code) {
+                case 'ArrowRight':
+                case 'Space':
+                    e.preventDefault();
+                    nextItem();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousItem();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    resetToStart();
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    clearScreen();
+                    break;
+                case 'Delete':
+                    e.preventDefault();
+                    clearLyrics();
+                    break;
+                case 'KeyM':
+                    e.preventDefault();
+                    toggleMinimize();
+                    break;
+            }
+        });
+
+        // Initialize
+        document.getElementById('lyricContainer').classList.add('');
+        updateNavigationInfo();
+        updateLineNavigation();
+    </script>
+</body>
+</html>
