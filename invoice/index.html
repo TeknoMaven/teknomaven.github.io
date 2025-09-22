@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #64748b;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .error-message {
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+
+        /* Invoice Card */
+        .invoice-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        /* Invoice Header */
+        .invoice-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .invoice-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .invoice-number {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .invoice-meta {
+            text-align: right;
+        }
+
+        .invoice-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-paid {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .status-overdue {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .status-draft {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+        }
+
+        .invoice-date {
+            display: block;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Invoice Details */
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .detail-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .detail-section p {
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-info {
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        /* Invoice Items */
+        .invoice-items {
+            margin-bottom: 3rem;
+        }
+
+        .items-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .items-table th {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .items-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .items-table tr:hover {
+            background: rgba(59, 130, 246, 0.02);
+        }
+
+        .item-description {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-details {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .quantity {
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Invoice Totals */
+        .invoice-totals {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 3rem;
+        }
+
+        .totals-section {
+            min-width: 300px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .total-row:last-child {
+            border-bottom: 2px solid #3b82f6;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding-top: 1rem;
+            color: #1e293b;
+        }
+
+        .total-label {
+            color: #64748b;
+        }
+
+        .total-amount {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Invoice Footer */
+        .invoice-footer {
+            border-top: 2px solid #f1f5f9;
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .payment-info {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .payment-info h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-info p {
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .invoice-notes {
+            color: #64748b;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .header,
+            .header-actions,
+            .btn {
+                display: none !important;
+            }
+            
+            .invoice-card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+                margin: 0;
+                padding: 2rem;
+            }
+            
+            .container {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .invoice-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .invoice-header {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .invoice-meta {
+                text-align: center;
+            }
+            
+            .invoice-details {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .items-table {
+                font-size: 0.9rem;
+            }
+            
+            .items-table th,
+            .items-table td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">TeknoMaven</div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    🖨️ Print
+                </button>
+                <button class="btn btn-primary" onclick="downloadPDF()">
+                    📄 Download PDF
+                </button>
+                <a href="/" class="btn btn-secondary">
+                    🏠 Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-container">
+            <div class="loading-spinner"></div>
+            <h3>Memuat Invoice...</h3>
+            <p>Mohon tunggu sebentar</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="error-container" style="display: none;">
+            <div class="error-icon">📋</div>
+            <h3 class="error-title">Invoice Tidak Ditemukan</h3>
+            <p class="error-message">Invoice dengan ID yang diminta tidak dapat ditemukan atau terjadi kesalahan saat memuat data.</p>
+            <button class="btn btn-primary" onclick="location.reload()">
+                🔄 Coba Lagi
+            </button>
+        </div>
+
+        <!-- Invoice Content -->
+        <div id="invoice-content" style="display: none;" class="fade-in">
+            <div class="invoice-card">
+                <!-- Invoice Header -->
+                <div class="invoice-header">
+                    <div>
+                        <h1 class="invoice-title">INVOICE</h1>
+                        <div class="invoice-number" id="invoice-number">#INV-0001</div>
+                    </div>
+                    <div class="invoice-meta">
+                        <span class="invoice-status" id="invoice-status">PENDING</span>
+                        <div>
+                            <span class="invoice-date">Tanggal: <span id="invoice-date">-</span></span>
+                            <span class="invoice-date">Jatuh Tempo: <span id="due-date">-</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Details -->
+                <div class="invoice-details">
+                    <div class="detail-section">
+                        <h3>Dari:</h3>
+                        <div class="company-info">
+                            <p><strong id="company-name">TeknoMaven</strong></p>
+                            <p id="company-address">-</p>
+                            <p id="company-contact">-</p>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Kepada:</h3>
+                        <div class="client-info">
+                            <p><strong id="client-name">-</strong></p>
+                            <p id="client-address">-</p>
+                            <p id="client-contact">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Items -->
+                <div class="invoice-items">
+                    <h3 class="items-title">Detail Item</h3>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Deskripsi</th>
+                                <th class="text-right">Qty</th>
+                                <th class="text-right">Harga</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-items-body">
+                            <!-- Items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Invoice Totals -->
+                <div class="invoice-totals">
+                    <div class="totals-section">
+                        <div class="total-row">
+                            <span class="total-label">Subtotal:</span>
+                            <span class="total-amount" id="subtotal">Rp 0</span>
+                        </div>
+                        <div class="total-row" id="tax-row" style="display: none;">
+                            <span class="total-label">Pajak (<span id="tax-rate">0</span>%):</span>
+                            <span class="total-amount" id="tax-amount">Rp 0</span>
+                        </div>
+                        <div class="total-row" id="discount-row" style="display: none;">
+                            <span class="total-label">Diskon:</span>
+                            <span class="total-amount" id="discount-amount">-Rp 0</span>
+                        </div>
+                        <div class="total-row">
+                            <span class="total-label">TOTAL:</span>
+                            <span class="total-amount" id="total-amount">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Footer -->
+                <div class="invoice-footer">
+                    <div class="payment-info" id="payment-info" style="display: none;">
+                        <h4>Informasi Pembayaran</h4>
+                        <p id="payment-details">-</p>
+                    </div>
+                    <div class="invoice-notes" id="invoice-notes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration - Sesuaikan dengan URL Google Apps Script Anda
+        const API_URL = 'https://script.google.com/macros/s/AKfycbw-Srw9xyu7yVULhNB4ENVc1YxJY4udDPHfDBAHwjdXxJhsWoCTj6EusTzYa0r7IiTyiQ/exec';
+        
+        // Get invoice ID from URL parameters
+        function getInvoiceId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('invoiceId');
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            if (!amount && amount !== 0) return 'Rp 0';
+            const number = typeof amount === 'string' ? parseFloat(amount) : amount;
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(number);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Show loading state
+        function showLoading() {
+            document.getElementById('loading-state').style.display = 'flex';
+            document.getElementById('error-state').style.display = 'none';
+            document.getElementById('invoice-content').style.display = 'none';
+        }
+
+        // Show error state
+        function showError(message = '') {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'flex';
+            document.getElementById('invoice-content').style.display = 'none';
+            
+            if (message) {
+                document.querySelector('.error-message').textContent = message;
+            }
+        }
+
+        // Show invoice content
+        function showInvoice() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'none';
+            document.getElementById('invoice-content').style.display = 'block';
+        }
+
+        // Load invoice data from API
+        async function loadInvoiceData(invoiceId) {
+            try {
+                console.log('Loading invoice data for ID:', invoiceId);
+                
+                const response = await fetch(`${API_URL}?action=getInvoice&invoiceId=${encodeURIComponent(invoiceId)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Invoice data loaded:', data);
+                
+                if (data.success && data.invoice) {
+                    renderInvoice(data.invoice);
+                    showInvoice();
+                } else {
+                    throw new Error(data.error || 'Invoice tidak ditemukan');
+                }
+                
+            } catch (error) {
+                console.error('Error loading invoice:', error);
+                showError(error.message);
+            }
+        }
+
+        // Render invoice data
+        function renderInvoice(invoice) {
+            // Basic invoice info
+            document.getElementById('invoice-number').textContent = invoice.invoice_number || '#INV-0001';
+            document.getElementById('invoice-date').textContent = formatDate(invoice.invoice_date);
+            document.getElementById('due-date').textContent = formatDate(invoice.due_date);
+            
+            // Update page title
+            document.title = `Invoice ${invoice.invoice_number} - TeknoMaven`;
+            
+            // Status
+            const statusElement = document.getElementById('invoice-status');
+            const status = (invoice.status || 'pending').toLowerCase();
+            statusElement.textContent = status.toUpperCase();
+            statusElement.className = `invoice-status status-${status}`;
+            
+            // Company info
+            document.getElementById('company-name').textContent = invoice.company_name || 'TeknoMaven';
+            document.getElementById('company-address').textContent = invoice.company_address || '';
+            document.getElementById('company-contact').textContent = invoice.company_contact || '';
+            
+            // Client info
+            document.getElementById('client-name').textContent = invoice.client_name || '';
+            document.getElementById('client-address').textContent = invoice.client_address || '';
+            document.getElementById('client-contact').textContent = invoice.client_contact || '';
+            
+            // Items
+            renderInvoiceItems(invoice.items || []);
+            
+            // Totals
+            renderInvoiceTotals(invoice);
+            
+            // Payment info
+            if (invoice.payment_details) {
+                document.getElementById('payment-info').style.display = 'block';
+                document.getElementById('payment-details').textContent = invoice.payment_details;
+            }
+            
+            // Notes
+            if (invoice.notes) {
+                document.getElementById('invoice-notes').textContent = invoice.notes;
+            }
+        }
+
+        // Render invoice items
+        function renderInvoiceItems(items) {
+            const tbody = document.getElementById('invoice-items-body');
+            tbody.innerHTML = '';
+            
+            if (!items || items.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #64748b; padding: 2rem;">
+                            Tidak ada item dalam invoice ini
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.price) || 0);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="item-description">${item.description || ''}</div>
+                        ${item.details ? `<div class="item-details">${item.details}</div>` : ''}
+                    </td>
+                    <td class="quantity">${item.quantity || 1}</td>
+                    <td class="text-right">${formatCurrency(item.price)}</td>
+                    <td class="text-right">${formatCurrency(total)}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render invoice totals
+        function renderInvoiceTotals(invoice) {
+            const subtotal = parseFloat(invoice.subtotal) || 0;
+            const taxRate = parseFloat(invoice.tax_rate) || 0;
+            const taxAmount = parseFloat(invoice.tax_amount) || 0;
+            const discountAmount = parseFloat(invoice.discount_amount) || 0;
+            const total = parseFloat(invoice.total_amount) || subtotal;
+            
+            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('total-amount').textContent = formatCurrency(total);
+            
+            // Tax
+            if (taxRate > 0 || taxAmount > 0) {
+                document.getElementById('tax-row').style.display = 'flex';
+                document.getElementById('tax-rate').textContent = taxRate;
+                document.getElementById('tax-amount').textContent = formatCurrency(taxAmount);
+            }
+            
+            // Discount
+            if (discountAmount > 0) {
+                document.getElementById('discount-row').style.display = 'flex';
+                document.getElementById('discount-amount').textContent = `-${formatCurrency(discountAmount)}`;
+            }
+        }
+
+        // Download PDF function (placeholder - requires PDF library)
+        function downloadPDF() {
+            // Simple implementation: open print dialog
+            window.print();
+            
+            // For actual PDF generation, you would use libraries like:
+            // - jsPDF
+            // - Puppeteer (server-side)
+            // - html2pdf.js
+            
+            console.log('PDF download requested');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Initialize page
+        async function initializePage() {
+            console.log('🧾 Initializing Invoice Page...');
+            
+            const invoiceId = getInvoiceId();
+            
+            if (!invoiceId) {
+                showError('ID Invoice tidak ditemukan dalam URL. Format: ?invoiceId=INV-001');
+                return;
+            }
+            
+            console.log('📋 Invoice ID:', invoiceId);
+            
+            // Validate API URL
+            if (API_URL.includes('YOUR_SCRIPT_ID')) {
+                showError('API URL belum dikonfigurasi. Silakan update API_URL dengan URL Google Apps Script yang benar.');
+                return;
+            }
+            
+            showLoading();
+            await loadInvoiceData(invoiceId);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializePage);
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', initializePage);
+
+        // Global error handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            showError('Terjadi kesalahan sistem. Silakan coba lagi.');
+            event.preventDefault();
+        });
+
+        // Debug mode
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('debug') === 'true') {
+            console.log('🐛 Debug mode enabled for Invoice Page');
+            console.log('API URL:', API_URL);
+            console.log('Invoice ID:', getInvoiceId());
+        }
+    </script>
+</body>
+</html>
