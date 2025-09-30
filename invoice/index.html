@@ -358,12 +358,20 @@
             text-align: center;
         }
 
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
         .payment-info {
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             padding: 1.5rem;
             border-radius: 15px;
-            margin-bottom: 1.5rem;
             border: 1px solid rgba(226, 232, 240, 0.5);
+            text-align: left;
         }
 
         .payment-info h4 {
@@ -375,6 +383,46 @@
         .payment-info p {
             color: #64748b;
             margin-bottom: 0.25rem;
+        }
+
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .qr-section h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 10px;
+            padding: 0.5rem;
+        }
+
+        .qr-code canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .qr-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            text-align: center;
         }
 
         .invoice-notes {
@@ -406,6 +454,15 @@
                 max-width: none;
                 margin: 0;
                 padding: 0;
+            }
+
+            .qr-section {
+                border: 2px solid #e2e8f0;
+                page-break-inside: avoid;
+            }
+
+            .footer-content {
+                page-break-inside: avoid;
             }
         }
 
@@ -450,6 +507,14 @@
             
             .btn {
                 justify-content: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .qr-section {
+                margin: 0 auto;
             }
         }
 
@@ -588,9 +653,16 @@
 
                 <!-- Invoice Footer -->
                 <div class="invoice-footer">
-                    <div class="payment-info" id="payment-info" style="display: none;">
-                        <h4>Informasi Pembayaran</h4>
-                        <p id="payment-details">-</p>
+                    <div class="footer-content">
+                        <div class="payment-info" id="payment-info" style="display: none;">
+                            <h4>Informasi Pembayaran</h4>
+                            <p id="payment-details">-</p>
+                        </div>
+                        <div class="qr-section" id="qr-section">
+                            <h4>Scan QR untuk Invoice Digital</h4>
+                            <div class="qr-code" id="qr-code"></div>
+                            <p class="qr-text">Scan untuk akses invoice online</p>
+                        </div>
                     </div>
                     <div class="invoice-notes" id="invoice-notes"></div>
                 </div>
@@ -598,6 +670,8 @@
         </div>
     </div>
 
+    <!-- Ganti library QR Code -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
         // API Configuration - Sesuaikan dengan URL Google Apps Script Anda
         const API_URL = 'https://script.google.com/macros/s/AKfycbw-Srw9xyu7yVULhNB4ENVc1YxJY4udDPHfDBAHwjdXxJhsWoCTj6EusTzYa0r7IiTyiQ/exec';
@@ -607,7 +681,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('invoiceId');
         }
-
         // Format currency
         function formatCurrency(amount) {
             if (!amount && amount !== 0) return 'Rp 0';
@@ -628,6 +701,61 @@
                 month: 'long',
                 day: 'numeric'
             });
+        }
+
+        function generateQRCode(invoiceId) {
+            try {
+                console.log('Starting QR code generation for:', invoiceId);
+                
+                const qrContainer = document.getElementById('qr-code');
+                if (!qrContainer) {
+                    console.error('QR container not found');
+                    return;
+                }
+                
+                // Check if QRCode library is loaded
+                if (typeof QRCode === 'undefined') {
+                    console.error('QRCode library not loaded');
+                    qrContainer.innerHTML = '<p style="font-size: 0.8rem; color: #64748b;">Loading QR...</p>';
+                    
+                    // Retry after delay
+                    setTimeout(() => {
+                        if (typeof QRCode !== 'undefined') {
+                            generateQRCode(invoiceId);
+                        } else {
+                            console.error('QRCode library failed to load');
+                            qrContainer.innerHTML = '<p style="font-size: 0.8rem; color: #64748b;">QR unavailable</p>';
+                        }
+                    }, 1500);
+                    return;
+                }
+                
+                // Clear existing QR code
+                qrContainer.innerHTML = '';
+                
+                // Generate invoice URL
+                const invoiceUrl = `https://teknomaven.com/invoice/?invoiceId=${encodeURIComponent(invoiceId)}`;
+                console.log('Generating QR code for URL:', invoiceUrl);
+                
+                // Create QR code
+                const qr = new QRCode(qrContainer, {
+                    text: invoiceUrl,
+                    width: 140,
+                    height: 140,
+                    colorDark: "#1e293b",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                console.log('QR code generated successfully');
+                
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+                const qrContainer = document.getElementById('qr-code');
+                if (qrContainer) {
+                    qrContainer.innerHTML = '<p style="font-size: 0.8rem; color: #64748b;">QR error</p>';
+                }
+            }
         }
 
         // Show loading state
@@ -655,77 +783,7 @@
             document.getElementById('invoice-content').style.display = 'block';
         }
 
-        // Load invoice data from API
-        async function loadInvoiceData(invoiceId) {
-            try {
-                console.log('Loading invoice data for ID:', invoiceId);
-                
-                const response = await fetch(`${API_URL}?action=getInvoice&invoiceId=${encodeURIComponent(invoiceId)}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                console.log('Invoice data loaded:', data);
-                
-                if (data.success && data.invoice) {
-                    renderInvoice(data.invoice);
-                    showInvoice();
-                } else {
-                    throw new Error(data.error || 'Invoice tidak ditemukan');
-                }
-                
-            } catch (error) {
-                console.error('Error loading invoice:', error);
-                showError(error.message);
-            }
-        }
-
-        // Render invoice data
-        function renderInvoice(invoice) {
-            // Basic invoice info
-            document.getElementById('invoice-number').textContent = invoice.invoice_number || '#INV-0001';
-            document.getElementById('invoice-date').textContent = formatDate(invoice.invoice_date);
-            document.getElementById('due-date').textContent = formatDate(invoice.due_date);
-            
-            // Update page title
-            document.title = `Invoice ${invoice.invoice_number} - TeknoMaven`;
-            
-            // Status
-            const statusElement = document.getElementById('invoice-status');
-            const status = (invoice.status || 'pending').toLowerCase();
-            statusElement.textContent = status.toUpperCase();
-            statusElement.className = `invoice-status status-${status}`;
-            
-            // Company info
-            document.getElementById('company-name').textContent = invoice.company_name || 'TeknoMaven';
-            document.getElementById('company-address').textContent = invoice.company_address || '';
-            document.getElementById('company-contact').textContent = invoice.company_contact || '';
-            
-            // Client info
-            document.getElementById('client-name').textContent = invoice.client_name || '';
-            document.getElementById('client-address').textContent = invoice.client_address || '';
-            document.getElementById('client-contact').textContent = invoice.client_contact || '';
-            
-            // Items
-            renderInvoiceItems(invoice.items || []);
-            
-            // Totals
-            renderInvoiceTotals(invoice);
-            
-            // Payment info
-            if (invoice.payment_details) {
-                document.getElementById('payment-info').style.display = 'block';
-                document.getElementById('payment-details').textContent = invoice.payment_details;
-            }
-            
-            // Notes
-            if (invoice.notes) {
-                document.getElementById('invoice-notes').textContent = invoice.notes;
-            }
-        }
-
+        
         // Render invoice items
         function renderInvoiceItems(items) {
             const tbody = document.getElementById('invoice-items-body');
@@ -785,62 +843,100 @@
             }
         }
 
+        // Render invoice data
+        function renderInvoice(invoice) {
+            // Store current invoice ID for QR code
+            currentInvoiceId = invoice.invoice_id;
+            
+            // Basic invoice info
+            document.getElementById('invoice-number').textContent = invoice.invoice_number || '#INV-0001';
+            document.getElementById('invoice-date').textContent = formatDate(invoice.invoice_date);
+            document.getElementById('due-date').textContent = formatDate(invoice.due_date);
+            
+            // Update page title
+            document.title = `Invoice ${invoice.invoice_number} - TeknoMaven`;
+            
+            // Status
+            const statusElement = document.getElementById('invoice-status');
+            const status = (invoice.status || 'pending').toLowerCase();
+            statusElement.textContent = status.toUpperCase();
+            statusElement.className = `invoice-status status-${status}`;
+            
+            // Company info
+            document.getElementById('company-name').textContent = invoice.company_name || 'TeknoMaven';
+            document.getElementById('company-address').textContent = invoice.company_address || '';
+            document.getElementById('company-contact').textContent = invoice.company_contact || '';
+            
+            // Client info
+            document.getElementById('client-name').textContent = invoice.client_name || '';
+            document.getElementById('client-address').textContent = invoice.client_address || '';
+            document.getElementById('client-contact').textContent = invoice.client_contact || '';
+            
+            // Items
+            renderInvoiceItems(invoice.items || []);
+            
+            // Totals
+            renderInvoiceTotals(invoice);
+            
+            // Payment info
+            if (invoice.payment_details) {
+                document.getElementById('payment-info').style.display = 'block';
+                document.getElementById('payment-details').textContent = invoice.payment_details;
+            }
+            
+            // Notes
+            if (invoice.notes) {
+                document.getElementById('invoice-notes').textContent = invoice.notes;
+            }
+            
+            // Generate QR Code
+            generateQRCode(invoice.invoice_id || invoice.invoice_number);
+        }
+
+        // ========================================
+        // DATA LOADING FUNCTIONS
+        // ========================================
+
+        
+        // Load invoice data from API
+        async function loadInvoiceData(invoiceId) {
+            try {
+                console.log('Loading invoice data for ID:', invoiceId);
+                
+                const response = await fetch(`${API_URL}?action=getInvoice&invoiceId=${encodeURIComponent(invoiceId)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Invoice data loaded:', data);
+                
+                if (data.success && data.invoice) {
+                    renderInvoice(data.invoice);
+                    showInvoice();
+                } else {
+                    throw new Error(data.error || 'Invoice tidak ditemukan');
+                }
+                
+            } catch (error) {
+                console.error('Error loading invoice:', error);
+                showError(error.message);
+            }
+        }
+
         // Download PDF function (placeholder - requires PDF library)
         function downloadPDF() {
             // Simple implementation: open print dialog
             window.print();
             
-            // For actual PDF generation, you would use libraries like:
-            // - jsPDF
-            // - Puppeteer (server-side)
-            // - html2pdf.js
-            
             console.log('PDF download requested');
         }
 
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                color: white;
-                font-weight: 500;
-                z-index: 10000;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
-                max-width: 400px;
-            `;
-            
-            if (type === 'success') {
-                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-            } else if (type === 'error') {
-                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-            } else {
-                notification.style.background = 'linear-gradient(135deg, #3b82f6, #06b6d4)';
-            }
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(400px)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
-            }, 4000);
-        }
-
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        
         // Initialize page
         async function initializePage() {
             console.log('🧾 Initializing Invoice Page...');
