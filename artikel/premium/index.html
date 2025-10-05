@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeknoMaven Academy - Tutorial Koding</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #64748b;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #3b82f6;
+        }
+
+        .apps-script-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .apps-script-input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .apps-script-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .info-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            padding: 1.5rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .header-nav a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .header-nav a:hover {
+            color: #3b82f6;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 5%;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(6, 182, 212, 0.05));
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-section h3 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+
+        .filter-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group label:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Course Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .course-thumbnail {
+            height: 200px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .course-category {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .course-level {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .level-beginner {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .level-intermediate {
+            background: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+        }
+
+        .level-advanced {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .read-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .read-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .article-body {
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .article-body h2 {
+            color: #1e293b;
+            margin: 2rem 0 1rem;
+            font-size: 1.8rem;
+        }
+
+        .article-body h3 {
+            color: #3b82f6;
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .article-body p {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        .article-body code {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+        }
+
+        .article-body pre {
+            background: rgba(15, 23, 42, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            color: #1e293b;
+        }
+
+        .article-body ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            color: #475569;
+        }
+
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .article-title {
+                font-size: 1.8rem;
+            }
+
+            .login-box {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+        #open-link-btn {
+    background-color: #007BFF; /* Warna biru */
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#open-link-btn:hover {
+    background-color: #0056b3; /* Warna biru tua saat hover */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="login-icon">🔐</div>
+            <h2 class="login-title">Akses Terbatas</h2>
+            <p class="login-subtitle">Masukkan password untuk mengakses tutorial</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="passwordInput">Password:</label>
+                    <div class="password-input-wrapper">
+                        <input 
+                            type="password" 
+                            id="passwordInput" 
+                            class="password-input" 
+                            placeholder="Masukkan password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="passwordToggle">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Masuk
+                </button>
+
+                <div class="error-message" id="errorMessage">
+                    Password salah! Silakan coba lagi.
+                </div>
+
+                <p class="info-text">
+                    💡 Hubungi administrator jika Anda lupa password
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden until authenticated) -->
+    <div id="mainContent" class="hidden">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">TeknoMaven Academy</div>
+                <ul class="header-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/produk">Produk</a></li>
+                    <li><button class="logout-btn" id="logoutBtn">🚪 Logout</button></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Paket Tutorial Premium</h1>
+            <p>Kumpulan artikel premium teknomaven</p>
+        </section>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>🔍 Pencarian</h3>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Cari tutorial...">
+                </div>
+
+                <div class="filter-section">
+                    <h3>📁 Kategori</h3>
+                    <div id="categoryFilters"></div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>📊 Level</h3>
+                    <div id="levelFilters"></div>
+                </div>
+            </aside>
+
+            <!-- Courses Grid -->
+            <main>
+                <div class="courses-grid" id="coursesGrid">
+                    <div class="loading">Memuat tutorial...</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">×</button>
+            <div id="articleContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let allTutorials = [];
+        let filteredTutorials = [];
+        let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbwe5IQhiY92BI6i1h4QbZTd9PHg9wENGEdTBG7_eeL1BQdwmQin1WVk7E7RANhWJT1LAA/exec';
+
+        $(document).ready(function() {
+            // Password toggle
+            $('#passwordToggle').on('click', function() {
+                const passwordInput = $('#passwordInput');
+                const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                passwordInput.attr('type', type);
+                $(this).text(type === 'password' ? '👁️' : '🙈');
+            });
+
+            // Login form submission
+            $('#loginForm').on('submit', async function(e) {
+                e.preventDefault();
+                
+                const password = $('#passwordInput').val();
+                // appsScriptUrl = $('#appsScriptUrl').val();
+                const loginBtn = $('#loginBtn');
+                const errorMessage = $('#errorMessage');
+
+                // Disable button and show loading
+                loginBtn.prop('disabled', true).text('Memuat...');
+                errorMessage.removeClass('show');
+
+                try {
+                    // Call Apps Script with password parameter
+                    const response = await $.ajax({
+                        url: `${appsScriptUrl}?password=${encodeURIComponent(password)}`,
+                        method: 'GET',
+                        dataType: 'json',
+                        timeout: 10000
+                    });
+
+                    if (response && response.tutorials && response.tutorials.length > 0) {
+                        // Authentication successful
+                        allTutorials = response.tutorials;
+                        filteredTutorials = [...allTutorials];
+                        
+                        // Hide login, show content
+                        $('#loginOverlay').fadeOut(300);
+                        $('#mainContent').removeClass('hidden');
+                        
+                        // Initialize the app
+                        initializeApp();
+                    } else {
+                        throw new Error('Invalid response format');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    // errorMessage.text('Password salah!').addClass('show');
+                    errorMessage.html('Password salah! Jika anda belum memiliki password akses, silahkan kunjungi page di bawah:<br><br>' +
+    '<button id="open-link-btn" onclick="window.location.href=\'https://teknomaven.com/produk/\';">Buka Link</button>')
+    .addClass('show');
+                    loginBtn.prop('disabled', false).text('Masuk');
+                }
+            });
+
+            // Logout button
+            $('#logoutBtn').on('click', function() {
+                $('#mainContent').addClass('hidden');
+                $('#loginOverlay').fadeIn(300);
+                $('#passwordInput').val('');
+                allTutorials = [];
+                filteredTutorials = [];
+            });
+
+            // Initialize app after successful login
+            function initializeApp() {
+                const categories = [...new Set(allTutorials.map(t => t.category))];
+                const levels = ['beginner', 'intermediate', 'advanced'];
+
+                // Render filters
+                function renderFilters() {
+                    const categoryHTML = categories.map(cat => `
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" class="category-filter" value="${cat}" checked>
+                                <span>${cat}</span>
+                            </label>
+                        </div>
+                    `).join('');
+                    $('#categoryFilters').html(categoryHTML);
+
+                    const levelLabels = {
+                        beginner: 'Pemula',
+                        intermediate: 'Menengah',
+                        advanced: 'Mahir'
+                    };
+                    
+                    const levelHTML = levels.map(level => `
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" class="level-filter" value="${level}" checked>
+                                <span>${levelLabels[level]}</span>
+                            </label>
+                        </div>
+                    `).join('');
+                    $('#levelFilters').html(levelHTML);
+                }
+
+                // Render courses
+                function renderCourses(tutorials) {
+                    if (tutorials.length === 0) {
+                        $('#coursesGrid').html(`
+                            <div class="no-results">
+                                <h3>Tidak ada tutorial ditemukan</h3>
+                                <p>Coba ubah filter atau kata kunci pencarian</p>
+                            </div>
+                        `);
+                        return;
+                    }
+
+                    const coursesHTML = tutorials.map(tutorial => `
+                        <div class="course-card" data-id="${tutorial.id}">
+                            <div class="course-thumbnail">${tutorial.icon}</div>
+                            <div class="course-content">
+                                <div class="course-header">
+                                    <span class="course-category">${tutorial.category}</span>
+                                    <span class="course-level level-${tutorial.level}">
+                                        ${tutorial.level === 'beginner' ? 'Pemula' : 
+                                          tutorial.level === 'intermediate' ? 'Menengah' : 'Mahir'}
+                                    </span>
+                                </div>
+                                <h3 class="course-title">${tutorial.title}</h3>
+                                <p class="course-description">${tutorial.description}</p>
+                                <div class="course-meta">
+                                    <span>⏱️ ${tutorial.duration}</span>
+                                    <span>📚 ${tutorial.lessons} lessons</span>
+                                </div>
+                                <div class="course-footer">
+                                    <a href="#" class="read-btn" data-id="${tutorial.id}">
+                                        Baca Tutorial
+                                        <span>→</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    $('#coursesGrid').html(coursesHTML);
+                }
+
+                // Apply filters
+                function applyFilters() {
+                    const searchTerm = $('#searchInput').val().toLowerCase();
+                    const selectedCategories = $('.category-filter:checked').map(function() {
+                        return $(this).val();
+                    }).get();
+                    const selectedLevels = $('.level-filter:checked').map(function() {
+                        return $(this).val();
+                    }).get();
+
+                    filteredTutorials = allTutorials.filter(tutorial => {
+                        const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm) ||
+                                            tutorial.description.toLowerCase().includes(searchTerm);
+                        const matchesCategory = selectedCategories.includes(tutorial.category);
+                        const matchesLevel = selectedLevels.includes(tutorial.level);
+
+                        return matchesSearch && matchesCategory && matchesLevel;
+                    });
+
+                    renderCourses(filteredTutorials);
+                }
+
+                // Show article modal
+                function showArticle(id) {
+                    const tutorial = allTutorials.find(t => t.id === id);
+                    if (!tutorial) return;
+
+                    const levelText = {
+                        beginner: 'Pemula',
+                        intermediate: 'Menengah',
+                        advanced: 'Mahir'
+                    };
+
+                    const articleHTML = `
+                        <div class="article-header">
+                            <h1 class="article-title">${tutorial.title}</h1>
+                            <div class="article-meta">
+                                <span>📁 ${tutorial.category}</span>
+                                <span>📊 ${levelText[tutorial.level]}</span>
+                                <span>⏱️ ${tutorial.duration}</span>
+                                <span>📚 ${tutorial.lessons} lessons</span>
+                            </div>
+                        </div>
+                        <div class="article-body">
+                            ${tutorial.content}
+                        </div>
+                    `;
+
+                    $('#articleContent').html(articleHTML);
+                    $('#articleModal').fadeIn(300);
+                    $('body').css('overflow', 'hidden');
+                }
+
+                // Close modal
+                function closeModal() {
+                    $('#articleModal').fadeOut(300);
+                    $('body').css('overflow', 'auto');
+                }
+
+                // Event listeners
+                $('#searchInput').on('input', applyFilters);
+
+                $(document).on('change', '.category-filter, .level-filter', applyFilters);
+
+                $(document).on('click', '.read-btn', function(e) {
+                    e.preventDefault();
+                    const id = parseInt($(this).data('id'));
+                    showArticle(id);
+                });
+
+                $(document).on('click', '.course-card', function(e) {
+                    if (!$(e.target).hasClass('read-btn')) {
+                        const id = parseInt($(this).data('id'));
+                        showArticle(id);
+                    }
+                });
+
+                $('#modalClose').on('click', closeModal);
+
+                $('#articleModal').on('click', function(e) {
+                    if ($(e.target).is('#articleModal')) {
+                        closeModal();
+                    }
+                });
+
+                $(document).on('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    }
+                });
+
+                // Initialize
+                renderFilters();
+                renderCourses(allTutorials);
+            }
+        });
+    </script>
+</body>
+</html>
