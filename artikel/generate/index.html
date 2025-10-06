@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutorial JSON Creator - TeknoMaven</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
     <!-- Highlight.js for code syntax -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -27,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -103,7 +103,11 @@
             box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
 
-        /* Container */
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
         .container {
             max-width: 1400px;
             margin: 2rem auto;
@@ -119,7 +123,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Form Grid */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -177,9 +180,8 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* Quill Editor */
         #editor {
-            height: 400px;
+            height: 500px;
             background: white;
         }
 
@@ -192,7 +194,144 @@
             border-radius: 0 0 10px 10px;
         }
 
-        /* JSON Output */
+        .table-builder {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .table-builder h3 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .table-dimension-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .table-dimension-controls label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .table-dimension-controls input {
+            width: 70px;
+            padding: 0.5rem;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .dimension-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-preview {
+            background: white;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .preview-table td,
+        .preview-table th {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            min-width: 100px;
+        }
+
+        .preview-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .preview-table input {
+            width: 100%;
+            border: none;
+            padding: 0.3rem;
+            background: transparent;
+            font-size: 0.9rem;
+        }
+
+        .preview-table input:focus {
+            outline: 2px solid #3b82f6;
+            border-radius: 4px;
+        }
+
+        .shortcode-preview {
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px dashed #3b82f6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            color: #3b82f6;
+            font-size: 0.9rem;
+        }
+
+        .tables-list {
+            margin-top: 1.5rem;
+        }
+
+        .tables-list h4 {
+            color: #475569;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .table-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-item-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .table-shortcode {
+            font-family: monospace;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .table-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
         .json-output {
             background: rgba(15, 23, 42, 0.95);
             border: 1px solid rgba(226, 232, 240, 0.5);
@@ -222,7 +361,6 @@
             line-height: 1.6;
         }
 
-        /* Draft Info */
         .draft-info {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -237,14 +375,12 @@
             display: block;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
         }
 
-        /* Notification */
         .notification {
             position: fixed;
             top: 100px;
@@ -272,7 +408,16 @@
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
         }
 
-        /* Responsive */
+        .helper-text {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 1024px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -297,28 +442,33 @@
             .action-buttons {
                 flex-direction: column;
             }
+
+            #editor {
+                height: 400px;
+            }
+
+            .table-dimension-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-content">
             <div class="logo">Tutorial Creator</div>
             <div class="header-actions">
-                <button class="btn btn-secondary" id="loadDraftBtn">📂 Load Draft</button>
-                <a href="/course" class="btn btn-secondary">← Kembali</a>
+                <button class="btn btn-secondary" id="loadDraftBtn">Load Draft</button>
+                <a href="/course" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <div class="container">
         <h1 class="page-title">Buat Tutorial Baru</h1>
 
-        <!-- Form Grid -->
         <div class="form-grid">
-            <!-- Basic Info -->
             <div class="form-section">
                 <h2>Informasi Dasar</h2>
                 <div class="form-group">
@@ -335,11 +485,10 @@
                 </div>
                 <div class="form-group">
                     <label for="tutorialIcon">Icon (Emoji)</label>
-                    <input type="text" id="tutorialIcon" placeholder="🐳" maxlength="2">
+                    <input type="text" id="tutorialIcon" placeholder="Contoh: 🐳" maxlength="2">
                 </div>
             </div>
 
-            <!-- Category & Details -->
             <div class="form-section">
                 <h2>Kategori & Detail</h2>
                 <div class="form-group">
@@ -355,7 +504,7 @@
                         <option value="Database">Database</option>
                         <option value="DevOps">DevOps</option>
                         <option value="Tools">Tools</option>
-                        <option value="Tools">Apps Script</option>
+                        <option value="Apps Script">Apps Script</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -377,36 +526,64 @@
                 </div>
             </div>
 
-            <!-- Content Editor -->
             <div class="form-section full-width">
                 <h2>Konten Tutorial</h2>
-                <p style="color: #64748b; margin-bottom: 1rem;">Gunakan editor di bawah untuk menulis konten tutorial. Anda bisa menambahkan heading, paragraf, list, dan code blocks.</p>
+                <div class="helper-text">
+                    <strong>Fitur Editor:</strong><br>
+                    Gunakan toolbar untuk formatting text. Untuk tabel, gunakan Table Builder di bawah - tabel akan diinsert sebagai shortcode [TABLE_X] dan otomatis di-replace saat generate JSON.
+                </div>
+                
+                <div class="table-builder">
+                    <h3>Table Builder</h3>
+                    <div class="table-dimension-controls">
+                        <label>
+                            Baris: <input type="number" id="tableRows" value="3" min="1" max="20">
+                        </label>
+                        <label>
+                            Kolom: <input type="number" id="tableCols" value="3" min="1" max="10">
+                        </label>
+                        <div class="dimension-btn-group">
+                            <button class="btn btn-secondary btn-small" id="generateTableBtn">Generate Tabel</button>
+                            <button class="btn btn-primary btn-small" id="insertTableBtn" style="display: none;">Insert Shortcode</button>
+                        </div>
+                    </div>
+
+                    <div class="table-preview" id="tablePreview" style="display: none;">
+                        <table class="preview-table" id="previewTable"></table>
+                    </div>
+
+                    <!-- Table List for Editing -->
+                    <div id="tablesList" style="margin-top: 1.5rem;"></div>
+                </div>
+
                 <div id="editor"></div>
             </div>
         </div>
 
-        <!-- Draft Info -->
         <div class="draft-info" id="draftInfo">
-            ✅ Draft tersimpan pada: <span id="draftTime"></span>
+            Draft tersimpan pada: <span id="draftTime"></span>
         </div>
 
-        <!-- Action Buttons -->
         <div class="action-buttons">
-            <button class="btn btn-primary" id="saveDraftBtn">💾 Simpan Draft</button>
-            <button class="btn btn-success" id="generateJsonBtn">🚀 Generate JSON</button>
-            <button class="btn btn-secondary" id="clearFormBtn">🗑️ Clear Form</button>
+            <button class="btn btn-primary" id="saveDraftBtn">Simpan Draft</button>
+            <button class="btn btn-success" id="generateJsonBtn">Generate JSON</button>
+            <button class="btn btn-secondary" id="clearFormBtn">Clear Form</button>
         </div>
 
-        <!-- JSON Output -->
         <div class="json-output" id="jsonOutput" style="display: none;">
             <h2>Generated JSON</h2>
-            <button class="btn btn-primary" id="copyJsonBtn" style="margin-bottom: 1rem;">📋 Copy JSON</button>
+            <button class="btn btn-primary" id="copyJsonBtn" style="margin-bottom: 1rem;">Copy JSON</button>
             <pre><code id="jsonCode"></code></pre>
         </div>
     </div>
 
     <script>
-        // Initialize Quill Editor
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.configure({
+                languages: ['javascript', 'html', 'css', 'python', 'json', 'sql', 'bash']
+            });
+        });
+
         const quill = new Quill('#editor', {
             theme: 'snow',
             modules: {
@@ -421,21 +598,207 @@
                 ],
                 syntax: true
             },
-            placeholder: 'Tulis konten tutorial di sini...\n\nContoh:\n<h2>Pendahuluan</h2>\n<p>Docker adalah platform untuk containerization...</p>'
+            placeholder: 'Tulis konten tutorial di sini...'
         });
-        document.addEventListener('DOMContentLoaded', function() {
-    hljs.configure({   // konfigurasi opsional
-      languages: ['javascript', 'html', 'css', 'python', 'json']
-    });
-  });
 
-        // Auto-save draft every 30 seconds
+        // Store tables data
+        let tablesData = {};
+        let tableCounter = 0;
+        let currentEditingTable = null;
+
+        function generateTablePreview() {
+            const rows = parseInt($('#tableRows').val()) || 3;
+            const cols = parseInt($('#tableCols').val()) || 3;
+            
+            let tableHTML = '<thead><tr>';
+            
+            for (let j = 0; j < cols; j++) {
+                tableHTML += `<th><input type="text" placeholder="Header ${j + 1}" data-row="0" data-col="${j}"></th>`;
+            }
+            tableHTML += '</tr></thead><tbody>';
+            
+            for (let i = 1; i < rows; i++) {
+                tableHTML += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    tableHTML += `<td><input type="text" placeholder="Data ${i}-${j + 1}" data-row="${i}" data-col="${j}"></td>`;
+                }
+                tableHTML += '</tr>';
+            }
+            
+            tableHTML += '</tbody>';
+            
+            $('#previewTable').html(tableHTML);
+            $('#tablePreview').slideDown();
+            $('#insertTableBtn').show().text('Insert Shortcode');
+            currentEditingTable = null;
+            
+            showNotification('Tabel berhasil di-generate! Isi data lalu klik "Insert Shortcode"', 'info');
+        }
+
+        function insertTableShortcode() {
+            const rows = parseInt($('#tableRows').val());
+            const cols = parseInt($('#tableCols').val());
+            
+            let tableId;
+            
+            if (currentEditingTable) {
+                // Update existing table
+                tableId = currentEditingTable;
+            } else {
+                // Create new table
+                tableCounter++;
+                tableId = `TABLE_${tableCounter}`;
+            }
+            
+            let tableHTML = '<table><tbody>';
+            
+            tableHTML += '<tr>';
+            for (let j = 0; j < cols; j++) {
+                const value = $(`input[data-row="0"][data-col="${j}"]`).val() || `Header ${j + 1}`;
+                tableHTML += `<th>${value}</th>`;
+            }
+            tableHTML += '</tr>';
+            
+            for (let i = 1; i < rows; i++) {
+                tableHTML += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    const value = $(`input[data-row="${i}"][data-col="${j}"]`).val() || `Data ${i}-${j + 1}`;
+                    tableHTML += `<td>${value}</td>`;
+                }
+                tableHTML += '</tr>';
+            }
+            
+            tableHTML += '</tbody></table>';
+            
+            // Store table data
+            tablesData[tableId] = tableHTML;
+            
+            if (!currentEditingTable) {
+                // Insert shortcode to editor only for new tables
+                const range = quill.getSelection(true);
+                const position = range ? range.index : quill.getLength();
+                
+                quill.insertText(position, `\n[${tableId}]\n`, { 'bold': true, 'color': '#3b82f6' });
+            }
+            
+            // Clear preview
+            $('#tablePreview').slideUp();
+            $('#insertTableBtn').hide();
+            $('#previewTable').html('');
+            currentEditingTable = null;
+            
+            // Update tables list
+            renderTablesList();
+            
+            const action = currentEditingTable ? 'diupdate' : 'ditambahkan';
+            showNotification(`Tabel [${tableId}] berhasil ${action}!`, 'success');
+        }
+
+        function editTable(tableId) {
+            const tableHTML = tablesData[tableId];
+            
+            if (!tableHTML) {
+                showNotification('Tabel tidak ditemukan', 'info');
+                return;
+            }
+            
+            // Parse table HTML to get data
+            const tempDiv = $('<div>').html(tableHTML);
+            const table = tempDiv.find('table');
+            const rows = table.find('tr');
+            
+            const numRows = rows.length;
+            const numCols = $(rows[0]).find('th, td').length;
+            
+            // Set dimensions
+            $('#tableRows').val(numRows);
+            $('#tableCols').val(numCols);
+            
+            // Generate preview structure
+            let previewHTML = '<thead><tr>';
+            
+            for (let j = 0; j < numCols; j++) {
+                previewHTML += `<th><input type="text" data-row="0" data-col="${j}"></th>`;
+            }
+            previewHTML += '</tr></thead><tbody>';
+            
+            for (let i = 1; i < numRows; i++) {
+                previewHTML += '<tr>';
+                for (let j = 0; j < numCols; j++) {
+                    previewHTML += `<td><input type="text" data-row="${i}" data-col="${j}"></td>`;
+                }
+                previewHTML += '</tr>';
+            }
+            
+            previewHTML += '</tbody>';
+            
+            $('#previewTable').html(previewHTML);
+            
+            // Fill values from existing table
+            rows.each(function(i) {
+                $(this).find('th, td').each(function(j) {
+                    const value = $(this).text();
+                    $(`input[data-row="${i}"][data-col="${j}"]`).val(value);
+                });
+            });
+            
+            $('#tablePreview').slideDown();
+            $('#insertTableBtn').show().text('Update Tabel');
+            currentEditingTable = tableId;
+            
+            // Scroll to table builder
+            $('html, body').animate({
+                scrollTop: $('.table-builder').offset().top - 100
+            }, 500);
+            
+            showNotification(`Edit mode: ${tableId}`, 'info');
+        }
+
+        function deleteTable(tableId) {
+            if (!confirm(`Apakah Anda yakin ingin menghapus ${tableId}? Shortcode di editor tidak akan dihapus otomatis.`)) {
+                return;
+            }
+            
+            delete tablesData[tableId];
+            renderTablesList();
+            showNotification(`${tableId} berhasil dihapus`, 'success');
+        }
+
+        function renderTablesList() {
+            const tableKeys = Object.keys(tablesData);
+            
+            if (tableKeys.length === 0) {
+                $('#tablesList').html('');
+                return;
+            }
+            
+            let listHTML = '<div class="tables-list"><h4>Tabel yang Sudah Dibuat (' + tableKeys.length + '):</h4>';
+            
+            tableKeys.forEach(tableId => {
+                listHTML += `
+                    <div class="table-item">
+                        <div class="table-item-info">
+                            <span class="table-shortcode">[${tableId}]</span>
+                        </div>
+                        <div class="table-item-actions">
+                            <button class="btn btn-secondary btn-icon btn-small" onclick="editTable('${tableId}')">Edit</button>
+                            <button class="btn btn-secondary btn-icon btn-small" onclick="deleteTable('${tableId}')" style="color: #ef4444;">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            listHTML += '</div>';
+            
+            $('#tablesList').html(listHTML);
+        }
+
         let autoSaveInterval;
 
         function startAutoSave() {
             autoSaveInterval = setInterval(() => {
-                saveDraft(true); // silent save
-            }, 30000); // 30 seconds
+                saveDraft(true);
+            }, 30000);
         }
 
         function stopAutoSave() {
@@ -444,7 +807,6 @@
             }
         }
 
-        // Save Draft to LocalStorage
         function saveDraft(silent = false) {
             const draftData = {
                 id: $('#tutorialId').val(),
@@ -455,7 +817,10 @@
                 icon: $('#tutorialIcon').val(),
                 duration: $('#tutorialDuration').val(),
                 lessons: $('#tutorialLessons').val(),
-                content: quill.root.innerHTML,
+                content: quill.getText(),
+                contentHTML: quill.root.innerHTML,
+                tables: tablesData,
+                tableCounter: tableCounter,
                 savedAt: new Date().toISOString()
             };
 
@@ -465,13 +830,11 @@
                 showNotification('Draft berhasil disimpan!', 'success');
             }
             
-            // Show draft info
             const draftTime = new Date(draftData.savedAt).toLocaleString('id-ID');
             $('#draftTime').text(draftTime);
             $('#draftInfo').addClass('show');
         }
 
-        // Load Draft from LocalStorage
         function loadDraft() {
             const draftData = localStorage.getItem('tutorialDraft');
             
@@ -491,9 +854,20 @@
             $('#tutorialDuration').val(draft.duration || '');
             $('#tutorialLessons').val(draft.lessons || '');
             
-            if (draft.content) {
-                quill.root.innerHTML = draft.content;
+            if (draft.contentHTML) {
+                quill.root.innerHTML = draft.contentHTML;
             }
+            
+            if (draft.tables) {
+                tablesData = draft.tables;
+            }
+            
+            if (draft.tableCounter) {
+                tableCounter = draft.tableCounter;
+            }
+            
+            // Render tables list after loading
+            renderTablesList();
 
             const draftTime = new Date(draft.savedAt).toLocaleString('id-ID');
             $('#draftTime').text(draftTime);
@@ -502,7 +876,6 @@
             showNotification('Draft berhasil dimuat!', 'success');
         }
 
-        // Clear Form
         function clearForm() {
             if (!confirm('Apakah Anda yakin ingin menghapus semua data? Draft yang tersimpan tidak akan terhapus.')) {
                 return;
@@ -518,15 +891,18 @@
             $('#tutorialLessons').val('');
             quill.setContents([]);
             
+            tablesData = {};
+            tableCounter = 0;
+            
             $('#jsonOutput').hide();
             $('#draftInfo').removeClass('show');
+            $('#tablePreview').hide();
+            $('#insertTableBtn').hide();
             
             showNotification('Form berhasil dibersihkan', 'info');
         }
 
-        // Generate JSON
         function generateJSON() {
-            // Validate required fields
             const id = $('#tutorialId').val();
             const title = $('#tutorialTitle').val();
             const description = $('#tutorialDescription').val();
@@ -540,10 +916,14 @@
                 return;
             }
 
-            // Get content from Quill
-            const content = quill.root.innerHTML;
+            let content = quill.root.innerHTML;
+            
+            // Replace all shortcodes with actual tables
+            for (const [shortcode, tableHTML] of Object.entries(tablesData)) {
+                const regex = new RegExp(`\\[${shortcode}\\]`, 'g');
+                content = content.replace(regex, tableHTML);
+            }
 
-            // Create JSON object
             const tutorialObject = {
                 id: parseInt(id),
                 title: title,
@@ -556,22 +936,18 @@
                 content: content
             };
 
-            // Format JSON with proper indentation
             const jsonString = JSON.stringify(tutorialObject, null, 2);
 
-            // Display JSON
             $('#jsonCode').text(jsonString);
             $('#jsonOutput').slideDown();
 
-            // Scroll to JSON output
             $('html, body').animate({
                 scrollTop: $('#jsonOutput').offset().top - 100
             }, 500);
 
-            showNotification('JSON berhasil di-generate!', 'success');
+            showNotification('JSON berhasil di-generate dengan ' + Object.keys(tablesData).length + ' tabel!', 'success');
         }
 
-        // Copy JSON to Clipboard
         function copyJSON() {
             const jsonText = $('#jsonCode').text();
             
@@ -583,9 +959,7 @@
             });
         }
 
-        // Show Notification
         function showNotification(message, type = 'info') {
-            // Remove existing notification
             $('.notification').remove();
 
             const notification = $('<div>')
@@ -606,12 +980,9 @@
             }, 3000);
         }
 
-        // Event Listeners
         $(document).ready(function() {
-            // Start auto-save
             startAutoSave();
 
-            // Check if there's a saved draft
             const hasDraft = localStorage.getItem('tutorialDraft');
             if (hasDraft) {
                 const draft = JSON.parse(hasDraft);
@@ -620,19 +991,23 @@
                 $('#draftInfo').addClass('show');
             }
 
+            $('#generateTableBtn').on('click', generateTablePreview);
+            $('#insertTableBtn').on('click', insertTableShortcode);
             $('#saveDraftBtn').on('click', () => saveDraft(false));
             $('#loadDraftBtn').on('click', loadDraft);
             $('#clearFormBtn').on('click', clearForm);
             $('#generateJsonBtn').on('click', generateJSON);
             $('#copyJsonBtn').on('click', copyJSON);
+            
+            // Make edit and delete functions globally accessible
+            window.editTable = editTable;
+            window.deleteTable = deleteTable;
 
-            // Save draft when leaving page
             $(window).on('beforeunload', function() {
                 saveDraft(true);
             });
         });
 
-        // Cleanup on page unload
         $(window).on('unload', function() {
             stopAutoSave();
         });
