@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeknoMaven - All Links</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.9; }
+        }
+
+        /* Container */
+        .linktree-container {
+            max-width: 680px;
+            width: 100%;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Loading Spinner */
+        .loading-container {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Secret Password Form */
+        .secret-form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .secret-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .secret-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .secret-description {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .secret-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .secret-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .secret-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .secret-input::placeholder {
+            color: #64748b;
+            letter-spacing: normal;
+        }
+
+        .secret-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secret-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .secret-button:active {
+            transform: translateY(0);
+        }
+
+        .secret-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back-button {
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .profile-image-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+            animation: pulse 3s ease-in-out infinite;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 25px 80px rgba(59, 130, 246, 0.6); }
+        }
+
+        .profile-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border: 3px solid #1e293b;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .profile-badge.secret {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-title {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .profile-description {
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Secret Badge Indicator */
+        .secret-indicator {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Stats */
+        .stats-section {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+        }
+
+        /* Links Section */
+        .links-section {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-item:hover::before {
+            left: 100%;
+        }
+
+        .link-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .link-item:active {
+            transform: translateY(-2px);
+        }
+
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .link-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.3rem;
+        }
+
+        .link-description {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .link-arrow {
+            font-size: 1.2rem;
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+
+        .link-item:hover .link-arrow {
+            transform: translateX(5px);
+            color: #3b82f6;
+        }
+
+        .link-item:hover .link-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Social Links */
+        .social-section {
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Logout Button */
+        .logout-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-button {
+            padding: 0.8rem 2rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            color: #ef4444;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 0.9rem;
+            animation: fadeIn 0.8s ease-out 0.8s both;
+        }
+
+        .footer-logo {
+            display: inline-block;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(150px);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .retry-button {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .stats-section {
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 0.8rem 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .link-content {
+                gap: 1rem;
+            }
+
+            .link-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .link-title {
+                font-size: 1rem;
+            }
+
+            .link-description {
+                font-size: 0.85rem;
+            }
+
+            .notification {
+                right: 15px;
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .secret-form-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="linktree-container">
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingState">
+            <div class="spinner"></div>
+            <div class="loading-text">Memuat data...</div>
+        </div>
+
+        <!-- Secret Password Form -->
+        <div class="secret-form-container hidden" id="secretForm">
+            <div class="secret-icon">🔐</div>
+            <h2 class="secret-title">Secret Access</h2>
+            <p class="secret-description">
+                Masukkan kunci rahasia untuk mengakses link khusus
+            </p>
+            <div class="secret-input-group">
+                <input 
+                    type="password" 
+                    id="secretInput" 
+                    class="secret-input" 
+                    placeholder="Masukkan kunci..."
+                    autocomplete="off"
+                >
+            </div>
+            <button class="secret-button" id="secretSubmit">
+                🔓 Buka Akses
+            </button>
+            <button class="back-button" id="backButton">
+                ← Kembali ke Halaman Utama
+            </button>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-container hidden" id="errorState">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title">Terjadi Kesalahan</h2>
+            <p class="error-message" id="errorMessage">
+                Gagal memuat data. Pastikan Apps Script sudah dikonfigurasi dengan benar.
+            </p>
+            <button class="retry-button" onclick="loadData()">
+                🔄 Coba Lagi
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="hidden">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-image-wrapper">
+                    <div class="profile-image">⚡</div>
+                    <div class="profile-badge" id="profileBadge">✓</div>
+                </div>
+                <h1 class="profile-name">TeknoMaven</h1>
+                <p class="profile-title">Technology & Innovation Hub</p>
+                <p class="profile-description">
+                    Solusi teknologi terdepan untuk bisnis digital Anda. Spesialis dalam pengembangan web, mobile apps, dan konsultasi IT.
+                </p>
+                <div class="secret-indicator hidden" id="secretIndicator">
+                    🔑 Secret Access Mode
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1200+</span>
+                    <span class="stat-label">Clients</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Courses</span>
+                </div>
+            </div>
+
+            <!-- Main Links -->
+            <div class="links-section">
+                <h2 class="section-title">🔗 Quick Links</h2>
+                <div id="quickLinksContainer"></div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="social-section">
+                <h2 class="section-title">💬 Connect With Us</h2>
+                <div class="social-links" id="socialLinksContainer"></div>
+            </div>
+
+            <!-- Logout Button (only shown in secret mode) -->
+            <div class="logout-section hidden" id="logoutSection">
+                <button class="logout-button" id="logoutButton">
+                    🚪 Keluar dari Secret Access
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-logo">TeknoMaven</div>
+                <div>© 2025 TeknoMaven. All rights reserved.</div>
+                <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+                    Made with ❤️ in Indonesia
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - GANTI DENGAN URL APPS SCRIPT ANDA
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOHpMNSg2kc0ViOuyIrhgtcib69WF719xW3AO8D5oNEbm1bnyXzehZI1ldhcL71aMc/exec';
+        
+        // LocalStorage key
+        const STORAGE_KEY = 'teknomaven_secret_key';
+        
+        $(document).ready(function() {
+            // Create particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                const particleCount = 60;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's',
+                        animationDuration: (Math.random() * 4 + 4) + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                const results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            // Get stored secret key
+            function getStoredKey() {
+                try {
+                    return localStorage.getItem(STORAGE_KEY);
+                } catch (e) {
+                    console.error('localStorage not available:', e);
+                    return null;
+                }
+            }
+
+            // Store secret key
+            function storeKey(key) {
+                try {
+                    if (key) {
+                        localStorage.setItem(STORAGE_KEY, key);
+                    } else {
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                } catch (e) {
+                    console.error('localStorage not available:', e);
+                }
+            }
+
+            // Clear secret key
+            function clearStoredKey() {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                } catch (e) {
+                    console.error('localStorage not available:', e);
+                }
+            }
+
+            // Check if secret mode
+            const isSecretMode = getUrlParameter('secret') === 'true';
+            const storedKey = getStoredKey();
+
+            // Load data from Apps Script
+            window.loadData = function() {
+                // Check if we should show secret form
+                if (isSecretMode && !storedKey) {
+                    showSecretForm();
+                    return;
+                }
+
+                showLoading();
+
+                const url = storedKey 
+                    ? `${APPS_SCRIPT_URL}?key=${encodeURIComponent(storedKey)}`
+                    : APPS_SCRIPT_URL;
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.error) {
+                            // If error with stored key, clear it and show error
+                            if (storedKey) {
+                                clearStoredKey();
+                                showError('Kunci tidak valid. Silakan masukkan kunci yang benar.');
+                                setTimeout(() => {
+                                    window.location.href = window.location.pathname + '?secret=true';
+                                }, 2000);
+                            } else {
+                                showError(data.error);
+                            }
+                            return;
+                        }
+                        renderContent(data);
+                        showMainContent(!!storedKey);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading data:', error);
+                        showError('Gagal memuat data dari server. Pastikan Apps Script URL sudah benar.');
+                    }
+                });
+            };
+
+            // Show/Hide states
+            function showLoading() {
+                $('#loadingState').removeClass('hidden');
+                $('#secretForm').addClass('hidden');
+                $('#errorState').addClass('hidden');
+                $('#mainContent').addClass('hidden');
+            }
+
+            function showSecretForm() {
+                $('#loadingState').addClass('hidden');
+                $('#secretForm').removeClass('hidden');
+                $('#errorState').addClass('hidden');
+                $('#mainContent').addClass('hidden');
+                
+                // Clear any existing parameter
+                if (window.history.replaceState) {
+                    window.history.replaceState({}, document.title, window.location.pathname + '?secret=true');
+                }
+            }
+
+            function showError(message) {
+                $('#loadingState').addClass('hidden');
+                $('#secretForm').addClass('hidden');
+                $('#errorState').removeClass('hidden');
+                $('#mainContent').addClass('hidden');
+                $('#errorMessage').text(message);
+            }
+
+            function showMainContent(isSecretAccess) {
+                $('#loadingState').addClass('hidden');
+                $('#secretForm').addClass('hidden');
+                $('#errorState').addClass('hidden');
+                $('#mainContent').removeClass('hidden');
+
+                if (isSecretAccess) {
+                    $('#profileBadge').addClass('secret').text('🔑');
+                    $('#secretIndicator').removeClass('hidden');
+                    $('#logoutSection').removeClass('hidden');
+                    
+                    // Clear URL parameter
+                    if (window.history.replaceState) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } else {
+                    $('#profileBadge').removeClass('secret').text('✓');
+                    $('#secretIndicator').addClass('hidden');
+                    $('#logoutSection').addClass('hidden');
+                }
+            }
+
+            // Render content
+            function renderContent(data) {
+                // Render Quick Links
+                const quickLinksContainer = $('#quickLinksContainer');
+                quickLinksContainer.empty();
+
+                if (data.quickLinks && data.quickLinks.length > 0) {
+                    data.quickLinks.forEach(link => {
+                        const linkItem = $(`
+                            <div class="link-item" data-url="${link.url}">
+                                <div class="link-content">
+                                    <div class="link-icon">${link.icon || '🔗'}</div>
+                                    <div class="link-info">
+                                        <div class="link-title">${link.title}</div>
+                                        <div class="link-description">${link.description || ''}</div>
+                                    </div>
+                                    <div class="link-arrow">→</div>
+                                </div>
+                            </div>
+                        `);
+                        
+                        linkItem.click(function() {
+                            openLink($(this).data('url'), link.title);
+                        });
+
+                        quickLinksContainer.append(linkItem);
+                    });
+                } else {
+                    quickLinksContainer.html('<p style="text-align: center; color: #64748b;">Tidak ada quick links tersedia</p>');
+                }
+
+                // Render Social Links
+                const socialLinksContainer = $('#socialLinksContainer');
+                socialLinksContainer.empty();
+
+                if (data.socialLinks && data.socialLinks.length > 0) {
+                    data.socialLinks.forEach(link => {
+                        const socialLink = $(`
+                            <div class="social-link" title="${link.title}" data-url="${link.url}">
+                                ${link.icon || '🔗'}
+                            </div>
+                        `);
+
+                        socialLink.click(function() {
+                            openLink($(this).data('url'), link.title);
+                        });
+
+                        socialLinksContainer.append(socialLink);
+                    });
+                } else {
+                    socialLinksContainer.html('<p style="text-align: center; color: #64748b; width: 100%;">Tidak ada social links tersedia</p>');
+                }
+            }
+
+            // Open link function
+            function openLink(url, title) {
+                if (!url) return;
+                
+                showNotification(`🚀 Membuka ${title || 'link'}...`);
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                }, 300);
+            }
+
+            // Secret form handling
+            $('#secretSubmit').click(function() {
+                const secretValue = $('#secretInput').val().trim();
+                
+                if (!secretValue) {
+                    showNotification('❌ Kunci tidak boleh kosong', 'error');
+                    return;
+                }
+
+                // Store key in localStorage
+                storeKey(secretValue);
+                
+                // Show success message and reload
+                showNotification('✅ Kunci tersimpan, memuat data...', 'success');
+                
+                setTimeout(() => {
+                    // Reload data with stored key
+                    loadData();
+                }, 1000);
+            });
+
+            // Secret input enter key
+            $('#secretInput').keypress(function(e) {
+                if (e.which === 13) {
+                    $('#secretSubmit').click();
+                }
+            });
+
+            // Back button
+            $('#backButton').click(function() {
+                clearStoredKey();
+                window.location.href = window.location.pathname;
+            });
+
+            // Logout button
+            $('#logoutButton').click(function() {
+                clearStoredKey();
+                showNotification('👋 Keluar dari secret access...', 'success');
+                setTimeout(() => {
+                    window.location.href = window.location.pathname;
+                }, 1000);
+            });
+
+            // Show notification
+            function showNotification(message, type = 'success') {
+                $('.notification').remove();
+
+                const notification = $(`
+                    <div class="notification ${type}">
+                        <span>${message}</span>
+                    </div>
+                `);
+
+                $('body').append(notification);
+
+                setTimeout(() => {
+                    notification.addClass('show');
+                }, 100);
+
+                setTimeout(() => {
+                    notification.removeClass('show');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 2000);
+            }
+
+            // Add parallax effect on mouse move
+            $(document).mousemove(function(e) {
+                const moveX = (e.pageX * -1 / 50);
+                const moveY = (e.pageY * -1 / 50);
+                $('.particles').css('transform', `translate(${moveX}px, ${moveY}px)`);
+            });
+
+            // Initialize
+            createParticles();
+            loadData();
+        });
+    </script>
+</body>
+</html>
