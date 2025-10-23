@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Stack Web Development - TeknoMaven</title>
+    <link rel="icon" href="data:text/plain;base64,4pyh" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Password Modal Styles */
+        #passwordModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .password-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .password-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .password-header h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .password-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-submit {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #mainContent {
+            display: none;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.8);
+            border-right: 1px solid rgba(226, 232, 240, 0.5);
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .progress-percentage {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(226, 232, 240, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .modules-list {
+            padding: 0;
+        }
+
+        .module-section {
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .module-header {
+            padding: 1rem 1.5rem;
+            background: rgba(248, 250, 252, 0.8);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .module-header:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .module-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .module-toggle {
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+
+        .module-header.expanded .module-toggle {
+            transform: rotate(90deg);
+        }
+
+        .lessons-list {
+            background: rgba(255, 255, 255, 0.9);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .lessons-list.expanded {
+            max-height: 500px;
+        }
+
+        .lesson-item {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+            padding-left: 2.5rem;
+        }
+
+        .lesson-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+        }
+
+        .lesson-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-name {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+
+        .lesson-duration {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .lesson-status {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        .content-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breadcrumb {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .btn-toggle-syllabus {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-toggle-syllabus:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Syllabus View */
+        .syllabus-view {
+            padding: 3rem;
+        }
+
+        .syllabus-hero {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .syllabus-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .syllabus-hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .btn-start-course {
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #3b82f6;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-start-course:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .course-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .syllabus-modules {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .syllabus-modules h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #1e293b;
+        }
+
+        .syllabus-module-card {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+
+        .syllabus-module-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .module-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .module-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .module-card-lessons {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .module-card-description {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* Lesson View */
+        .lesson-view {
+            display: flex;
+            height: calc(100vh - 140px);
+        }
+
+        .lesson-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .lesson-details {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .lesson-details h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .lesson-description {
+            line-height: 1.8;
+            color: #475569;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-objectives {
+            background: rgba(59, 130, 246, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .lesson-objectives h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .objectives-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objectives-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #475569;
+        }
+
+        .objectives-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: 700;
+        }
+
+        .lesson-navigation {
+            max-width: 1000px;
+            margin: 2rem auto 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 1rem 2rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #1e293b;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Materials Sidebar */
+        .materials-sidebar {
+            width: 350px;
+            background: white;
+            border-left: 1px solid rgba(226, 232, 240, 0.5);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .materials-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .materials-header span {
+            font-size: 1.5rem;
+        }
+
+        .materials-header h4 {
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+
+        .material-item {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .material-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateX(-5px);
+        }
+
+        .material-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .material-icon {
+            font-size: 2rem;
+        }
+
+        .material-details h5 {
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+
+        .material-details span {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .btn-download-material {
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download-material:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #0891b2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                max-height: 50vh;
+            }
+
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .lesson-view {
+                flex-direction: column;
+            }
+
+            .materials-sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid rgba(226, 232, 240, 0.5);
+            }
+
+            .video-container iframe {
+                height: 300px;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Modal -->
+    <div id="passwordModal">
+        <div class="password-container">
+            <div class="password-header">
+                <h2>🔐 Akses Course</h2>
+                <p>Masukkan kode akses untuk melanjutkan ke course</p>
+            </div>
+            <form id="passwordForm" class="password-form">
+                <div class="form-group">
+                    <label for="coursePassword">Kode Akses Course</label>
+                    <input 
+                        type="password" 
+                        id="coursePassword" 
+                        placeholder="Masukkan kode akses" 
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+                <div class="error-message" id="errorMessage">
+                    ❌ Kode akses tidak valid. Silakan coba lagi.
+                </div>
+                <button type="submit" class="btn-submit" id="btnSubmit">
+                    Masuk ke Course
+                </button>
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem; color: #64748b;">Memuat course...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Animated Background -->
+        <div class="particles" id="particles"></div>
+
+        <!-- Header -->
+        <header>
+            <nav>
+                <div class="logo">TeknoMaven</div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3 class="course-title" id="courseTitle">Loading...</h3>
+                    <div class="course-meta">
+                        <span id="courseDuration">⏱️ Loading...</span>
+                        <span id="courseLessons">📚 Loading...</span>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span class="progress-title">Progress Anda</span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="modules-list" id="modulesList">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <div class="content-header">
+                    <div class="breadcrumb" id="breadcrumb">Course Overview</div>
+                    <button class="btn-toggle-syllabus" id="toggleSyllabus">📋 View Syllabus</button>
+                </div>
+
+                <!-- Syllabus View -->
+                <div class="syllabus-view" id="syllabusView">
+                    <div class="syllabus-hero">
+                        <h1 id="syllabusTitle">Loading Course...</h1>
+                        <p id="syllabusDescription">Loading description...</p>
+                        <button class="btn-start-course" onclick="startCourse()">🚀 Mulai Course</button>
+                    </div>
+
+                    <div class="course-stats" id="courseStats">
+                        <!-- Stats will be dynamically loaded -->
+                    </div>
+
+                    <div class="syllabus-modules">
+                        <h2>📚 Course Modules</h2>
+                        <div id="syllabusModulesList">
+                            <!-- Modules will be dynamically loaded -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson View -->
+                <div class="lesson-view" id="lessonView" style="display: none;">
+                    <div class="lesson-content">
+                        <div class="video-container" id="videoContainer">
+                            <!-- Video will be loaded here -->
+                        </div>
+
+                        <div class="lesson-details" id="lessonDetails">
+                            <!-- Lesson details will be loaded here -->
+                        </div>
+
+                        <div class="lesson-navigation" id="lessonNavigation">
+                            <!-- Navigation will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="materials-sidebar" id="materialsSidebar">
+                        <!-- Materials will be loaded here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // GANTI URL INI DENGAN URL APPS SCRIPT ANDA
+            const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzc7q2yt3tgIPJ20AKL-qxXg0WsE03VW_tP8S89YynI6bF5RT-lxU8cyieZTIhB6pN8/exec';
+            
+            let courseData = null;
+            let currentLesson = null;
+            let currentView = 'syllabus';
+            let completedLessons = new Set();
+
+            // Password Form Submit
+            $('#passwordForm').submit(function(e) {
+                e.preventDefault();
+                
+                const password = $('#coursePassword').val().trim();
+                const $errorMessage = $('#errorMessage');
+                const $btnSubmit = $('#btnSubmit');
+                const $loadingSpinner = $('#loadingSpinner');
+                
+                // Hide error message
+                $errorMessage.removeClass('show');
+                
+                // Show loading
+                $btnSubmit.prop('disabled', true).text('Memverifikasi...');
+                $loadingSpinner.show();
+                
+                // Fetch course data with password
+                $.ajax({
+                    url: APPS_SCRIPT_URL + '?coursekey=' + encodeURIComponent(password),
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.data) {
+                            courseData = response.data;
+                            
+                            // Hide password modal
+                            $('#passwordModal').fadeOut(300, function() {
+                                $(this).remove();
+                            });
+                            
+                            // Show main content
+                            $('#mainContent').fadeIn(300);
+                            
+                            // Initialize page
+                            initializePage();
+                        } else {
+                            showError(response.message || 'Kode akses tidak valid');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        showError('Kode akses tidak valid atau terjadi kesalahan koneksi');
+                    },
+                    complete: function() {
+                        $btnSubmit.prop('disabled', false).text('Masuk ke Course');
+                        $loadingSpinner.hide();
+                    }
+                });
+            });
+
+            function showError(message) {
+                const $errorMessage = $('#errorMessage');
+                $errorMessage.text('❌ ' + message);
+                $errorMessage.addClass('show');
+                
+                // Shake animation for password input
+                $('#coursePassword').css('animation', 'shake 0.5s ease');
+                setTimeout(function() {
+                    $('#coursePassword').css('animation', '');
+                }, 500);
+            }
+
+            // Create animated particles
+            function createParticles() {
+                const particlesContainer = $('#particles');
+                for (let i = 0; i < 30; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 6 + 's'
+                    });
+                    particlesContainer.append(particle);
+                }
+            }
+
+            // Initialize page with course data
+            function initializePage() {
+                if (!courseData) return;
+
+                const course = courseData.course;
+                
+                // Update header
+                $('#courseTitle').text(course.title);
+                $('#courseDuration').html(`⏱️ ${course.duration}`);
+                $('#courseLessons').html(`📚 ${course.lessons} Lessons`);
+
+                // Update syllabus view
+                $('#syllabusTitle').text(course.title);
+                $('#syllabusDescription').text(course.description);
+
+                // Render course stats
+                renderCourseStats(course);
+
+                // Render modules in sidebar
+                renderModulesSidebar(course.modules);
+
+                // Render modules in syllabus
+                renderModulesSyllabus(course.modules);
+
+                // Show syllabus view by default
+                showSyllabusView();
+            }
+
+            // Render course stats
+            function renderCourseStats(course) {
+                const stats = [
+                    { icon: '📚', value: course.modules.length, label: 'Modules' },
+                    { icon: '🎥', value: course.lessons, label: 'Video Lessons' },
+                    { icon: '⏱️', value: course.duration, label: 'Total Duration' },
+                    { icon: '🎯', value: 'Intermediate', label: 'Level' }
+                ];
+
+                const statsHtml = stats.map(stat => `
+                    <div class="stat-card">
+                        <div class="stat-icon">${stat.icon}</div>
+                        <div class="stat-value">${stat.value}</div>
+                        <div class="stat-label">${stat.label}</div>
+                    </div>
+                `).join('');
+
+                $('#courseStats').html(statsHtml);
+            }
+
+            // Render modules in sidebar
+            function renderModulesSidebar(modules) {
+                const modulesHtml = modules.map((module, index) => `
+                    <div class="module-section">
+                        <div class="module-header" onclick="toggleModule(${index + 1})">
+                            <span class="module-title">${index + 1}. ${module.title}</span>
+                            <span class="module-toggle">▶</span>
+                        </div>
+                        <div class="lessons-list" id="module${index + 1}">
+                            ${module.lessons.map(lesson => `
+                                <div class="lesson-item" data-lesson-id="${lesson.id}" onclick="selectLesson('${lesson.id}')">
+                                    <div class="lesson-info">
+                                        <div class="lesson-name">${lesson.title}</div>
+                                        <div class="lesson-duration">⏱️ ${lesson.duration}</div>
+                                    </div>
+                                    <span class="lesson-status" id="status-${lesson.id}">⭕</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+
+                $('#modulesList').html(modulesHtml);
+            }
+
+            // Render modules in syllabus
+            function renderModulesSyllabus(modules) {
+                const modulesHtml = modules.map((module, index) => `
+                    <div class="syllabus-module-card">
+                        <div class="module-card-header">
+                            <h3 class="module-card-title">${index + 1}. ${module.title}</h3>
+                            <span class="module-card-lessons">${module.lessons.length} lessons</span>
+                        </div>
+                        <p class="module-card-description">${module.description}</p>
+                    </div>
+                `).join('');
+
+                $('#syllabusModulesList').html(modulesHtml);
+            }
+
+            // Toggle module expansion
+            window.toggleModule = function(moduleNumber) {
+                const moduleElement = $(`#module${moduleNumber}`);
+                const moduleHeader = moduleElement.prev('.module-header');
+                
+                moduleElement.toggleClass('expanded');
+                moduleHeader.toggleClass('expanded');
+            };
+
+            // Start course
+            window.startCourse = function() {
+                // Find first lesson
+                const firstLesson = courseData.course.modules[0].lessons[0];
+                selectLesson(firstLesson.id);
+                
+                // Expand first module
+                toggleModule(1);
+            };
+
+            // Select lesson
+            window.selectLesson = function(lessonId) {
+                // Find lesson data
+                let selectedLesson = null;
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        if (lesson.id === lessonId) {
+                            selectedLesson = lesson;
+                        }
+                    });
+                });
+
+                if (!selectedLesson) return;
+
+                currentLesson = selectedLesson;
+                
+                // Update active states
+                $('.lesson-item').removeClass('active');
+                $(`.lesson-item[data-lesson-id="${lessonId}"]`).addClass('active');
+                
+                // Switch to lesson view
+                showLessonView();
+                renderLessonContent();
+                updateBreadcrumb();
+            };
+
+            // Show lesson view
+            function showLessonView() {
+                $('#syllabusView').hide();
+                $('#lessonView').show();
+                currentView = 'lesson';
+            }
+
+            // Show syllabus view
+            function showSyllabusView() {
+                $('#syllabusView').show();
+                $('#lessonView').hide();
+                currentView = 'syllabus';
+                $('#breadcrumb').text('Course Overview');
+            }
+
+            // Render lesson content
+            function renderLessonContent() {
+                if (!currentLesson) return;
+
+                // Render video
+                const videoContainer = $('#videoContainer');
+                videoContainer.html(`
+                    <iframe src="https://www.youtube.com/embed/${currentLesson.youtubeId}?autoplay=1" 
+                            allowfullscreen allow="autoplay"></iframe>
+                `);
+
+                // Render lesson details
+                const lessonDetails = $('#lessonDetails');
+                lessonDetails.html(`
+                    <h2>${currentLesson.title}</h2>
+                    <div class="lesson-meta">
+                        <span>⏱️ ${currentLesson.duration}</span>
+                        <span>📚 ${getCurrentModuleTitle()}</span>
+                        <span>🎯 Intermediate</span>
+                    </div>
+                    <div class="lesson-description">
+                        ${currentLesson.description}
+                    </div>
+                    <div class="lesson-objectives">
+                        <h4>🎯 Learning Objectives</h4>
+                        <ul class="objectives-list">
+                            ${currentLesson.objectives.map(obj => `<li>${obj}</li>`).join('')}
+                        </ul>
+                    </div>
+                `);
+
+                // Render materials
+                const materialsSidebar = $('#materialsSidebar');
+                materialsSidebar.html(`
+                    <div class="materials-header">
+                        <span>📎</span>
+                        <h4>Download Materials</h4>
+                    </div>
+                    ${currentLesson.materials.map(material => `
+                        <div class="material-item">
+                            <div class="material-info">
+                                <span class="material-icon">${getFileIcon(material.type)}</span>
+                                <div class="material-details">
+                                    <h5>${material.name}</h5>
+                                    <span>${material.type} • ${material.size}</span>
+                                </div>
+                            </div>
+                            <button class="btn-download-material" onclick="downloadMaterial('${material.downloadUrl}', '${material.name}')">
+                                Download
+                            </button>
+                        </div>
+                    `).join('')}
+                `);
+
+                // Render navigation
+                renderLessonNavigation();
+            }
+
+            // Get current module title
+            function getCurrentModuleTitle() {
+                let moduleTitle = '';
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        if (lesson.id === currentLesson.id) {
+                            moduleTitle = module.title;
+                        }
+                    });
+                });
+                return moduleTitle;
+            }
+
+            // Get file icon
+            function getFileIcon(type) {
+                const icons = {
+                    'PDF': '📄',
+                    'ZIP': '📦',
+                    'DOC': '📝',
+                    'PPT': '📊'
+                };
+                return icons[type] || '📄';
+            }
+
+            // Download material
+            window.downloadMaterial = function(url, filename) {
+                // Mark lesson as completed when downloading materials
+                if (currentLesson) {
+                    markLessonCompleted(currentLesson.id);
+                }
+                
+                // Simulate download
+                alert(`Downloading ${filename}...`);
+                
+                // In real implementation, handle actual download
+                // window.open(url, '_blank');
+            };
+
+            // Mark lesson completed
+            function markLessonCompleted(lessonId) {
+                completedLessons.add(lessonId);
+                $(`#status-${lessonId}`).text('✅');
+                updateProgress();
+            }
+
+            // Update progress
+            function updateProgress() {
+                const totalLessons = courseData.course.modules.reduce((total, module) => total + module.lessons.length, 0);
+                const completedCount = completedLessons.size;
+                const percentage = Math.round((completedCount / totalLessons) * 100);
+                
+                $('#progressPercentage').text(`${percentage}%`);
+                $('#progressFill').css('width', `${percentage}%`);
+            }
+
+            // Render lesson navigation
+            function renderLessonNavigation() {
+                const lessonNavigation = $('#lessonNavigation');
+                const { prevLesson, nextLesson } = getAdjacentLessons();
+                
+                lessonNavigation.html(`
+                    <button class="nav-btn" ${!prevLesson ? 'disabled' : ''} onclick="selectLesson('${prevLesson?.id || ''}')">
+                        ← Previous Lesson
+                    </button>
+                    <button class="nav-btn" onclick="markLessonCompleted('${currentLesson.id}')">
+                        ✓ Mark Complete
+                    </button>
+                    <button class="nav-btn" ${!nextLesson ? 'disabled' : ''} onclick="selectLesson('${nextLesson?.id || ''}')">
+                        Next Lesson →
+                    </button>
+                `);
+            }
+
+            // Get adjacent lessons
+            function getAdjacentLessons() {
+                const allLessons = [];
+                courseData.course.modules.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        allLessons.push(lesson);
+                    });
+                });
+
+                const currentIndex = allLessons.findIndex(lesson => lesson.id === currentLesson.id);
+                return {
+                    prevLesson: currentIndex > 0 ? allLessons[currentIndex - 1] : null,
+                    nextLesson: currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null
+                };
+            }
+
+            // Update breadcrumb
+            function updateBreadcrumb() {
+                if (currentLesson) {
+                    const moduleTitle = getCurrentModuleTitle();
+                    $('#breadcrumb').text(`${moduleTitle} > ${currentLesson.title}`);
+                }
+            }
+
+            // Toggle syllabus view
+            $('#toggleSyllabus').click(function() {
+                if (currentView === 'syllabus') {
+                    return;
+                } else {
+                    showSyllabusView();
+                }
+            });
+
+            // Header scroll effect
+            $(window).scroll(function() {
+                const header = $('header');
+                if ($(window).scrollTop() > 100) {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 2px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    header.css({
+                        'background': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': 'none'
+                    });
+                }
+            });
+
+            // Initialize particles
+            createParticles();
+        });
+    </script>
+</body>
+</html>
