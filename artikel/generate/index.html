@@ -194,6 +194,16 @@
             border-radius: 0 0 10px 10px;
         }
 
+        /* Custom button for image URL */
+        .ql-toolbar .ql-imageUrl {
+            width: auto !important;
+        }
+
+        .ql-toolbar .ql-imageUrl::after {
+            content: '🖼️';
+            font-size: 18px;
+        }
+
         .table-builder {
             background: rgba(59, 130, 246, 0.05);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -241,67 +251,61 @@
             border: 2px solid rgba(226, 232, 240, 0.8);
             border-radius: 10px;
             padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
+            max-height: 400px;
+            overflow: auto;
+            display: none;
+            margin-bottom: 1rem;
         }
 
-        .preview-table {
+        .table-preview table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .preview-table td,
-        .preview-table th {
-            border: 1px solid #e2e8f0;
-            padding: 0.5rem;
-            min-width: 100px;
+        .table-preview th,
+        .table-preview td {
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 0.8rem;
+            text-align: left;
         }
 
-        .preview-table th {
-            background: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .preview-table input {
-            width: 100%;
-            border: none;
-            padding: 0.3rem;
-            background: transparent;
-            font-size: 0.9rem;
-        }
-
-        .preview-table input:focus {
-            outline: 2px solid #3b82f6;
-            border-radius: 4px;
-        }
-
-        .shortcode-preview {
+        .table-preview th {
             background: rgba(59, 130, 246, 0.1);
-            border: 2px dashed #3b82f6;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
+            font-weight: 600;
             color: #3b82f6;
-            font-size: 0.9rem;
+        }
+
+        .table-preview td {
+            background: white;
+        }
+
+        .table-preview input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 5px;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
         }
 
         .tables-list {
-            margin-top: 1.5rem;
+            display: none;
         }
 
-        .tables-list h4 {
-            color: #475569;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+        .tables-list.show {
+            display: block;
         }
 
         .table-item {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -310,15 +314,15 @@
         .table-item-info {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .table-shortcode {
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             background: rgba(59, 130, 246, 0.1);
-            padding: 0.25rem 0.5rem;
-            border-radius: 5px;
             color: #3b82f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
             font-weight: 600;
         }
 
@@ -328,37 +332,40 @@
         }
 
         .btn-icon {
-            padding: 0.4rem 0.8rem;
+            padding: 0.5rem 1rem;
             font-size: 0.85rem;
         }
 
         .json-output {
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(226, 232, 240, 0.5);
+            background: #282c34;
             border-radius: 15px;
             padding: 2rem;
+            display: none;
             margin-top: 2rem;
         }
 
-        .json-output h2 {
-            color: #3b82f6;
+        .json-output h3 {
+            color: #61dafb;
             margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
 
-        .json-output pre {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
+        .json-code-container {
+            background: #1e1e1e;
             border-radius: 10px;
-            overflow-x: auto;
-            max-height: 500px;
-            overflow-y: auto;
+            padding: 1.5rem;
+            max-height: 600px;
+            overflow: auto;
+            position: relative;
         }
 
-        .json-output code {
-            color: #06b6d4;
+        .json-code-container pre {
+            margin: 0;
+            color: #abb2bf;
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
-            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .draft-info {
@@ -366,90 +373,201 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 10px;
             padding: 1rem;
-            margin-top: 1rem;
-            color: #059669;
+            margin-bottom: 1rem;
             display: none;
+            align-items: center;
+            gap: 1rem;
         }
 
         .draft-info.show {
-            display: block;
+            display: flex;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+        .draft-info-icon {
+            font-size: 1.5rem;
+        }
+
+        .draft-info-text {
+            flex: 1;
+        }
+
+        .draft-info-text strong {
+            color: #059669;
+        }
+
+        .draft-info-text p {
+            font-size: 0.85rem;
+            color: #475569;
+            margin-top: 0.3rem;
         }
 
         .notification {
             position: fixed;
-            top: 100px;
-            right: 20px;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 15px;
             padding: 1rem 1.5rem;
-            border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transform: translateX(400px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(150%);
             transition: transform 0.3s ease;
-            max-width: 400px;
+            z-index: 10000;
+            min-width: 300px;
         }
 
         .notification.show {
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
         .notification.success {
-            background: linear-gradient(135deg, #10b981, #059669);
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
         }
 
         .notification.info {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-left: 4px solid #3b82f6;
         }
 
-        .helper-text {
-            background: rgba(59, 130, 246, 0.1);
-            border-left: 3px solid #3b82f6;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 5px;
-            color: #475569;
-            font-size: 0.9rem;
+        /* Modal styles for Image URL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
         }
 
-        @media (max-width: 1024px) {
-            .form-grid {
-                grid-template-columns: 1fr;
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #3b82f6;
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-end;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
         @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
             .page-title {
                 font-size: 2rem;
             }
 
-            .header-actions {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .btn {
-                font-size: 0.85rem;
-                padding: 0.6rem 1.2rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            #editor {
-                height: 400px;
-            }
-
             .table-dimension-controls {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .dimension-btn-group {
+                width: 100%;
             }
         }
     </style>
@@ -457,322 +575,483 @@
 <body>
     <header>
         <div class="header-content">
-            <div class="logo">Tutorial Creator</div>
+            <div class="logo">📚 TeknoMaven Creator</div>
             <div class="header-actions">
-                <button class="btn btn-secondary" id="loadDraftBtn">Load Draft</button>
-                <a href="/course" class="btn btn-secondary">Kembali</a>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">⬅ Kembali</button>
             </div>
         </div>
     </header>
 
     <div class="container">
-        <h1 class="page-title">Buat Tutorial Baru</h1>
+        <h1 class="page-title">Tutorial JSON Creator</h1>
+
+        <div class="draft-info" id="draftInfo">
+            <span class="draft-info-icon">💾</span>
+            <div class="draft-info-text">
+                <strong>Draft Tersimpan</strong>
+                <p>Terakhir disimpan: <span id="draftTime">-</span></p>
+            </div>
+        </div>
 
         <div class="form-grid">
             <div class="form-section">
-                <h2>Informasi Dasar</h2>
+                <h2>📝 Informasi Tutorial</h2>
+                
                 <div class="form-group">
-                    <label for="tutorialId">ID Tutorial</label>
-                    <input type="number" id="tutorialId" placeholder="Contoh: 9" required>
+                    <label>ID Tutorial *</label>
+                    <input type="number" id="tutorialId" placeholder="Contoh: 1">
                 </div>
+
                 <div class="form-group">
-                    <label for="tutorialTitle">Judul Tutorial</label>
-                    <input type="text" id="tutorialTitle" placeholder="Contoh: Docker & Containerization" required>
+                    <label>Judul Tutorial *</label>
+                    <input type="text" id="tutorialTitle" placeholder="Contoh: Cara Install Docker">
                 </div>
+
                 <div class="form-group">
-                    <label for="tutorialDescription">Deskripsi</label>
-                    <textarea id="tutorialDescription" rows="4" placeholder="Deskripsi singkat tentang tutorial..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="tutorialIcon">Icon (Emoji)</label>
-                    <input type="text" id="tutorialIcon" placeholder="Contoh: 🐳" maxlength="2">
+                    <label>Deskripsi *</label>
+                    <textarea id="tutorialDescription" rows="4" placeholder="Deskripsi singkat tutorial..."></textarea>
                 </div>
             </div>
 
             <div class="form-section">
-                <h2>Kategori & Detail</h2>
+                <h2>🎯 Detail Tutorial</h2>
+                
                 <div class="form-group">
-                    <label for="tutorialCategory">Kategori</label>
-                    <select id="tutorialCategory" required>
-                        <option value="">Pilih Kategori</option>
-                        <option value="HTML">HTML</option>
-                        <option value="CSS">CSS</option>
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="React">React</option>
-                        <option value="Backend">Backend</option>
-                        <option value="Python">Python</option>
-                        <option value="Database">Database</option>
-                        <option value="DevOps">DevOps</option>
-                        <option value="Tools">Tools</option>
-                        <option value="Apps Script">Apps Script</option>
+                    <label>Kategori *</label>
+                    <select id="tutorialCategory">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="programming">Programming</option>
+                        <option value="devops">DevOps</option>
+                        <option value="database">Database</option>
+                        <option value="web-dev">Web Development</option>
+                        <option value="mobile-dev">Mobile Development</option>
+                        <option value="cloud">Cloud Computing</option>
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label for="tutorialLevel">Level Kesulitan</label>
-                    <select id="tutorialLevel" required>
-                        <option value="">Pilih Level</option>
-                        <option value="beginner">Pemula</option>
-                        <option value="intermediate">Menengah</option>
-                        <option value="advanced">Mahir</option>
+                    <label>Level *</label>
+                    <select id="tutorialLevel">
+                        <option value="">-- Pilih Level --</option>
+                        <option value="Pemula">Pemula</option>
+                        <option value="Menengah">Menengah</option>
+                        <option value="Lanjutan">Lanjutan</option>
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label for="tutorialDuration">Durasi</label>
-                    <input type="text" id="tutorialDuration" placeholder="Contoh: 110 menit" required>
+                    <label>Icon (Emoji)</label>
+                    <input type="text" id="tutorialIcon" placeholder="Contoh: 🐳">
                 </div>
+
                 <div class="form-group">
-                    <label for="tutorialLessons">Jumlah Lessons</label>
-                    <input type="number" id="tutorialLessons" placeholder="Contoh: 28" required>
+                    <label>Durasi *</label>
+                    <input type="text" id="tutorialDuration" placeholder="Contoh: 45 menit">
+                </div>
+
+                <div class="form-group">
+                    <label>Jumlah Pelajaran *</label>
+                    <input type="number" id="tutorialLessons" placeholder="Contoh: 5">
                 </div>
             </div>
 
             <div class="form-section full-width">
-                <h2>Konten Tutorial</h2>
-                <div class="helper-text">
-                    <strong>Fitur Editor:</strong><br>
-                    Gunakan toolbar untuk formatting text. Untuk tabel, gunakan Table Builder di bawah - tabel akan diinsert sebagai shortcode [TABLE_X] dan otomatis di-replace saat generate JSON.
-                </div>
-                
+                <h2>✏️ Konten Tutorial</h2>
+                <div id="editor"></div>
+            </div>
+
+            <div class="form-section full-width">
+                <h2>📊 Table Builder</h2>
                 <div class="table-builder">
-                    <h3>Table Builder</h3>
+                    <h3>Buat Tabel Baru</h3>
                     <div class="table-dimension-controls">
                         <label>
-                            Baris: <input type="number" id="tableRows" value="3" min="1" max="20">
+                            Baris:
+                            <input type="number" id="tableRows" value="3" min="1" max="20">
                         </label>
                         <label>
-                            Kolom: <input type="number" id="tableCols" value="3" min="1" max="10">
+                            Kolom:
+                            <input type="number" id="tableCols" value="3" min="1" max="10">
                         </label>
                         <div class="dimension-btn-group">
-                            <button class="btn btn-secondary btn-small" id="generateTableBtn">Generate Tabel</button>
-                            <button class="btn btn-primary btn-small" id="insertTableBtn" style="display: none;">Insert Shortcode</button>
+                            <button class="btn btn-primary btn-small" id="generateTableBtn">Generate Preview</button>
                         </div>
                     </div>
-
-                    <div class="table-preview" id="tablePreview" style="display: none;">
-                        <table class="preview-table" id="previewTable"></table>
-                    </div>
-
-                    <!-- Table List for Editing -->
-                    <div id="tablesList" style="margin-top: 1.5rem;"></div>
                 </div>
 
-                <div id="editor"></div>
+                <div class="table-preview" id="tablePreview"></div>
+
+                <div class="table-actions">
+                    <button class="btn btn-success btn-small" id="insertTableBtn" style="display: none;">Insert Table ke Editor</button>
+                </div>
+
+                <div id="tablesList" class="tables-list"></div>
             </div>
         </div>
 
-        <div class="draft-info" id="draftInfo">
-            Draft tersimpan pada: <span id="draftTime"></span>
+        <div style="display: flex; gap: 1rem; justify-content: center; margin: 2rem 0;">
+            <button class="btn btn-secondary" id="saveDraftBtn">💾 Simpan Draft</button>
+            <button class="btn btn-secondary" id="loadDraftBtn">📂 Muat Draft</button>
+            <button class="btn btn-secondary" id="clearFormBtn">🗑️ Bersihkan Form</button>
+            <button class="btn btn-primary" id="generateJsonBtn">🚀 Generate JSON</button>
         </div>
 
-        <div class="action-buttons">
-            <button class="btn btn-primary" id="saveDraftBtn">Simpan Draft</button>
-            <button class="btn btn-success" id="generateJsonBtn">Generate JSON</button>
-            <button class="btn btn-secondary" id="clearFormBtn">Clear Form</button>
+        <div class="json-output" id="jsonOutput">
+            <h3>📋 JSON Output</h3>
+            <div class="json-code-container">
+                <pre id="jsonCode"></pre>
+            </div>
+            <button class="btn btn-success" id="copyJsonBtn" style="margin-top: 1rem;">📋 Copy JSON</button>
         </div>
+    </div>
 
-        <div class="json-output" id="jsonOutput" style="display: none;">
-            <h2>Generated JSON</h2>
-            <button class="btn btn-primary" id="copyJsonBtn" style="margin-bottom: 1rem;">Copy JSON</button>
-            <pre><code id="jsonCode"></code></pre>
+    <!-- Modal for Image URL -->
+    <div id="imageUrlModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🖼️ Tambah Gambar dari URL</h3>
+                <button class="modal-close" onclick="closeImageUrlModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>URL Gambar *</label>
+                    <input type="url" id="imageUrlInput" placeholder="https://example.com/image.jpg">
+                    <div class="error-message" id="imageUrlError">URL gambar tidak valid</div>
+                </div>
+                <div class="form-group">
+                    <label>Alt Text (Optional)</label>
+                    <input type="text" id="imageAltInput" placeholder="Deskripsi gambar">
+                </div>
+                <div class="form-group">
+                    <label>Lebar Gambar (Optional)</label>
+                    <input type="text" id="imageWidthInput" placeholder="Contoh: 500px atau 100%">
+                </div>
+                <div class="image-preview" id="imagePreviewContainer">
+                    <img id="imagePreview" src="" alt="Preview">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-small" onclick="closeImageUrlModal()">Batal</button>
+                <button class="btn btn-primary btn-small" onclick="insertImageFromUrl()">Insert Gambar</button>
+            </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            hljs.configure({
-                languages: ['javascript', 'html', 'css', 'python', 'json', 'sql', 'bash']
-            });
-        });
-
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': [2, 3, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    ['link'],
-                    ['clean']
-                ],
-                syntax: true
-            },
-            placeholder: 'Tulis konten tutorial di sini...'
-        });
-
-        // Store tables data
+        let quill;
         let tablesData = {};
         let tableCounter = 0;
-        let currentEditingTable = null;
+
+        // Initialize Quill editor with custom toolbar
+        const toolbarOptions = [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image', 'imageUrl'], // Added custom imageUrl button
+            ['clean']
+        ];
+
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: {
+                    container: toolbarOptions,
+                    handlers: {
+                        imageUrl: openImageUrlModal
+                    }
+                }
+            }
+        });
+
+        function openImageUrlModal() {
+            document.getElementById('imageUrlModal').classList.add('show');
+            document.getElementById('imageUrlInput').value = '';
+            document.getElementById('imageAltInput').value = '';
+            document.getElementById('imageWidthInput').value = '';
+            document.getElementById('imagePreviewContainer').classList.remove('show');
+            document.getElementById('imageUrlError').classList.remove('show');
+        }
+
+        function closeImageUrlModal() {
+            document.getElementById('imageUrlModal').classList.remove('show');
+        }
+
+        // Preview image when URL is entered
+        document.getElementById('imageUrlInput').addEventListener('input', function() {
+            const url = this.value.trim();
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewImg = document.getElementById('imagePreview');
+            const errorMsg = document.getElementById('imageUrlError');
+
+            if (url) {
+                // Simple URL validation
+                if (isValidImageUrl(url)) {
+                    previewImg.src = url;
+                    previewImg.onload = function() {
+                        previewContainer.classList.add('show');
+                        errorMsg.classList.remove('show');
+                    };
+                    previewImg.onerror = function() {
+                        previewContainer.classList.remove('show');
+                        errorMsg.classList.add('show');
+                    };
+                } else {
+                    previewContainer.classList.remove('show');
+                    errorMsg.classList.add('show');
+                }
+            } else {
+                previewContainer.classList.remove('show');
+                errorMsg.classList.remove('show');
+            }
+        });
+
+        function isValidImageUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+                const pathname = urlObj.pathname.toLowerCase();
+                return validExtensions.some(ext => pathname.endsWith(ext)) || url.includes('image');
+            } catch {
+                return false;
+            }
+        }
+
+        function insertImageFromUrl() {
+            const url = document.getElementById('imageUrlInput').value.trim();
+            const alt = document.getElementById('imageAltInput').value.trim();
+            const width = document.getElementById('imageWidthInput').value.trim();
+
+            if (!url) {
+                showNotification('Mohon masukkan URL gambar', 'info');
+                return;
+            }
+
+            if (!isValidImageUrl(url)) {
+                document.getElementById('imageUrlError').classList.add('show');
+                return;
+            }
+
+            // Get current cursor position
+            const range = quill.getSelection(true);
+            
+            // Insert the image
+            quill.insertEmbed(range.index, 'image', url);
+            
+            // If width is specified, add custom style
+            if (width) {
+                quill.formatText(range.index, 1, 'width', width);
+            }
+            
+            // Move cursor after the image
+            quill.setSelection(range.index + 1);
+
+            // Add alt text if provided (modify the inserted image)
+            if (alt) {
+                setTimeout(() => {
+                    const imgs = document.querySelectorAll('.ql-editor img');
+                    if (imgs.length > 0) {
+                        imgs[imgs.length - 1].alt = alt;
+                    }
+                }, 100);
+            }
+
+            closeImageUrlModal();
+            showNotification('Gambar berhasil ditambahkan!', 'success');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('imageUrlModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageUrlModal();
+            }
+        });
 
         function generateTablePreview() {
-            const rows = parseInt($('#tableRows').val()) || 3;
-            const cols = parseInt($('#tableCols').val()) || 3;
-            
-            let tableHTML = '<thead><tr>';
-            
-            for (let j = 0; j < cols; j++) {
-                tableHTML += `<th><input type="text" placeholder="Header ${j + 1}" data-row="0" data-col="${j}"></th>`;
+            const rows = parseInt($('#tableRows').val());
+            const cols = parseInt($('#tableCols').val());
+
+            if (rows < 1 || rows > 20 || cols < 1 || cols > 10) {
+                showNotification('Jumlah baris (1-20) dan kolom (1-10) tidak valid!', 'info');
+                return;
             }
-            tableHTML += '</tr></thead><tbody>';
+
+            let tableHTML = '<table id="previewTable">';
             
-            for (let i = 1; i < rows; i++) {
+            // Generate header row
+            tableHTML += '<thead><tr>';
+            for (let i = 0; i < cols; i++) {
+                tableHTML += `<th><input type="text" placeholder="Header ${i + 1}" data-row="0" data-col="${i}"></th>`;
+            }
+            tableHTML += '</tr></thead>';
+            
+            // Generate body rows
+            tableHTML += '<tbody>';
+            for (let i = 1; i <= rows; i++) {
                 tableHTML += '<tr>';
                 for (let j = 0; j < cols; j++) {
-                    tableHTML += `<td><input type="text" placeholder="Data ${i}-${j + 1}" data-row="${i}" data-col="${j}"></td>`;
+                    tableHTML += `<td><input type="text" placeholder="Cell ${i},${j + 1}" data-row="${i}" data-col="${j}"></td>`;
                 }
                 tableHTML += '</tr>';
             }
-            
-            tableHTML += '</tbody>';
-            
-            $('#previewTable').html(tableHTML);
-            $('#tablePreview').slideDown();
-            $('#insertTableBtn').show().text('Insert Shortcode');
-            currentEditingTable = null;
-            
-            showNotification('Tabel berhasil di-generate! Isi data lalu klik "Insert Shortcode"', 'info');
+            tableHTML += '</tbody></table>';
+
+            $('#tablePreview').html(tableHTML).slideDown();
+            $('#insertTableBtn').show();
         }
 
         function insertTableShortcode() {
-            const rows = parseInt($('#tableRows').val());
-            const cols = parseInt($('#tableCols').val());
-            
-            let tableId;
-            
-            if (currentEditingTable) {
-                // Update existing table
-                tableId = currentEditingTable;
-            } else {
-                // Create new table
-                tableCounter++;
-                tableId = `TABLE_${tableCounter}`;
+            const table = $('#previewTable');
+            if (table.length === 0) {
+                showNotification('Tidak ada tabel yang di-preview!', 'info');
+                return;
             }
+
+            tableCounter++;
+            const shortcode = `TABLE_${tableCounter}`;
             
-            let tableHTML = '<table><tbody>';
+            // Build the final table HTML with user inputs
+            let finalTableHTML = '<table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">';
             
-            tableHTML += '<tr>';
-            for (let j = 0; j < cols; j++) {
-                const value = $(`input[data-row="0"][data-col="${j}"]`).val() || `Header ${j + 1}`;
-                tableHTML += `<th>${value}</th>`;
-            }
-            tableHTML += '</tr>';
+            // Header
+            finalTableHTML += '<thead><tr>';
+            table.find('thead input').each(function() {
+                const value = $(this).val() || $(this).attr('placeholder');
+                finalTableHTML += `<th style="border: 1px solid #ddd; padding: 12px; background-color: #f8f9fa; font-weight: 600;">${value}</th>`;
+            });
+            finalTableHTML += '</tr></thead>';
             
-            for (let i = 1; i < rows; i++) {
-                tableHTML += '<tr>';
-                for (let j = 0; j < cols; j++) {
-                    const value = $(`input[data-row="${i}"][data-col="${j}"]`).val() || `Data ${i}-${j + 1}`;
-                    tableHTML += `<td>${value}</td>`;
-                }
-                tableHTML += '</tr>';
-            }
+            // Body
+            finalTableHTML += '<tbody>';
+            table.find('tbody tr').each(function() {
+                finalTableHTML += '<tr>';
+                $(this).find('input').each(function() {
+                    const value = $(this).val() || $(this).attr('placeholder');
+                    finalTableHTML += `<td style="border: 1px solid #ddd; padding: 12px;">${value}</td>`;
+                });
+                finalTableHTML += '</tr>';
+            });
+            finalTableHTML += '</tbody></table>';
             
-            tableHTML += '</tbody></table>';
+            // Store the table HTML
+            tablesData[shortcode] = finalTableHTML;
             
-            // Store table data
-            tablesData[tableId] = tableHTML;
+            // Insert shortcode into editor
+            const range = quill.getSelection(true);
+            quill.insertText(range.index, `[${shortcode}]\n`);
+            quill.setSelection(range.index + shortcode.length + 3);
             
-            if (!currentEditingTable) {
-                // Insert shortcode to editor only for new tables
-                const range = quill.getSelection(true);
-                const position = range ? range.index : quill.getLength();
-                
-                quill.insertText(position, `\n[${tableId}]\n`, { 'bold': true, 'color': '#3b82f6' });
-            }
-            
-            // Clear preview
+            // Hide preview and show tables list
             $('#tablePreview').slideUp();
             $('#insertTableBtn').hide();
-            $('#previewTable').html('');
-            currentEditingTable = null;
             
-            // Update tables list
             renderTablesList();
             
-            const action = currentEditingTable ? 'diupdate' : 'ditambahkan';
-            showNotification(`Tabel [${tableId}] berhasil ${action}!`, 'success');
+            showNotification(`Tabel [${shortcode}] berhasil diinsert!`, 'success');
         }
 
-        function editTable(tableId) {
-            const tableHTML = tablesData[tableId];
-            
+        function editTable(shortcode) {
+            const tableHTML = tablesData[shortcode];
             if (!tableHTML) {
-                showNotification('Tabel tidak ditemukan', 'info');
+                showNotification('Tabel tidak ditemukan!', 'info');
                 return;
             }
-            
-            // Parse table HTML to get data
+
+            // Parse the table HTML and populate the preview
             const tempDiv = $('<div>').html(tableHTML);
             const table = tempDiv.find('table');
-            const rows = table.find('tr');
             
-            const numRows = rows.length;
-            const numCols = $(rows[0]).find('th, td').length;
+            const rows = table.find('tbody tr').length;
+            const cols = table.find('thead th').length;
             
-            // Set dimensions
-            $('#tableRows').val(numRows);
-            $('#tableCols').val(numCols);
+            $('#tableRows').val(rows);
+            $('#tableCols').val(cols);
             
-            // Generate preview structure
-            let previewHTML = '<thead><tr>';
+            generateTablePreview();
             
-            for (let j = 0; j < numCols; j++) {
-                previewHTML += `<th><input type="text" data-row="0" data-col="${j}"></th>`;
-            }
-            previewHTML += '</tr></thead><tbody>';
-            
-            for (let i = 1; i < numRows; i++) {
-                previewHTML += '<tr>';
-                for (let j = 0; j < numCols; j++) {
-                    previewHTML += `<td><input type="text" data-row="${i}" data-col="${j}"></td>`;
-                }
-                previewHTML += '</tr>';
-            }
-            
-            previewHTML += '</tbody>';
-            
-            $('#previewTable').html(previewHTML);
-            
-            // Fill values from existing table
-            rows.each(function(i) {
-                $(this).find('th, td').each(function(j) {
-                    const value = $(this).text();
-                    $(`input[data-row="${i}"][data-col="${j}"]`).val(value);
+            // Fill in the values
+            setTimeout(() => {
+                table.find('thead th').each(function(index) {
+                    const text = $(this).text().trim();
+                    $(`#previewTable thead input[data-col="${index}"]`).val(text);
                 });
+                
+                table.find('tbody tr').each(function(rowIndex) {
+                    $(this).find('td').each(function(colIndex) {
+                        const text = $(this).text().trim();
+                        $(`#previewTable tbody input[data-row="${rowIndex + 1}"][data-col="${colIndex}"]`).val(text);
+                    });
+                });
+            }, 100);
+            
+            // Update the shortcode when saved
+            $('#insertTableBtn').off('click').on('click', function() {
+                const table = $('#previewTable');
+                
+                let finalTableHTML = '<table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">';
+                
+                finalTableHTML += '<thead><tr>';
+                table.find('thead input').each(function() {
+                    const value = $(this).val() || $(this).attr('placeholder');
+                    finalTableHTML += `<th style="border: 1px solid #ddd; padding: 12px; background-color: #f8f9fa; font-weight: 600;">${value}</th>`;
+                });
+                finalTableHTML += '</tr></thead>';
+                
+                finalTableHTML += '<tbody>';
+                table.find('tbody tr').each(function() {
+                    finalTableHTML += '<tr>';
+                    $(this).find('input').each(function() {
+                        const value = $(this).val() || $(this).attr('placeholder');
+                        finalTableHTML += `<td style="border: 1px solid #ddd; padding: 12px;">${value}</td>`;
+                    });
+                    finalTableHTML += '</tr>';
+                });
+                finalTableHTML += '</tbody></table>';
+                
+                tablesData[shortcode] = finalTableHTML;
+                
+                $('#tablePreview').slideUp();
+                $('#insertTableBtn').hide();
+                
+                renderTablesList();
+                
+                showNotification(`Tabel [${shortcode}] berhasil diupdate!`, 'success');
+                
+                $('#insertTableBtn').off('click').on('click', insertTableShortcode);
             });
             
-            $('#tablePreview').slideDown();
-            $('#insertTableBtn').show().text('Update Tabel');
-            currentEditingTable = tableId;
-            
-            // Scroll to table builder
-            $('html, body').animate({
-                scrollTop: $('.table-builder').offset().top - 100
-            }, 500);
-            
-            showNotification(`Edit mode: ${tableId}`, 'info');
+            showNotification(`Edit tabel [${shortcode}]`, 'info');
         }
 
-        function deleteTable(tableId) {
-            if (!confirm(`Apakah Anda yakin ingin menghapus ${tableId}? Shortcode di editor tidak akan dihapus otomatis.`)) {
+        function deleteTable(shortcode) {
+            if (!confirm(`Apakah Anda yakin ingin menghapus tabel [${shortcode}]?`)) {
                 return;
             }
+
+            delete tablesData[shortcode];
             
-            delete tablesData[tableId];
             renderTablesList();
-            showNotification(`${tableId} berhasil dihapus`, 'success');
+            
+            showNotification(`Tabel [${shortcode}] berhasil dihapus!`, 'success');
         }
 
         function renderTablesList() {
             const tableKeys = Object.keys(tablesData);
             
             if (tableKeys.length === 0) {
-                $('#tablesList').html('');
+                $('#tablesList').removeClass('show').html('');
                 return;
             }
             
-            let listHTML = '<div class="tables-list"><h4>Tabel yang Sudah Dibuat (' + tableKeys.length + '):</h4>';
+            let listHTML = '<div style="margin-top: 1.5rem;"><h3 style="color: #3b82f6; margin-bottom: 1rem;">Daftar Tabel yang Dibuat</h3>';
             
             tableKeys.forEach(tableId => {
                 listHTML += `
@@ -790,7 +1069,7 @@
             
             listHTML += '</div>';
             
-            $('#tablesList').html(listHTML);
+            $('#tablesList').html(listHTML).addClass('show');
         }
 
         let autoSaveInterval;
@@ -866,7 +1145,6 @@
                 tableCounter = draft.tableCounter;
             }
             
-            // Render tables list after loading
             renderTablesList();
 
             const draftTime = new Date(draft.savedAt).toLocaleString('id-ID');
@@ -898,6 +1176,7 @@
             $('#draftInfo').removeClass('show');
             $('#tablePreview').hide();
             $('#insertTableBtn').hide();
+            $('#tablesList').removeClass('show').html('');
             
             showNotification('Form berhasil dibersihkan', 'info');
         }
@@ -999,7 +1278,6 @@
             $('#generateJsonBtn').on('click', generateJSON);
             $('#copyJsonBtn').on('click', copyJSON);
             
-            // Make edit and delete functions globally accessible
             window.editTable = editTable;
             window.deleteTable = deleteTable;
 
