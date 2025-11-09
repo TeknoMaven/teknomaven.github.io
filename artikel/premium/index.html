@@ -111,25 +111,6 @@
             color: #3b82f6;
         }
 
-        .apps-script-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .apps-script-input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .apps-script-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
         .login-btn {
             width: 100%;
             padding: 1rem;
@@ -153,6 +134,22 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
         .error-message {
@@ -488,6 +485,10 @@
             overflow-y: auto;
         }
 
+        .modal.fullscreen {
+            background: rgba(255, 255, 255, 1);
+        }
+
         .modal-content {
             max-width: 900px;
             margin: 3rem auto;
@@ -499,27 +500,434 @@
             backdrop-filter: blur(10px);
         }
 
-        .modal-close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
+        .modal.fullscreen .modal-content {
+            max-width: 100%;
+            margin: 0;
+            border-radius: 0;
             border: none;
-            width: 40px;
-            height: 40px;
+            min-height: 100vh;
+            padding: 2rem 5%;
+        }
+
+        /* Slide Mode */
+        .modal.slide-mode {
+            overflow: hidden;
+        }
+
+        .modal.slide-mode .modal-content {
+            max-width: 100%;
+            margin: 0;
+            border-radius: 0;
+            border: none;
+            height: 100vh;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-container {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal.slide-mode .slide-container {
+            display: block;
+        }
+
+        .modal.slide-mode #articleContent {
+            display: none;
+        }
+
+        .slides-wrapper {
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 2rem 5% 8rem 5%;
+            animation: slideIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 12rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .slide-body {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .slide-body h3 {
+            color: #3b82f6;
+            margin: 1.5rem 0 1rem;
+            font-size: 2rem;
+        }
+
+        .slide-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .slide-body ul {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .slide-body li {
+            margin-bottom: 1rem;
+        }
+
+        .slide-body code {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+
+        .slide-body pre {
+            background: rgba(15, 23, 42, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            font-size: 1.1rem;
+        }
+
+        .slide-body pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Custom scrollbar for slides */
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+
+        .slide-navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-nav-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: none;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-nav-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(1.1);
+        }
+
+        .slide-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .slide-counter {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            margin: -1rem 0 1rem;
+            z-index: 10;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .modal.slide-mode .modal-header {
+            position: relative;
+            margin: 0;
+            padding: 1.5rem 5%;
+        }
+
+        .modal-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .modal-controls-left {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .modal-controls-center {
+            display: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .modal.fullscreen .modal-controls-center,
+        .modal.slide-mode .modal-controls-center {
+            display: flex;
+        }
+
+        .modal-site-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-close, .modal-fullscreen, .modal-nav-btn, .modal-toggle-indicator, .modal-toggle-mode {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
         .modal-close:hover {
-            background: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .modal-fullscreen:hover, .modal-nav-btn:hover, .modal-toggle-indicator:hover, .modal-toggle-mode:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .modal-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .modal-nav-btn:disabled:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .article-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .modal.slide-mode .article-progress {
+            display: none;
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2050;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 1rem;
+            border-radius: 15px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .step-indicator.show {
+            display: flex;
+        }
+
+        .step-indicator-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .step-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .step-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(226, 232, 240, 0.8);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .step-item.active .step-dot {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-color: #3b82f6;
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-item.completed .step-dot {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .step-line {
+            position: absolute;
+            left: 1rem;
+            top: 100%;
+            width: 2px;
+            height: 1rem;
+            background: rgba(226, 232, 240, 0.5);
+        }
+
+        .step-item:last-child .step-line {
+            display: none;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .step-item.active .step-label {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Custom scrollbar */
+        .step-indicator::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .step-indicator::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+            border-radius: 10px;
+        }
+
+        .step-indicator::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+        }
+
+        .step-indicator::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
         }
 
         .article-header {
             margin-bottom: 2rem;
+            padding-top: 1rem;
         }
 
         .article-title {
@@ -531,16 +939,28 @@
             margin-bottom: 1rem;
         }
 
+        .modal.fullscreen .article-title {
+            font-size: 3rem;
+        }
+
         .article-meta {
             display: flex;
             gap: 1.5rem;
             color: #64748b;
             font-size: 0.9rem;
+            flex-wrap: wrap;
         }
 
         .article-body {
             line-height: 1.8;
             color: #334155;
+        }
+
+        .modal.fullscreen .article-body {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 2;
         }
 
         .article-body h2 {
@@ -607,6 +1027,30 @@
             color: #64748b;
         }
 
+        /* Navigation shortcuts */
+        .nav-hint {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            z-index: 2100;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .nav-hint.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .container {
@@ -620,6 +1064,15 @@
 
             .courses-grid {
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+
+            .step-indicator {
+                left: 1rem;
+                padding: 1rem 0.8rem;
+            }
+
+            .step-label {
+                max-width: 120px;
             }
         }
 
@@ -637,8 +1090,16 @@
                 padding: 2rem 1.5rem;
             }
 
+            .modal.fullscreen .modal-content {
+                padding: 1.5rem 1rem;
+            }
+
             .article-title {
                 font-size: 1.8rem;
+            }
+
+            .modal.fullscreen .article-title {
+                font-size: 2rem;
             }
 
             .login-box {
@@ -648,23 +1109,77 @@
             .login-title {
                 font-size: 1.5rem;
             }
+
+            .modal-controls {
+                flex-wrap: wrap;
+            }
+
+            .article-progress {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .modal-site-name {
+                font-size: 1.2rem;
+            }
+
+            .modal.fullscreen .modal-controls-center,
+            .modal.slide-mode .modal-controls-center {
+                order: -1;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .step-indicator {
+                left: 0.5rem;
+                padding: 1rem 0.5rem;
+                max-height: 60vh;
+            }
+
+            .step-label {
+                font-size: 0.75rem;
+                max-width: 100px;
+            }
+
+            .slide-title {
+                font-size: 2rem;
+            }
+
+            .slide-body {
+                font-size: 1.1rem;
+            }
+
+            .slide-navigation {
+                bottom: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .slide-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .slide {
+                padding: 1.5rem 1rem 7rem 1rem;
+            }
         }
+        
         #open-link-btn {
-    background-color: #007BFF; /* Warna biru */
-    color: white;
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
 
-#open-link-btn:hover {
-    background-color: #0056b3; /* Warna biru tua saat hover */
-}
-
+        #open-link-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -692,6 +1207,11 @@
                     </div>
                 </div>
 
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" checked>
+                    <label for="rememberMe">Ingat password saya</label>
+                </div>
+
                 <button type="submit" class="login-btn" id="loginBtn">
                     Masuk
                 </button>
@@ -707,9 +1227,8 @@
         </div>
     </div>
 
-    <!-- Main Content (Hidden until authenticated) -->
+    <!-- Main Content -->
     <div id="mainContent" class="hidden">
-        <!-- Header -->
         <header>
             <div class="header-content">
                 <div class="logo">TeknoMaven Academy</div>
@@ -721,15 +1240,12 @@
             </div>
         </header>
 
-        <!-- Hero -->
         <section class="hero">
             <h1>Paket Tutorial Premium</h1>
             <p>Kumpulan artikel premium teknomaven</p>
         </section>
 
-        <!-- Main Container -->
         <div class="container">
-            <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="filter-section">
                     <h3>🔍 Pencarian</h3>
@@ -747,7 +1263,6 @@
                 </div>
             </aside>
 
-            <!-- Courses Grid -->
             <main>
                 <div class="courses-grid" id="coursesGrid">
                     <div class="loading">Memuat tutorial...</div>
@@ -759,19 +1274,77 @@
     <!-- Modal -->
     <div class="modal" id="articleModal">
         <div class="modal-content">
-            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-header">
+                <div class="modal-controls">
+                    <div class="modal-controls-left">
+                        <button class="modal-close" id="modalClose" title="Tutup (Esc)">×</button>
+                        <button class="modal-fullscreen" id="modalFullscreen" title="Fullscreen (F)">⛶</button>
+                        <button class="modal-toggle-mode" id="toggleMode" title="Mode Slide (S)">▶</button>
+                        <button class="modal-toggle-indicator" id="toggleIndicator" title="Toggle Indicator (I)">◉</button>
+                    </div>
+                    <div class="modal-controls-center">
+                        <div class="modal-site-name">TeknoMaven Academy</div>
+                    </div>
+                    <div class="article-progress" id="articleProgress">
+                        <button class="modal-nav-btn" id="prevArticle" title="Artikel Sebelumnya (←)">←</button>
+                        <span id="articleCounter">1 / 10</span>
+                        <button class="modal-nav-btn" id="nextArticle" title="Artikel Selanjutnya (→)">→</button>
+                    </div>
+                </div>
+            </div>
             <div id="articleContent"></div>
+            
+            <!-- Slide Container -->
+            <div class="slide-container" id="slideContainer">
+                <div class="slides-wrapper" id="slidesWrapper"></div>
+                <div class="slide-navigation">
+                    <button class="slide-nav-btn" id="prevSlide" title="Slide Sebelumnya (←)">←</button>
+                    <div class="slide-counter" id="slideCounter">1 / 5</div>
+                    <button class="slide-nav-btn" id="nextSlide" title="Slide Selanjutnya (→)">→</button>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator" id="stepIndicator">
+        <div class="step-indicator-title">Progress</div>
+        <div id="stepsList"></div>
+    </div>
+
+    <!-- Navigation Hint -->
+    <div class="nav-hint" id="navHint">
+        💡 ← → navigasi | F fullscreen | S mode slide | I indikator | Esc keluar
     </div>
 
     <script>
         // Global variables
         let allTutorials = [];
         let filteredTutorials = [];
+        let currentArticleIndex = -1;
+        let currentSlideIndex = 0;
+        let slides = [];
+        let isFullscreen = false;
+        let isSlideMode = false;
+        let showIndicator = false;
         let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbwe5IQhiY92BI6i1h4QbZTd9PHg9wENGEdTBG7_eeL1BQdwmQin1WVk7E7RANhWJT1LAA/exec';
+        const STORAGE_KEY = 'teknomaven_academy_password';
+        const INDICATOR_STORAGE_KEY = 'teknomaven_indicator_visible';
+        const MODE_STORAGE_KEY = 'teknomaven_view_mode';
 
         $(document).ready(function() {
-            // Password toggle
+            checkSavedPassword();
+
+            const savedIndicatorState = localStorage.getItem(INDICATOR_STORAGE_KEY);
+            if (savedIndicatorState !== null) {
+                showIndicator = savedIndicatorState === 'true';
+            }
+
+            const savedMode = localStorage.getItem(MODE_STORAGE_KEY);
+            if (savedMode !== null) {
+                isSlideMode = savedMode === 'slide';
+            }
+
             $('#passwordToggle').on('click', function() {
                 const passwordInput = $('#passwordInput');
                 const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
@@ -779,21 +1352,18 @@
                 $(this).text(type === 'password' ? '👁️' : '🙈');
             });
 
-            // Login form submission
             $('#loginForm').on('submit', async function(e) {
                 e.preventDefault();
                 
                 const password = $('#passwordInput').val();
-                // appsScriptUrl = $('#appsScriptUrl').val();
+                const rememberMe = $('#rememberMe').is(':checked');
                 const loginBtn = $('#loginBtn');
                 const errorMessage = $('#errorMessage');
 
-                // Disable button and show loading
                 loginBtn.prop('disabled', true).text('Memuat...');
                 errorMessage.removeClass('show');
 
                 try {
-                    // Call Apps Script with password parameter
                     const response = await $.ajax({
                         url: `${appsScriptUrl}?password=${encodeURIComponent(password)}`,
                         method: 'GET',
@@ -802,44 +1372,83 @@
                     });
 
                     if (response && response.tutorials && response.tutorials.length > 0) {
-                        // Authentication successful
                         allTutorials = response.tutorials;
                         filteredTutorials = [...allTutorials];
                         
-                        // Hide login, show content
+                        if (rememberMe) {
+                            localStorage.setItem(STORAGE_KEY, password);
+                        } else {
+                            localStorage.removeItem(STORAGE_KEY);
+                        }
+                        
                         $('#loginOverlay').fadeOut(300);
                         $('#mainContent').removeClass('hidden');
                         
-                        // Initialize the app
                         initializeApp();
                     } else {
                         throw new Error('Invalid response format');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    // errorMessage.text('Password salah!').addClass('show');
                     errorMessage.html('Password salah! Jika anda belum memiliki password akses, silahkan kunjungi page di bawah:<br><br>' +
-    '<button id="open-link-btn" onclick="window.location.href=\'https://teknomaven.com/produk/\';">Buka Link</button>')
-    .addClass('show');
+                        '<button id="open-link-btn" onclick="window.location.href=\'https://teknomaven.com/produk/\';">Buka Link</button>')
+                        .addClass('show');
                     loginBtn.prop('disabled', false).text('Masuk');
                 }
             });
 
-            // Logout button
+            async function checkSavedPassword() {
+                const savedPassword = localStorage.getItem(STORAGE_KEY);
+                
+                if (savedPassword) {
+                    $('#loginBtn').prop('disabled', true).text('Memuat...');
+                    $('#passwordInput').val(savedPassword);
+                    
+                    try {
+                        const response = await $.ajax({
+                            url: `${appsScriptUrl}?password=${encodeURIComponent(savedPassword)}`,
+                            method: 'GET',
+                            dataType: 'json',
+                            timeout: 10000
+                        });
+
+                        if (response && response.tutorials && response.tutorials.length > 0) {
+                            allTutorials = response.tutorials;
+                            filteredTutorials = [...allTutorials];
+                            
+                            $('#loginOverlay').fadeOut(300);
+                            $('#mainContent').removeClass('hidden');
+                            
+                            initializeApp();
+                        } else {
+                            localStorage.removeItem(STORAGE_KEY);
+                            $('#loginBtn').prop('disabled', false).text('Masuk');
+                            $('#passwordInput').val('');
+                        }
+                    } catch (error) {
+                        console.error('Auto-login error:', error);
+                        localStorage.removeItem(STORAGE_KEY);
+                        $('#loginBtn').prop('disabled', false).text('Masuk');
+                        $('#passwordInput').val('');
+                    }
+                }
+            }
+
             $('#logoutBtn').on('click', function() {
+                localStorage.removeItem(STORAGE_KEY);
+                
                 $('#mainContent').addClass('hidden');
                 $('#loginOverlay').fadeIn(300);
                 $('#passwordInput').val('');
+                $('#rememberMe').prop('checked', true);
                 allTutorials = [];
                 filteredTutorials = [];
             });
 
-            // Initialize app after successful login
             function initializeApp() {
                 const categories = [...new Set(allTutorials.map(t => t.category))];
                 const levels = ['beginner', 'intermediate', 'advanced'];
 
-                // Render filters
                 function renderFilters() {
                     const categoryHTML = categories.map(cat => `
                         <div class="filter-group">
@@ -868,7 +1477,6 @@
                     $('#levelFilters').html(levelHTML);
                 }
 
-                // Render courses
                 function renderCourses(tutorials) {
                     if (tutorials.length === 0) {
                         $('#coursesGrid').html(`
@@ -910,7 +1518,6 @@
                     $('#coursesGrid').html(coursesHTML);
                 }
 
-                // Apply filters
                 function applyFilters() {
                     const searchTerm = $('#searchInput').val().toLowerCase();
                     const selectedCategories = $('.category-filter:checked').map(function() {
@@ -932,10 +1539,142 @@
                     renderCourses(filteredTutorials);
                 }
 
-                // Show article modal
+                // Parse content into slides
+                function parseContentToSlides(content, title) {
+                    const tempDiv = $('<div>').html(content);
+                    const slideContents = [];
+                    
+                    // First slide: Title
+                    slideContents.push({
+                        type: 'title',
+                        content: `<h1 class="slide-title">${title}</h1>`
+                    });
+
+                    // Parse by h2 sections
+                    const sections = [];
+                    let currentSection = { heading: '', content: [] };
+                    
+                    tempDiv.children().each(function() {
+                        const tagName = $(this).prop('tagName').toLowerCase();
+                        
+                        if (tagName === 'h2') {
+                            if (currentSection.heading || currentSection.content.length > 0) {
+                                sections.push({ ...currentSection });
+                            }
+                            currentSection = { heading: $(this).text(), content: [] };
+                        } else {
+                            currentSection.content.push($(this).prop('outerHTML'));
+                        }
+                    });
+                    
+                    if (currentSection.heading || currentSection.content.length > 0) {
+                        sections.push(currentSection);
+                    }
+
+                    // Create slides from sections
+                    sections.forEach(section => {
+                        let slideContent = '<div class="slide-body">';
+                        if (section.heading) {
+                            slideContent += `<h3>${section.heading}</h3>`;
+                        }
+                        slideContent += section.content.join('');
+                        slideContent += '</div>';
+                        
+                        slideContents.push({
+                            type: 'content',
+                            content: slideContent
+                        });
+                    });
+
+                    return slideContents;
+                }
+
+                function renderSlides() {
+                    const slidesHTML = slides.map((slide, index) => `
+                        <div class="slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+                            <div class="slide-content">
+                                ${slide.content}
+                            </div>
+                        </div>
+                    `).join('');
+
+                    $('#slidesWrapper').html(slidesHTML);
+                    updateSlideNavigation();
+                }
+
+                function updateSlideNavigation() {
+                    $('#slideCounter').text(`${currentSlideIndex + 1} / ${slides.length}`);
+                    $('#prevSlide').prop('disabled', currentSlideIndex === 0);
+                    $('#nextSlide').prop('disabled', currentSlideIndex === slides.length - 1);
+                }
+
+                function showSlide(index) {
+                    if (index < 0 || index >= slides.length) return;
+                    
+                    $('.slide').removeClass('active');
+                    $(`.slide[data-index="${index}"]`).addClass('active');
+                    currentSlideIndex = index;
+                    updateSlideNavigation();
+                    
+                    // Scroll to top of slide
+                    $(`.slide[data-index="${index}"]`).scrollTop(0);
+                }
+
+                function nextSlide() {
+                    if (currentSlideIndex < slides.length - 1) {
+                        showSlide(currentSlideIndex + 1);
+                    }
+                }
+
+                function prevSlide() {
+                    if (currentSlideIndex > 0) {
+                        showSlide(currentSlideIndex - 1);
+                    }
+                }
+
+                function renderStepIndicator() {
+                    const stepsHTML = filteredTutorials.map((tutorial, index) => {
+                        const isActive = index === currentArticleIndex;
+                        const isCompleted = index < currentArticleIndex;
+                        const activeClass = isActive ? 'active' : '';
+                        const completedClass = isCompleted ? 'completed' : '';
+                        
+                        return `
+                            <div class="step-item ${activeClass} ${completedClass}" data-index="${index}">
+                                <div class="step-dot"></div>
+                                <div class="step-label" title="${tutorial.title}">${index + 1}. ${tutorial.title}</div>
+                                <div class="step-line"></div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    $('#stepsList').html(stepsHTML);
+
+                    if (currentArticleIndex >= 0) {
+                        const activeStep = $(`.step-item[data-index="${currentArticleIndex}"]`);
+                        if (activeStep.length) {
+                            activeStep[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                }
+
+                function updateArticleNavigation() {
+                    const total = filteredTutorials.length;
+                    const current = currentArticleIndex + 1;
+                    
+                    $('#articleCounter').text(`${current} / ${total}`);
+                    
+                    $('#prevArticle').prop('disabled', currentArticleIndex === 0);
+                    $('#nextArticle').prop('disabled', currentArticleIndex === filteredTutorials.length - 1);
+
+                    renderStepIndicator();
+                }
+
                 function showArticle(id) {
                     const tutorial = allTutorials.find(t => t.id === id);
                     if (!tutorial) return;
+
+                    currentArticleIndex = filteredTutorials.findIndex(t => t.id === id);
 
                     const levelText = {
                         beginner: 'Pemula',
@@ -959,19 +1698,92 @@
                     `;
 
                     $('#articleContent').html(articleHTML);
+                    
+                    // Parse content to slides
+                    slides = parseContentToSlides(tutorial.content, tutorial.title);
+                    currentSlideIndex = 0;
+                    renderSlides();
+                    
+                    updateArticleNavigation();
                     $('#articleModal').fadeIn(300);
                     $('body').css('overflow', 'hidden');
+                    
+                    // Apply saved mode
+                    if (isSlideMode) {
+                        $('#articleModal').addClass('slide-mode');
+                    }
+                    
+                    if (showIndicator) {
+                        $('#stepIndicator').addClass('show');
+                    }
+                    
+                    $('#navHint').addClass('show');
+                    setTimeout(() => {
+                        $('#navHint').removeClass('show');
+                    }, 4000);
                 }
 
-                // Close modal
+                function nextArticle() {
+                    if (currentArticleIndex < filteredTutorials.length - 1) {
+                        currentArticleIndex++;
+                        const nextTutorial = filteredTutorials[currentArticleIndex];
+                        showArticle(nextTutorial.id);
+                        $('#articleModal').scrollTop(0);
+                    }
+                }
+
+                function prevArticle() {
+                    if (currentArticleIndex > 0) {
+                        currentArticleIndex--;
+                        const prevTutorial = filteredTutorials[currentArticleIndex];
+                        showArticle(prevTutorial.id);
+                        $('#articleModal').scrollTop(0);
+                    }
+                }
+
+                function toggleFullscreen() {
+                    isFullscreen = !isFullscreen;
+                    $('#articleModal').toggleClass('fullscreen', isFullscreen);
+                }
+
+                function toggleViewMode() {
+                    isSlideMode = !isSlideMode;
+                    $('#articleModal').toggleClass('slide-mode', isSlideMode);
+                    
+                    // Save preference
+                    localStorage.setItem(MODE_STORAGE_KEY, isSlideMode ? 'slide' : 'article');
+                    
+                    // Update button icon
+                    $('#toggleMode').html(isSlideMode ? '📄' : '▶');
+                    $('#toggleMode').css('background', isSlideMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.1)');
+                    
+                    // Reset slide to first when switching to slide mode
+                    if (isSlideMode) {
+                        showSlide(0);
+                    }
+                }
+
+                function toggleStepIndicator() {
+                    showIndicator = !showIndicator;
+                    $('#stepIndicator').toggleClass('show', showIndicator);
+                    
+                    localStorage.setItem(INDICATOR_STORAGE_KEY, showIndicator.toString());
+                    
+                    $('#toggleIndicator').css('background', showIndicator ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.1)');
+                }
+
                 function closeModal() {
                     $('#articleModal').fadeOut(300);
                     $('body').css('overflow', 'auto');
+                    isFullscreen = false;
+                    $('#articleModal').removeClass('fullscreen slide-mode');
+                    $('#stepIndicator').removeClass('show');
+                    currentArticleIndex = -1;
+                    currentSlideIndex = 0;
                 }
 
                 // Event listeners
                 $('#searchInput').on('input', applyFilters);
-
                 $(document).on('change', '.category-filter, .level-filter', applyFilters);
 
                 $(document).on('click', '.read-btn', function(e) {
@@ -987,23 +1799,79 @@
                     }
                 });
 
+                $(document).on('click', '.step-item', function() {
+                    const index = parseInt($(this).data('index'));
+                    if (index >= 0 && index < filteredTutorials.length) {
+                        const tutorial = filteredTutorials[index];
+                        showArticle(tutorial.id);
+                        $('#articleModal').scrollTop(0);
+                    }
+                });
+
                 $('#modalClose').on('click', closeModal);
+                $('#modalFullscreen').on('click', toggleFullscreen);
+                $('#toggleMode').on('click', toggleViewMode);
+                $('#toggleIndicator').on('click', toggleStepIndicator);
+                $('#prevArticle').on('click', prevArticle);
+                $('#nextArticle').on('click', nextArticle);
+                $('#prevSlide').on('click', prevSlide);
+                $('#nextSlide').on('click', nextSlide);
 
                 $('#articleModal').on('click', function(e) {
-                    if ($(e.target).is('#articleModal')) {
+                    if ($(e.target).is('#articleModal') && !isFullscreen && !isSlideMode) {
                         closeModal();
                     }
                 });
 
+                // Keyboard shortcuts
                 $(document).on('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        closeModal();
+                    if ($('#articleModal').is(':visible')) {
+                        switch(e.key) {
+                            case 'Escape':
+                                closeModal();
+                                break;
+                            case 'ArrowRight':
+                                e.preventDefault();
+                                if (isSlideMode) {
+                                    nextSlide();
+                                } else {
+                                    nextArticle();
+                                }
+                                break;
+                            case 'ArrowLeft':
+                                e.preventDefault();
+                                if (isSlideMode) {
+                                    prevSlide();
+                                } else {
+                                    prevArticle();
+                                }
+                                break;
+                            case 'f':
+                            case 'F':
+                                e.preventDefault();
+                                toggleFullscreen();
+                                break;
+                            case 's':
+                            case 'S':
+                                e.preventDefault();
+                                toggleViewMode();
+                                break;
+                            case 'i':
+                            case 'I':
+                                e.preventDefault();
+                                toggleStepIndicator();
+                                break;
+                        }
                     }
                 });
 
                 // Initialize
                 renderFilters();
                 renderCourses(allTutorials);
+                
+                $('#toggleIndicator').css('background', showIndicator ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.1)');
+                $('#toggleMode').html(isSlideMode ? '📄' : '▶');
+                $('#toggleMode').css('background', isSlideMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.1)');
             }
         });
     </script>
