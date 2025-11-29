@@ -106,6 +106,20 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
         .btn-submit {
             padding: 1rem 2rem;
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
@@ -129,6 +143,25 @@
             transform: none;
         }
 
+        .btn-logout {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
         .error-message {
             color: #ef4444;
             font-size: 0.9rem;
@@ -141,6 +174,19 @@
         .error-message.show {
             display: block;
             animation: shake 0.5s ease;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.9rem;
+            padding: 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
         }
 
         @keyframes shake {
@@ -234,6 +280,7 @@
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
 
         .nav-links a {
@@ -262,6 +309,23 @@
 
         .nav-links a:hover {
             color: #3b82f6;
+        }
+
+        .btn-nav-logout {
+            padding: 0.5rem 1.25rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav-logout:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
         }
 
         /* Main Layout */
@@ -306,6 +370,337 @@
         .progress-section {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        /* Progress Popup untuk Mobile */
+        .progress-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .progress-popup.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Course Navigator Popup untuk Mobile */
+        .navigator-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 9998;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .navigator-popup.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .navigator-popup-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navigator-popup-header {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navigator-popup-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .navigator-popup-body {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .navigator-popup-body .module-section {
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .navigator-popup-body .module-header {
+            padding: 1rem 1.5rem;
+            background: rgba(248, 250, 252, 0.8);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .navigator-popup-body .module-header:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .navigator-popup-body .module-title {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+
+        .navigator-popup-body .module-toggle {
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+
+        .navigator-popup-body .module-header.expanded .module-toggle {
+            transform: rotate(90deg);
+        }
+
+        .navigator-popup-body .lessons-list {
+            background: rgba(255, 255, 255, 0.9);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .navigator-popup-body .lessons-list.expanded {
+            max-height: 500px;
+        }
+
+        .navigator-popup-body .lesson-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .navigator-popup-body .lesson-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+            padding-left: 2rem;
+        }
+
+        .navigator-popup-body .lesson-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+        }
+
+        .navigator-popup-body .lesson-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navigator-popup-body .lesson-name {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .navigator-popup-body .lesson-duration {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .navigator-popup-body .lesson-status {
+            font-size: 1.2rem;
+        }
+
+        .btn-close-navigator {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close-navigator:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-popup-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .progress-popup-header h3 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-close-popup {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close-popup:hover {
+            background: #f1f5f9;
+            color: #ef4444;
+        }
+
+        .progress-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-stat-item {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .progress-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .btn-toggle-progress {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-toggle-progress:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-toggle-progress:active {
+            transform: translateY(-2px);
+        }
+
+        .btn-toggle-navigator {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-toggle-navigator:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-toggle-navigator:active {
+            transform: translateY(-2px);
         }
 
         .progress-header {
@@ -811,8 +1206,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%;
-                max-height: 50vh;
+                display: none !important;
             }
 
             .main-layout {
@@ -834,7 +1228,120 @@
             }
 
             .nav-links {
-                gap: 1rem;
+                gap: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            nav {
+                padding: 1rem 3%;
+            }
+
+            /* Hide sidebar progress section on mobile */
+            .progress-section {
+                display: none !important;
+            }
+
+            /* Show floating buttons on mobile */
+            .btn-toggle-progress {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-toggle-navigator {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Adjust popup for mobile */
+            .progress-popup-content {
+                margin: 1rem;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .navigator-popup-content {
+                margin: 1rem;
+            }
+
+            .syllabus-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .syllabus-hero p {
+                font-size: 1rem;
+            }
+
+            .course-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            .btn-nav-logout {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .syllabus-view {
+                padding: 1.5rem;
+            }
+
+            .lesson-content {
+                padding: 1rem;
+            }
+
+            .materials-sidebar {
+                padding: 1rem;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-toggle-progress {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .btn-toggle-navigator {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .nav-links {
+                gap: 0.3rem;
+            }
+
+            .nav-links a {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -858,8 +1365,15 @@
                         autocomplete="off"
                     >
                 </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberPassword" checked>
+                    <label for="rememberPassword">Ingat password saya (24 jam)</label>
+                </div>
                 <div class="error-message" id="errorMessage">
                     ❌ Kode akses tidak valid. Silakan coba lagi.
+                </div>
+                <div class="success-message" id="successMessage">
+                    ✅ Login otomatis berhasil!
                 </div>
                 <button type="submit" class="btn-submit" id="btnSubmit">
                     Masuk ke Course
@@ -877,7 +1391,59 @@
         <!-- Animated Background -->
         <div class="particles" id="particles"></div>
 
+        <!-- Progress Popup (Mobile) -->
+        <div class="progress-popup" id="progressPopup">
+            <div class="progress-popup-content">
+                <div class="progress-popup-header">
+                    <h3>📊 Progress Anda</h3>
+                    <button class="btn-close-popup" onclick="closeProgressPopup()">✕</button>
+                </div>
+                
+                <div class="progress-stats-grid" id="progressStatsGrid">
+                    <!-- Stats will be loaded here -->
+                </div>
+                
+                <div class="progress-header">
+                    <span class="progress-title">Total Progress</span>
+                    <span class="progress-percentage" id="progressPercentagePopup">0%</span>
+                </div>
+                <div class="progress-bar" style="margin-bottom: 1rem;">
+                    <div class="progress-fill" id="progressFillPopup" style="width: 0%"></div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1)); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">
+                        Terus belajar! Setiap video yang diselesaikan akan tersimpan otomatis.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Navigator Popup (Mobile) -->
+        <div class="navigator-popup" id="navigatorPopup">
+            <div class="navigator-popup-content">
+                <div class="navigator-popup-header">
+                    <h3 id="navigatorPopupTitle">Course Navigator</h3>
+                    <button class="btn-close-navigator" onclick="closeNavigatorPopup()">✕</button>
+                </div>
+                <div class="navigator-popup-body" id="navigatorPopupBody">
+                    <!-- Course modules will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Progress Button (Mobile) -->
+        <button class="btn-toggle-progress" id="btnToggleProgress" onclick="openProgressPopup()">
+            📊
+        </button>
+
+        <!-- Floating Navigator Button (Mobile) -->
+        <button class="btn-toggle-navigator" id="btnToggleNavigator" onclick="openNavigatorPopup()">
+            📚
+        </button>
+
         <!-- Header -->
+        <header>
         <header>
             <nav>
                 <div class="logo">TeknoMaven</div>
@@ -886,6 +1452,7 @@
                     <li><a href="#courses">Courses</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <li><button class="btn-nav-logout" onclick="logout()">🚪 Logout</button></li>
                 </ul>
             </nav>
         </header>
@@ -977,12 +1544,133 @@
             let currentLesson = null;
             let currentView = 'syllabus';
             let completedLessons = new Set();
+            
+            // LocalStorage Keys
+            const STORAGE_KEYS = {
+                PASSWORD: 'course_password',
+                COMPLETED_LESSONS: 'completed_lessons',
+                LAST_LESSON: 'last_lesson_id',
+                COURSE_DATA: 'course_data',
+                LOGIN_TIME: 'login_timestamp'
+            };
+
+            // Load saved data from localStorage
+            function loadFromStorage() {
+                // Load completed lessons
+                const savedCompleted = localStorage.getItem(STORAGE_KEYS.COMPLETED_LESSONS);
+                if (savedCompleted) {
+                    try {
+                        const completedArray = JSON.parse(savedCompleted);
+                        completedLessons = new Set(completedArray);
+                        console.log('Loaded completed lessons:', completedArray);
+                    } catch (e) {
+                        console.error('Error loading completed lessons:', e);
+                    }
+                }
+                
+                // Load saved password
+                const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD);
+                if (savedPassword) {
+                    $('#coursePassword').val(savedPassword);
+                }
+            }
+
+            // Save to localStorage
+            function saveToStorage() {
+                // Save completed lessons
+                const completedArray = Array.from(completedLessons);
+                localStorage.setItem(STORAGE_KEYS.COMPLETED_LESSONS, JSON.stringify(completedArray));
+                console.log('Saved completed lessons:', completedArray);
+                
+                // Save current lesson
+                if (currentLesson) {
+                    localStorage.setItem(STORAGE_KEYS.LAST_LESSON, currentLesson.id);
+                }
+            }
+
+            // Clear localStorage
+            function clearStorage() {
+                Object.values(STORAGE_KEYS).forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                console.log('Storage cleared');
+            }
+
+            // Auto-login if password exists
+            function attemptAutoLogin() {
+                const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD);
+                const savedCourseData = localStorage.getItem(STORAGE_KEYS.COURSE_DATA);
+                const loginTime = localStorage.getItem(STORAGE_KEYS.LOGIN_TIME);
+                
+                // Check if login is still valid (24 hours)
+                if (savedPassword && savedCourseData && loginTime) {
+                    const hoursSinceLogin = (Date.now() - parseInt(loginTime)) / (1000 * 60 * 60);
+                    
+                    if (hoursSinceLogin < 24) {
+                        try {
+                            courseData = JSON.parse(savedCourseData);
+                            
+                            // Show success message
+                            $('#successMessage').addClass('show');
+                            setTimeout(function() {
+                                $('#successMessage').removeClass('show');
+                            }, 2000);
+                            
+                            // Hide password modal after success message
+                            setTimeout(function() {
+                                $('#passwordModal').fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                                
+                                // Show main content
+                                $('#mainContent').fadeIn(300);
+                                
+                                // Initialize page
+                                initializePage();
+                                
+                                // Resume last lesson if exists
+                                const lastLessonId = localStorage.getItem(STORAGE_KEYS.LAST_LESSON);
+                                if (lastLessonId) {
+                                    selectLesson(lastLessonId);
+                                }
+                            }, 2500);
+                            
+                            console.log('Auto-login successful');
+                            return true;
+                        } catch (e) {
+                            console.error('Error auto-login:', e);
+                            clearStorage();
+                        }
+                    } else {
+                        // Login expired, clear old data
+                        console.log('Login expired');
+                        clearStorage();
+                    }
+                }
+                
+                return false;
+            }
+
+            // Logout function
+            window.logout = function() {
+                if (confirm('Apakah Anda yakin ingin keluar? Progress Anda akan tetap tersimpan.')) {
+                    clearStorage();
+                    location.reload();
+                }
+            };
+
+            // Load saved data on page load
+            loadFromStorage();
+            
+            // Try auto-login
+            attemptAutoLogin();
 
             // Password Form Submit
             $('#passwordForm').submit(function(e) {
                 e.preventDefault();
                 
                 const password = $('#coursePassword').val().trim();
+                const rememberPassword = $('#rememberPassword').is(':checked');
                 const $errorMessage = $('#errorMessage');
                 const $btnSubmit = $('#btnSubmit');
                 const $loadingSpinner = $('#loadingSpinner');
@@ -1002,6 +1690,14 @@
                     success: function(response) {
                         if (response.success && response.data) {
                             courseData = response.data;
+                            
+                            // Save to localStorage if remember is checked
+                            if (rememberPassword) {
+                                localStorage.setItem(STORAGE_KEYS.PASSWORD, password);
+                                localStorage.setItem(STORAGE_KEYS.COURSE_DATA, JSON.stringify(courseData));
+                                localStorage.setItem(STORAGE_KEYS.LOGIN_TIME, Date.now().toString());
+                                console.log('Password and course data saved to localStorage');
+                            }
                             
                             // Hide password modal
                             $('#passwordModal').fadeOut(300, function() {
@@ -1078,17 +1774,38 @@
                 // Render modules in syllabus
                 renderModulesSyllabus(course.modules);
 
+                // Update progress after loading completed lessons
+                updateProgress();
+                
+                // Update lesson status icons
+                updateLessonStatusIcons();
+
                 // Show syllabus view by default
                 showSyllabusView();
+                
+                // Log for debugging
+                console.log('Page initialized. Mobile view check:', window.innerWidth <= 768);
+                console.log('Button visibility:', $('#btnToggleProgress').css('display'));
+            }
+
+            // Update lesson status icons
+            function updateLessonStatusIcons() {
+                completedLessons.forEach(lessonId => {
+                    $(`#status-${lessonId}`).text('✅');
+                });
             }
 
             // Render course stats
             function renderCourseStats(course) {
+                const totalLessons = course.modules.reduce((total, module) => total + module.lessons.length, 0);
+                const completedCount = completedLessons.size;
+                const completionPercentage = Math.round((completedCount / totalLessons) * 100);
+                
                 const stats = [
                     { icon: '📚', value: course.modules.length, label: 'Modules' },
-                    { icon: '🎥', value: course.lessons, label: 'Video Lessons' },
+                    { icon: '🎥', value: totalLessons, label: 'Video Lessons' },
                     { icon: '⏱️', value: course.duration, label: 'Total Duration' },
-                    { icon: '🎯', value: 'Intermediate', label: 'Level' }
+                    { icon: '✅', value: `${completionPercentage}%`, label: 'Completed' }
                 ];
 
                 const statsHtml = stats.map(stat => `
@@ -1165,10 +1882,13 @@
             window.selectLesson = function(lessonId) {
                 // Find lesson data
                 let selectedLesson = null;
-                courseData.course.modules.forEach(module => {
+                let moduleIndex = 0;
+                
+                courseData.course.modules.forEach((module, idx) => {
                     module.lessons.forEach(lesson => {
                         if (lesson.id === lessonId) {
                             selectedLesson = lesson;
+                            moduleIndex = idx + 1;
                         }
                     });
                 });
@@ -1181,10 +1901,21 @@
                 $('.lesson-item').removeClass('active');
                 $(`.lesson-item[data-lesson-id="${lessonId}"]`).addClass('active');
                 
+                // Expand module containing the lesson
+                const moduleElement = $(`#module${moduleIndex}`);
+                const moduleHeader = moduleElement.prev('.module-header');
+                if (!moduleElement.hasClass('expanded')) {
+                    moduleElement.addClass('expanded');
+                    moduleHeader.addClass('expanded');
+                }
+                
                 // Switch to lesson view
                 showLessonView();
                 renderLessonContent();
                 updateBreadcrumb();
+                
+                // Save to localStorage
+                saveToStorage();
             };
 
             // Show lesson view
@@ -1288,7 +2019,7 @@
             window.downloadMaterial = function(url, filename) {
                 // Mark lesson as completed when downloading materials
                 if (currentLesson) {
-                    markLessonCompleted(currentLesson.id);
+                    window.markLessonCompleted(currentLesson.id);
                 }
                 
                 // Simulate download
@@ -1298,11 +2029,48 @@
                 // window.open(url, '_blank');
             };
 
-            // Mark lesson completed
-            function markLessonCompleted(lessonId) {
-                completedLessons.add(lessonId);
-                $(`#status-${lessonId}`).text('✅');
-                updateProgress();
+            // Mark lesson completed - MUST BE GLOBAL
+            window.markLessonCompleted = function(lessonId) {
+                if (!completedLessons.has(lessonId)) {
+                    completedLessons.add(lessonId);
+                    $(`#status-${lessonId}`).text('✅');
+                    updateProgress();
+                    saveToStorage();
+                    
+                    // Show success notification
+                    showNotification('✅ Lesson marked as completed!');
+                    
+                    // Update navigation button
+                    renderLessonNavigation();
+                }
+            };
+
+            // Show notification
+            function showNotification(message) {
+                const notification = $(`
+                    <div style="
+                        position: fixed;
+                        top: 100px;
+                        right: 20px;
+                        background: linear-gradient(135deg, #10b981, #059669);
+                        color: white;
+                        padding: 1rem 2rem;
+                        border-radius: 10px;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                        z-index: 9999;
+                        animation: slideInRight 0.5s ease;
+                    ">
+                        ${message}
+                    </div>
+                `);
+                
+                $('body').append(notification);
+                
+                setTimeout(function() {
+                    notification.fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                }, 3000);
             }
 
             // Update progress
@@ -1311,21 +2079,173 @@
                 const completedCount = completedLessons.size;
                 const percentage = Math.round((completedCount / totalLessons) * 100);
                 
+                // Update sidebar progress
                 $('#progressPercentage').text(`${percentage}%`);
                 $('#progressFill').css('width', `${percentage}%`);
+                
+                // Update popup progress
+                $('#progressPercentagePopup').text(`${percentage}%`);
+                $('#progressFillPopup').css('width', `${percentage}%`);
+                
+                // Update popup stats
+                updateProgressPopupStats(completedCount, totalLessons, percentage);
+                
+                // Update stats if on syllabus view
+                if (currentView === 'syllabus') {
+                    renderCourseStats(courseData.course);
+                }
             }
+
+            // Update progress popup stats
+            function updateProgressPopupStats(completed, total, percentage) {
+                const remaining = total - completed;
+                const statsHtml = `
+                    <div class="progress-stat-item">
+                        <div class="progress-stat-value">${completed}</div>
+                        <div class="progress-stat-label">Selesai</div>
+                    </div>
+                    <div class="progress-stat-item">
+                        <div class="progress-stat-value">${remaining}</div>
+                        <div class="progress-stat-label">Tersisa</div>
+                    </div>
+                    <div class="progress-stat-item">
+                        <div class="progress-stat-value">${total}</div>
+                        <div class="progress-stat-label">Total Video</div>
+                    </div>
+                    <div class="progress-stat-item">
+                        <div class="progress-stat-value">${percentage}%</div>
+                        <div class="progress-stat-label">Progress</div>
+                    </div>
+                `;
+                $('#progressStatsGrid').html(statsHtml);
+            }
+
+            // Open progress popup
+            window.openProgressPopup = function() {
+                $('#progressPopup').addClass('show');
+                $('body').css('overflow', 'hidden');
+            };
+
+            // Close progress popup
+            window.closeProgressPopup = function() {
+                $('#progressPopup').removeClass('show');
+                $('body').css('overflow', 'auto');
+            };
+
+            // Open navigator popup
+            window.openNavigatorPopup = function() {
+                // Update navigator popup content
+                updateNavigatorPopup();
+                $('#navigatorPopup').addClass('show');
+                $('body').css('overflow', 'hidden');
+            };
+
+            // Close navigator popup
+            window.closeNavigatorPopup = function() {
+                $('#navigatorPopup').removeClass('show');
+                $('body').css('overflow', 'auto');
+            };
+
+            // Update navigator popup with course modules
+            function updateNavigatorPopup() {
+                if (!courseData) return;
+                
+                const course = courseData.course;
+                $('#navigatorPopupTitle').text(course.title);
+                
+                const modulesHtml = course.modules.map((module, index) => `
+                    <div class="module-section">
+                        <div class="module-header" onclick="toggleModulePopup(${index + 1})">
+                            <span class="module-title">${index + 1}. ${module.title}</span>
+                            <span class="module-toggle">▶</span>
+                        </div>
+                        <div class="lessons-list" id="modulePopup${index + 1}">
+                            ${module.lessons.map(lesson => `
+                                <div class="lesson-item" data-lesson-id="${lesson.id}" onclick="selectLessonFromPopup('${lesson.id}')">
+                                    <div class="lesson-info">
+                                        <div class="lesson-name">${lesson.title}</div>
+                                        <div class="lesson-duration">⏱️ ${lesson.duration}</div>
+                                    </div>
+                                    <span class="lesson-status" id="status-popup-${lesson.id}">⭕</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                
+                $('#navigatorPopupBody').html(modulesHtml);
+                
+                // Update status icons
+                completedLessons.forEach(lessonId => {
+                    $(`#status-popup-${lessonId}`).text('✅');
+                });
+            }
+
+            // Toggle module in popup
+            window.toggleModulePopup = function(moduleNumber) {
+                const moduleElement = $(`#modulePopup${moduleNumber}`);
+                const moduleHeader = moduleElement.prev('.module-header');
+                
+                moduleElement.toggleClass('expanded');
+                moduleHeader.toggleClass('expanded');
+            };
+
+            // Select lesson from popup and close popup
+            window.selectLessonFromPopup = function(lessonId) {
+                closeNavigatorPopup();
+                selectLesson(lessonId);
+            };
+
+            // Close popup when clicking outside
+            $('#progressPopup').click(function(e) {
+                if ($(e.target).is('#progressPopup')) {
+                    closeProgressPopup();
+                }
+            });
+
+            $('#navigatorPopup').click(function(e) {
+                if ($(e.target).is('#navigatorPopup')) {
+                    closeNavigatorPopup();
+                }
+            });
+
+            // Force check mobile view on resize
+            function checkMobileView() {
+                if (window.innerWidth <= 768) {
+                    $('.btn-toggle-progress').css('display', 'flex');
+                    $('.btn-toggle-navigator').css('display', 'flex');
+                    $('.sidebar').css('display', 'none');
+                    console.log('Mobile view detected - showing floating buttons');
+                } else {
+                    $('.btn-toggle-progress').css('display', 'none');
+                    $('.btn-toggle-navigator').css('display', 'none');
+                    $('.sidebar').css('display', 'block');
+                    console.log('Desktop view detected - hiding floating buttons');
+                }
+            }
+
+            // Check on window resize
+            $(window).resize(function() {
+                checkMobileView();
+            });
+
+            // Initial check after page load
+            setTimeout(function() {
+                checkMobileView();
+            }, 500);
 
             // Render lesson navigation
             function renderLessonNavigation() {
                 const lessonNavigation = $('#lessonNavigation');
                 const { prevLesson, nextLesson } = getAdjacentLessons();
+                const isCompleted = completedLessons.has(currentLesson.id);
                 
                 lessonNavigation.html(`
                     <button class="nav-btn" ${!prevLesson ? 'disabled' : ''} onclick="selectLesson('${prevLesson?.id || ''}')">
                         ← Previous Lesson
                     </button>
-                    <button class="nav-btn" onclick="markLessonCompleted('${currentLesson.id}')">
-                        ✓ Mark Complete
+                    <button class="nav-btn" onclick="window.markLessonCompleted('${currentLesson.id}')" ${isCompleted ? 'style="background: #10b981; color: white; border-color: #10b981;"' : ''}>
+                        ${isCompleted ? '✓ Completed' : '✓ Mark Complete'}
                     </button>
                     <button class="nav-btn" ${!nextLesson ? 'disabled' : ''} onclick="selectLesson('${nextLesson?.id || ''}')">
                         Next Lesson →
