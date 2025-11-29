@@ -274,6 +274,46 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            /* z-index: 1001; */
+            transition: font-size 0.3s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .logo {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            nav {
+                padding: 0.875rem 4%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .logo {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav {
+                padding: 0.75rem 3%;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .logo {
+                font-size: 1.1rem;
+            }
         }
 
         .nav-links {
@@ -309,6 +349,55 @@
 
         .nav-links a:hover {
             color: #3b82f6;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Mobile Menu Overlay */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         .btn-nav-logout {
@@ -1115,6 +1204,125 @@
             border-left: 1px solid rgba(226, 232, 240, 0.5);
             overflow-y: auto;
             padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .materials-sidebar-header {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .materials-sidebar-header h3 {
+            font-size: 1.2rem;
+            color: #1e293b;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .btn-toggle-materials {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-toggle-materials:hover {
+            transform: rotate(180deg);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .materials-sidebar-body {
+            transition: all 0.3s ease;
+        }
+
+        .materials-sidebar.minimized .materials-sidebar-body {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .materials-sidebar.minimized {
+            padding-bottom: 1rem;
+        }
+
+        /* Mobile Action Buttons - Hanya muncul di mobile/tablet */
+        .mobile-actions {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(6, 182, 212, 0.05));
+            border-radius: 15px;
+        }
+
+        .mobile-action-btn {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .mobile-action-btn .btn-icon {
+            font-size: 1.8rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .mobile-action-btn.progress-btn .btn-icon {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .mobile-action-btn.navigator-btn .btn-icon {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .mobile-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .mobile-action-btn .btn-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .mobile-action-btn .btn-text .btn-title {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .mobile-action-btn .btn-text .btn-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 400;
         }
 
         .materials-header {
@@ -1204,9 +1412,90 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            /* Show mobile action buttons di tablet/mobile */
+            .mobile-actions {
+                display: flex !important;
+            }
+
+            /* Hide sidebar di mobile */
             .sidebar {
                 display: none !important;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            /* Show materials sidebar header di mobile/tablet */
+            .materials-sidebar-header {
+                display: flex !important;
+            }
+
+            /* Add sticky positioning for mobile header */
+            .materials-sidebar {
+                position: relative;
+            }
+
+            .materials-sidebar-header {
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 10;
+                margin: -2rem -2rem 1.5rem -2rem;
+                padding: 1rem 2rem;
+                border-bottom: 2px solid #e2e8f0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Mobile Navigation */
+            .hamburger {
+                display: flex !important;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 280px;
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: 5rem 2rem 2rem 2rem;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                font-size: 1.1rem;
+                padding: 0.75rem 0;
+                width: 100%;
+            }
+
+            .nav-links a::after {
+                bottom: 0;
+                left: 0;
+                transform: translateX(0);
+            }
+
+            .btn-nav-logout {
+                width: 100%;
+                padding: 0.75rem 1.5rem;
+                font-size: 0.95rem;
             }
 
             .main-layout {
@@ -1221,41 +1510,21 @@
                 width: 100%;
                 border-left: none;
                 border-top: 1px solid rgba(226, 232, 240, 0.5);
+                padding: 1.5rem;
+            }
+
+            .materials-sidebar-header {
+                margin: -1.5rem -1.5rem 1rem -1.5rem;
+                padding: 1rem 1.5rem;
             }
 
             .video-container iframe {
                 height: 300px;
             }
 
-            .nav-links {
-                gap: 0.5rem;
-                font-size: 0.85rem;
-            }
-
-            .logo {
-                font-size: 1.4rem;
-            }
-
-            nav {
-                padding: 1rem 3%;
-            }
-
             /* Hide sidebar progress section on mobile */
             .progress-section {
                 display: none !important;
-            }
-
-            /* Show floating buttons on mobile */
-            .btn-toggle-progress {
-                display: flex !important;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .btn-toggle-navigator {
-                display: flex !important;
-                align-items: center;
-                justify-content: center;
             }
 
             /* Adjust popup for mobile */
@@ -1289,25 +1558,12 @@
                 width: 100%;
             }
 
-            .btn-nav-logout {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
-
             .syllabus-view {
                 padding: 1.5rem;
             }
 
             .lesson-content {
                 padding: 1rem;
-            }
-
-            .materials-sidebar {
-                padding: 1rem;
-            }
-
-            .main-content {
-                width: 100%;
             }
         }
 
@@ -1320,28 +1576,30 @@
                 grid-template-columns: 1fr;
             }
 
-            .btn-toggle-progress {
-                width: 55px;
-                height: 55px;
-                font-size: 1.3rem;
-                bottom: 15px;
-                right: 15px;
+            .mobile-action-btn {
+                padding: 0.875rem;
             }
 
-            .btn-toggle-navigator {
-                width: 55px;
-                height: 55px;
-                font-size: 1.3rem;
-                bottom: 15px;
-                left: 15px;
+            .mobile-action-btn .btn-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
             }
 
             .nav-links {
-                gap: 0.3rem;
+                width: 250px;
             }
 
-            .nav-links a {
-                font-size: 0.75rem;
+            .syllabus-view {
+                padding: 1rem;
+            }
+
+            .lesson-content {
+                padding: 0.75rem;
+            }
+
+            .materials-sidebar {
+                padding: 1rem;
             }
         }
     </style>
@@ -1432,29 +1690,34 @@
             </div>
         </div>
 
-        <!-- Floating Progress Button (Mobile) -->
-        <button class="btn-toggle-progress" id="btnToggleProgress" onclick="openProgressPopup()">
-            📊
-        </button>
-
-        <!-- Floating Navigator Button (Mobile) -->
-        <button class="btn-toggle-navigator" id="btnToggleNavigator" onclick="openNavigatorPopup()">
-            📚
-        </button>
+        <!-- Floating Progress Button (Mobile) - REMOVED -->
+        <!-- Floating Navigator Button (Mobile) - REMOVED -->
+        <!-- Test Button for Debug - REMOVED -->
 
         <!-- Header -->
         <header>
-        <header>
             <nav>
                 <div class="logo">TeknoMaven</div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#courses">Courses</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                
+                <!-- Hamburger Menu -->
+                <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <!-- Navigation Links -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" onclick="closeMobileMenu()">Home</a></li>
+                    <li><a href="#courses" onclick="closeMobileMenu()">Courses</a></li>
+                    <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+                    <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
                     <li><button class="btn-nav-logout" onclick="logout()">🚪 Logout</button></li>
                 </ul>
             </nav>
+
+            <!-- Mobile Menu Overlay -->
+            <div class="nav-overlay" id="navOverlay" onclick="closeMobileMenu()"></div>
         </header>
 
         <!-- Main Layout -->
@@ -1783,9 +2046,7 @@
                 // Show syllabus view by default
                 showSyllabusView();
                 
-                // Log for debugging
-                console.log('Page initialized. Mobile view check:', window.innerWidth <= 768);
-                console.log('Button visibility:', $('#btnToggleProgress').css('display'));
+                console.log('✅ Page initialized successfully');
             }
 
             // Update lesson status icons
@@ -1964,27 +2225,59 @@
                     </div>
                 `);
 
-                // Render materials
+                // Render materials with mobile actions and toggle header
                 const materialsSidebar = $('#materialsSidebar');
                 materialsSidebar.html(`
-                    <div class="materials-header">
-                        <span>📎</span>
-                        <h4>Download Materials</h4>
+                    <!-- Materials Sidebar Header (Mobile Only) -->
+                    <div class="materials-sidebar-header">
+                        <h3>📚 Materi & Navigasi</h3>
+                        <button class="btn-toggle-materials" onclick="toggleMaterialsSidebar()" id="btnToggleMaterials">
+                            ▼
+                        </button>
                     </div>
-                    ${currentLesson.materials.map(material => `
-                        <div class="material-item">
-                            <div class="material-info">
-                                <span class="material-icon">${getFileIcon(material.type)}</span>
-                                <div class="material-details">
-                                    <h5>${material.name}</h5>
-                                    <span>${material.type} • ${material.size}</span>
+
+                    <!-- Materials Sidebar Body -->
+                    <div class="materials-sidebar-body" id="materialsSidebarBody">
+                        <!-- Mobile Action Buttons -->
+                        <div class="mobile-actions">
+                            <button class="mobile-action-btn progress-btn" onclick="openProgressPopup()">
+                                <div class="btn-icon">📊</div>
+                                <div class="btn-text">
+                                    <div class="btn-title">Progress Anda</div>
+                                    <div class="btn-subtitle">Lihat kemajuan belajar</div>
                                 </div>
-                            </div>
-                            <button class="btn-download-material" onclick="downloadMaterial('${material.downloadUrl}', '${material.name}')">
-                                Download
+                            </button>
+                            <button class="mobile-action-btn navigator-btn" onclick="openNavigatorPopup()">
+                                <div class="btn-icon">📚</div>
+                                <div class="btn-text">
+                                    <div class="btn-title">Course Navigator</div>
+                                    <div class="btn-subtitle">Jelajahi semua materi</div>
+                                </div>
                             </button>
                         </div>
-                    `).join('')}
+
+                        <!-- Materials Header -->
+                        <div class="materials-header">
+                            <span>📎</span>
+                            <h4>Download Materials</h4>
+                        </div>
+                        
+                        <!-- Materials List -->
+                        ${currentLesson.materials.map(material => `
+                            <div class="material-item">
+                                <div class="material-info">
+                                    <span class="material-icon">${getFileIcon(material.type)}</span>
+                                    <div class="material-details">
+                                        <h5>${material.name}</h5>
+                                        <span>${material.type} • ${material.size}</span>
+                                    </div>
+                                </div>
+                                <button class="btn-download-material" onclick="downloadMaterial('${material.downloadUrl}', '${material.name}')">
+                                    Download
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
                 `);
 
                 // Render navigation
@@ -2209,29 +2502,60 @@
                 }
             });
 
-            // Force check mobile view on resize
-            function checkMobileView() {
-                if (window.innerWidth <= 768) {
-                    $('.btn-toggle-progress').css('display', 'flex');
-                    $('.btn-toggle-navigator').css('display', 'flex');
-                    $('.sidebar').css('display', 'none');
-                    console.log('Mobile view detected - showing floating buttons');
+            // Toggle materials sidebar (mobile)
+            window.toggleMaterialsSidebar = function() {
+                const sidebar = $('#materialsSidebar');
+                const button = $('#btnToggleMaterials');
+                
+                sidebar.toggleClass('minimized');
+                
+                if (sidebar.hasClass('minimized')) {
+                    button.text('▶');
+                    button.css('transform', 'rotate(0deg)');
                 } else {
-                    $('.btn-toggle-progress').css('display', 'none');
-                    $('.btn-toggle-navigator').css('display', 'none');
-                    $('.sidebar').css('display', 'block');
-                    console.log('Desktop view detected - hiding floating buttons');
+                    button.text('▼');
+                    button.css('transform', 'rotate(0deg)');
                 }
-            }
+            };
+
+            // Toggle mobile navigation menu
+            window.toggleMobileMenu = function() {
+                const hamburger = $('#hamburger');
+                const navLinks = $('#navLinks');
+                const navOverlay = $('#navOverlay');
+                
+                hamburger.toggleClass('active');
+                navLinks.toggleClass('active');
+                navOverlay.toggleClass('active');
+                
+                // Prevent body scroll when menu is open
+                if (navLinks.hasClass('active')) {
+                    $('body').css('overflow', 'hidden');
+                } else {
+                    $('body').css('overflow', 'auto');
+                }
+            };
+
+            // Close mobile menu
+            window.closeMobileMenu = function() {
+                $('#hamburger').removeClass('active');
+                $('#navLinks').removeClass('active');
+                $('#navOverlay').removeClass('active');
+                $('body').css('overflow', 'auto');
+            };
 
             // Check on window resize
             $(window).resize(function() {
-                checkMobileView();
+                // Close mobile menu on resize to desktop
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+                console.log('Window resized to:', window.innerWidth);
             });
 
             // Initial check after page load
             setTimeout(function() {
-                checkMobileView();
+                console.log('Page loaded. Width:', window.innerWidth);
             }, 500);
 
             // Render lesson navigation
