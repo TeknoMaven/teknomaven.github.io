@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course JSON Creator - TeknoMaven</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            padding: 1.5rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 5%;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            color: #3b82f6;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            color: #1e293b;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .module-item {
+            background: rgba(59, 130, 246, 0.05);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .module-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .lesson-item {
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .material-item {
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .objectives-list {
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .objective-item input {
+            flex: 1;
+        }
+
+        .json-output {
+            background: #282c34;
+            border-radius: 15px;
+            padding: 2rem;
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .json-output h3 {
+            color: #61dafb;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .json-code-container {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            max-height: 600px;
+            overflow: auto;
+            position: relative;
+        }
+
+        .json-code-container pre {
+            margin: 0;
+            color: #abb2bf;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(150%);
+            transition: transform 0.3s ease;
+            z-index: 10000;
+            min-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .notification.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .draft-info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .draft-info.show {
+            display: flex;
+        }
+
+        .draft-info-icon {
+            font-size: 1.5rem;
+        }
+
+        .draft-info-text {
+            flex: 1;
+        }
+
+        .draft-info-text strong {
+            color: #059669;
+        }
+
+        .draft-info-text p {
+            font-size: 0.85rem;
+            color: #475569;
+            margin-top: 0.3rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">🎓 Course JSON Creator</div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">⬅ Kembali</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Course JSON Creator with Password</h1>
+
+        <div class="draft-info" id="draftInfo">
+            <span class="draft-info-icon">💾</span>
+            <div class="draft-info-text">
+                <strong>Draft Tersimpan</strong>
+                <p>Terakhir disimpan: <span id="draftTime">-</span></p>
+            </div>
+            <button class="btn btn-secondary btn-small" onclick="loadDraft()">📂 Muat Draft</button>
+        </div>
+
+        <div class="form-section">
+            <h2>🔐 Course Password</h2>
+            <div class="form-group">
+                <label>Password Akses Course *</label>
+                <input type="text" id="coursePassword" placeholder="Contoh: FULLSTACK2024">
+                <small style="color: #64748b; font-size: 0.85rem; display: block; margin-top: 0.3rem;">Password ini akan digunakan untuk mengakses course</small>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>📚 Informasi Course</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>ID Course *</label>
+                    <input type="text" id="courseId" placeholder="course-001">
+                </div>
+                <div class="form-group">
+                    <label>Judul Course *</label>
+                    <input type="text" id="courseTitle" placeholder="Full Stack Web Development">
+                </div>
+                <div class="form-group full-width">
+                    <label>Deskripsi *</label>
+                    <textarea id="courseDescription" rows="3" placeholder="Deskripsi lengkap course..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Durasi *</label>
+                    <input type="text" id="courseDuration" placeholder="12 Weeks">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Lessons *</label>
+                    <input type="number" id="courseLessons" placeholder="48">
+                </div>
+                <div class="form-group">
+                    <label>Level *</label>
+                    <select id="courseLevel">
+                        <option value="">-- Pilih Level --</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Beginner to Advanced">Beginner to Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Instructor *</label>
+                    <input type="text" id="courseInstructor" placeholder="John Doe">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>📖 Modules & Lessons</h2>
+            <div id="modulesContainer"></div>
+            <button class="btn btn-primary" onclick="addModule()">➕ Tambah Module</button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="saveDraft()">💾 Simpan Draft</button>
+            <button class="btn btn-secondary" onclick="loadDraft()">📂 Muat Draft</button>
+            <button class="btn btn-secondary" onclick="clearForm()">🗑️ Bersihkan Form</button>
+            <button class="btn btn-primary" onclick="generateJSON()">🚀 Generate JSON</button>
+        </div>
+
+        <div class="json-output" id="jsonOutput">
+            <h3>📋 JSON Output with Password</h3>
+            <div class="json-code-container">
+                <pre id="jsonCode"></pre>
+            </div>
+            <button class="btn btn-success" onclick="copyJSON()" style="margin-top: 1rem;">📋 Copy JSON</button>
+        </div>
+    </div>
+
+    <script>
+        let moduleCounter = 0;
+        let lessonCounters = {};
+        let materialCounters = {};
+        let autoSaveInterval;
+
+        // Auto-save every 30 seconds
+        function startAutoSave() {
+            autoSaveInterval = setInterval(() => {
+                saveDraft(true);
+            }, 30000); // 30 seconds
+        }
+
+        function stopAutoSave() {
+            if (autoSaveInterval) {
+                clearInterval(autoSaveInterval);
+            }
+        }
+
+        function saveDraft(silent = false) {
+            const draftData = {
+                password: $('#coursePassword').val(),
+                courseId: $('#courseId').val(),
+                title: $('#courseTitle').val(),
+                description: $('#courseDescription').val(),
+                duration: $('#courseDuration').val(),
+                lessons: $('#courseLessons').val(),
+                level: $('#courseLevel').val(),
+                instructor: $('#courseInstructor').val(),
+                moduleCounter: moduleCounter,
+                lessonCounters: lessonCounters,
+                materialCounters: materialCounters,
+                modules: [],
+                savedAt: new Date().toISOString()
+            };
+
+            // Save all modules data
+            $('.module-item').each(function() {
+                const moduleId = $(this).attr('id');
+                const moduleData = {
+                    id: moduleId,
+                    moduleIdInput: $(this).find('.module-id').val(),
+                    title: $(this).find('.module-title-input').val(),
+                    description: $(this).find('.module-description').val(),
+                    lessons: []
+                };
+
+                $(this).find('.lesson-item').each(function() {
+                    const lessonId = $(this).attr('id');
+                    const lessonData = {
+                        id: lessonId,
+                        lessonIdInput: $(this).find('.lesson-id').val(),
+                        title: $(this).find('.lesson-title').val(),
+                        description: $(this).find('.lesson-description').val(),
+                        duration: $(this).find('.lesson-duration').val(),
+                        youtubeId: $(this).find('.lesson-youtube').val(),
+                        objectives: [],
+                        materials: []
+                    };
+
+                    $(this).find('.objective-text').each(function() {
+                        lessonData.objectives.push($(this).val());
+                    });
+
+                    $(this).find('.material-item').each(function() {
+                        lessonData.materials.push({
+                            name: $(this).find('.material-name').val(),
+                            type: $(this).find('.material-type').val(),
+                            size: $(this).find('.material-size').val(),
+                            url: $(this).find('.material-url').val()
+                        });
+                    });
+
+                    moduleData.lessons.push(lessonData);
+                });
+
+                draftData.modules.push(moduleData);
+            });
+
+            localStorage.setItem('courseDraft', JSON.stringify(draftData));
+
+            if (!silent) {
+                showNotification('Draft berhasil disimpan!', 'success');
+            }
+
+            const draftTime = new Date(draftData.savedAt).toLocaleString('id-ID');
+            $('#draftTime').text(draftTime);
+            $('#draftInfo').addClass('show');
+        }
+
+        function loadDraft() {
+            const draftData = localStorage.getItem('courseDraft');
+            
+            if (!draftData) {
+                showNotification('Tidak ada draft yang tersimpan', 'info');
+                return;
+            }
+
+            const draft = JSON.parse(draftData);
+
+            // Load basic course info
+            $('#coursePassword').val(draft.password || '');
+            $('#courseId').val(draft.courseId || '');
+            $('#courseTitle').val(draft.title || '');
+            $('#courseDescription').val(draft.description || '');
+            $('#courseDuration').val(draft.duration || '');
+            $('#courseLessons').val(draft.lessons || '');
+            $('#courseLevel').val(draft.level || '');
+            $('#courseInstructor').val(draft.instructor || '');
+
+            // Restore counters
+            moduleCounter = draft.moduleCounter || 0;
+            lessonCounters = draft.lessonCounters || {};
+            materialCounters = draft.materialCounters || {};
+
+            // Clear existing modules
+            $('#modulesContainer').html('');
+
+            // Restore modules
+            if (draft.modules && draft.modules.length > 0) {
+                draft.modules.forEach(moduleData => {
+                    const moduleHTML = `
+                        <div class="module-item" id="${moduleData.id}">
+                            <div class="module-header">
+                                <div class="module-title">📖 Module</div>
+                                <button class="btn btn-danger btn-small" onclick="removeModule('${moduleData.id}')">🗑️ Hapus</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Module ID</label>
+                                    <input type="text" class="module-id" value="${moduleData.moduleIdInput || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Module Title *</label>
+                                    <input type="text" class="module-title-input" value="${moduleData.title || ''}">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Module Description *</label>
+                                    <textarea class="module-description" rows="2">${moduleData.description || ''}</textarea>
+                                </div>
+                            </div>
+                            <div class="lessons-container" id="lessons-${moduleData.id}"></div>
+                            <button class="btn btn-secondary btn-small" onclick="addLesson('${moduleData.id}')">➕ Tambah Lesson</button>
+                        </div>
+                    `;
+                    $('#modulesContainer').append(moduleHTML);
+
+                    // Restore lessons
+                    if (moduleData.lessons && moduleData.lessons.length > 0) {
+                        moduleData.lessons.forEach(lessonData => {
+                            const lessonHTML = `
+                                <div class="lesson-item" id="${lessonData.id}">
+                                    <div class="lesson-header">
+                                        <div style="font-weight: 600; color: #475569;">📝 Lesson</div>
+                                        <button class="btn btn-danger btn-small" onclick="removeLesson('${lessonData.id}')">🗑️</button>
+                                    </div>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Lesson ID</label>
+                                            <input type="text" class="lesson-id" value="${lessonData.lessonIdInput || ''}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Title *</label>
+                                            <input type="text" class="lesson-title" value="${lessonData.title || ''}">
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label>Description *</label>
+                                            <textarea class="lesson-description" rows="2">${lessonData.description || ''}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Duration *</label>
+                                            <input type="text" class="lesson-duration" value="${lessonData.duration || ''}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>YouTube ID *</label>
+                                            <input type="text" class="lesson-youtube" value="${lessonData.youtubeId || ''}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Objectives</label>
+                                        <div class="objectives-list" id="objectives-${lessonData.id}"></div>
+                                        <button class="btn btn-secondary btn-small" onclick="addObjective('${lessonData.id}')">➕ Tambah Objective</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Materials</label>
+                                        <div id="materials-${lessonData.id}"></div>
+                                        <button class="btn btn-secondary btn-small" onclick="addMaterial('${lessonData.id}')">➕ Tambah Material</button>
+                                    </div>
+                                </div>
+                            `;
+                            $(`#lessons-${moduleData.id}`).append(lessonHTML);
+
+                            // Restore objectives
+                            if (lessonData.objectives && lessonData.objectives.length > 0) {
+                                lessonData.objectives.forEach(objective => {
+                                    const objectiveHTML = `
+                                        <div class="objective-item">
+                                            <span>•</span>
+                                            <input type="text" placeholder="Objective..." class="objective-text" value="${objective || ''}">
+                                            <button class="btn btn-danger btn-small" onclick="$(this).parent().remove()">🗑️</button>
+                                        </div>
+                                    `;
+                                    $(`#objectives-${lessonData.id}`).append(objectiveHTML);
+                                });
+                            }
+
+                            // Restore materials
+                            if (lessonData.materials && lessonData.materials.length > 0) {
+                                lessonData.materials.forEach(material => {
+                                    const materialHTML = `
+                                        <div class="material-item">
+                                            <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem;">
+                                                <input type="text" placeholder="Material Name" class="material-name" value="${material.name || ''}" style="padding: 0.5rem;">
+                                                <input type="text" placeholder="Type (PDF/ZIP)" class="material-type" value="${material.type || ''}" style="padding: 0.5rem;">
+                                                <input type="text" placeholder="Size (2.5 MB)" class="material-size" value="${material.size || ''}" style="padding: 0.5rem;">
+                                                <input type="text" placeholder="Download URL" class="material-url" value="${material.url || ''}" style="padding: 0.5rem;">
+                                            </div>
+                                            <button class="btn btn-danger btn-small" onclick="$(this).parent().remove()">🗑️</button>
+                                        </div>
+                                    `;
+                                    $(`#materials-${lessonData.id}`).append(materialHTML);
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            const draftTime = new Date(draft.savedAt).toLocaleString('id-ID');
+            $('#draftTime').text(draftTime);
+            $('#draftInfo').addClass('show');
+
+            showNotification('Draft berhasil dimuat!', 'success');
+        }
+
+        function addModule() {
+            moduleCounter++;
+            const moduleId = `module-${moduleCounter}`;
+            lessonCounters[moduleId] = 0;
+
+            const moduleHTML = `
+                <div class="module-item" id="${moduleId}">
+                    <div class="module-header">
+                        <div class="module-title">📖 Module ${moduleCounter}</div>
+                        <button class="btn btn-danger btn-small" onclick="removeModule('${moduleId}')">🗑️ Hapus</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Module ID</label>
+                            <input type="text" class="module-id" placeholder="module-${moduleCounter}">
+                        </div>
+                        <div class="form-group">
+                            <label>Module Title *</label>
+                            <input type="text" class="module-title-input" placeholder="Introduction to...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Module Description *</label>
+                            <textarea class="module-description" rows="2" placeholder="Deskripsi module..."></textarea>
+                        </div>
+                    </div>
+                    <div class="lessons-container" id="lessons-${moduleId}"></div>
+                    <button class="btn btn-secondary btn-small" onclick="addLesson('${moduleId}')">➕ Tambah Lesson</button>
+                </div>
+            `;
+
+            $('#modulesContainer').append(moduleHTML);
+        }
+
+        function removeModule(moduleId) {
+            if (confirm('Hapus module ini?')) {
+                $(`#${moduleId}`).remove();
+            }
+        }
+
+        function addLesson(moduleId) {
+            lessonCounters[moduleId]++;
+            const lessonId = `lesson-${moduleId}-${lessonCounters[moduleId]}`;
+            materialCounters[lessonId] = 0;
+
+            const lessonHTML = `
+                <div class="lesson-item" id="${lessonId}">
+                    <div class="lesson-header">
+                        <div style="font-weight: 600; color: #475569;">📝 Lesson ${lessonCounters[moduleId]}</div>
+                        <button class="btn btn-danger btn-small" onclick="removeLesson('${lessonId}')">🗑️</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Lesson ID</label>
+                            <input type="text" class="lesson-id" placeholder="lesson-1-1">
+                        </div>
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" class="lesson-title" placeholder="Introduction to...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Description *</label>
+                            <textarea class="lesson-description" rows="2" placeholder="Deskripsi lesson..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration *</label>
+                            <input type="text" class="lesson-duration" placeholder="25 mins">
+                        </div>
+                        <div class="form-group">
+                            <label>YouTube ID *</label>
+                            <input type="text" class="lesson-youtube" placeholder="dQw4w9WgXcQ">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Objectives</label>
+                        <div class="objectives-list" id="objectives-${lessonId}"></div>
+                        <button class="btn btn-secondary btn-small" onclick="addObjective('${lessonId}')">➕ Tambah Objective</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Materials</label>
+                        <div id="materials-${lessonId}"></div>
+                        <button class="btn btn-secondary btn-small" onclick="addMaterial('${lessonId}')">➕ Tambah Material</button>
+                    </div>
+                </div>
+            `;
+
+            $(`#lessons-${moduleId}`).append(lessonHTML);
+        }
+
+        function removeLesson(lessonId) {
+            if (confirm('Hapus lesson ini?')) {
+                $(`#${lessonId}`).remove();
+            }
+        }
+
+        function addObjective(lessonId) {
+            const objectiveHTML = `
+                <div class="objective-item">
+                    <span>•</span>
+                    <input type="text" placeholder="Objective..." class="objective-text">
+                    <button class="btn btn-danger btn-small" onclick="$(this).parent().remove()">🗑️</button>
+                </div>
+            `;
+            $(`#objectives-${lessonId}`).append(objectiveHTML);
+        }
+
+        function addMaterial(lessonId) {
+            materialCounters[lessonId]++;
+            const materialHTML = `
+                <div class="material-item">
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem;">
+                        <input type="text" placeholder="Material Name" class="material-name" style="padding: 0.5rem;">
+                        <input type="text" placeholder="Type (PDF/ZIP)" class="material-type" style="padding: 0.5rem;">
+                        <input type="text" placeholder="Size (2.5 MB)" class="material-size" style="padding: 0.5rem;">
+                        <input type="text" placeholder="Download URL" class="material-url" style="padding: 0.5rem;">
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="$(this).parent().remove()">🗑️</button>
+                </div>
+            `;
+            $(`#materials-${lessonId}`).append(materialHTML);
+        }
+
+        function generateJSON() {
+            const password = $('#coursePassword').val().trim();
+            const courseId = $('#courseId').val().trim();
+            const title = $('#courseTitle').val().trim();
+            const description = $('#courseDescription').val().trim();
+            const duration = $('#courseDuration').val().trim();
+            const lessons = $('#courseLessons').val().trim();
+            const level = $('#courseLevel').val();
+            const instructor = $('#courseInstructor').val().trim();
+
+            if (!password || !courseId || !title || !description || !duration || !lessons || !level || !instructor) {
+                showNotification('Mohon lengkapi semua field yang diperlukan!', 'info');
+                return;
+            }
+
+            const modules = [];
+            $('.module-item').each(function() {
+                const moduleData = {
+                    id: $(this).find('.module-id').val() || `module-${modules.length + 1}`,
+                    title: $(this).find('.module-title-input').val(),
+                    description: $(this).find('.module-description').val(),
+                    lessons: []
+                };
+
+                $(this).find('.lesson-item').each(function() {
+                    const lessonData = {
+                        id: $(this).find('.lesson-id').val() || `lesson-${moduleData.lessons.length + 1}`,
+                        title: $(this).find('.lesson-title').val(),
+                        description: $(this).find('.lesson-description').val(),
+                        duration: $(this).find('.lesson-duration').val(),
+                        youtubeId: $(this).find('.lesson-youtube').val(),
+                        objectives: [],
+                        materials: []
+                    };
+
+                    $(this).find('.objective-text').each(function() {
+                        const obj = $(this).val().trim();
+                        if (obj) lessonData.objectives.push(obj);
+                    });
+
+                    $(this).find('.material-item').each(function() {
+                        const material = {
+                            name: $(this).find('.material-name').val(),
+                            type: $(this).find('.material-type').val(),
+                            size: $(this).find('.material-size').val(),
+                            downloadUrl: $(this).find('.material-url').val()
+                        };
+                        if (material.name) lessonData.materials.push(material);
+                    });
+
+                    if (lessonData.title) moduleData.lessons.push(lessonData);
+                });
+
+                if (moduleData.title) modules.push(moduleData);
+            });
+
+            const courseObject = {
+                [password]: {
+                    course: {
+                        id: courseId,
+                        title: title,
+                        description: description,
+                        duration: duration,
+                        lessons: parseInt(lessons),
+                        level: level,
+                        instructor: instructor,
+                        modules: modules
+                    }
+                }
+            };
+
+            const jsonString = JSON.stringify(courseObject, null, 2);
+
+            $('#jsonCode').text(jsonString);
+            $('#jsonOutput').slideDown();
+
+            $('html, body').animate({
+                scrollTop: $('#jsonOutput').offset().top - 100
+            }, 500);
+
+            showNotification(`JSON berhasil di-generate dengan password: ${password}`, 'success');
+        }
+
+        function copyJSON() {
+            const jsonText = $('#jsonCode').text();
+            
+            navigator.clipboard.writeText(jsonText).then(() => {
+                showNotification('JSON berhasil disalin ke clipboard!', 'success');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showNotification('Gagal menyalin JSON', 'error');
+            });
+        }
+
+        function clearForm() {
+            if (!confirm('Apakah Anda yakin ingin menghapus semua data? Draft yang tersimpan tidak akan terhapus.')) {
+                return;
+            }
+
+            $('#coursePassword').val('');
+            $('#courseId').val('');
+            $('#courseTitle').val('');
+            $('#courseDescription').val('');
+            $('#courseDuration').val('');
+            $('#courseLessons').val('');
+            $('#courseLevel').val('');
+            $('#courseInstructor').val('');
+            $('#modulesContainer').html('');
+            $('#jsonOutput').hide();
+
+            moduleCounter = 0;
+            lessonCounters = {};
+            materialCounters = {};
+
+            // Initialize with one module
+            addModule();
+
+            showNotification('Form berhasil dibersihkan', 'info');
+        }
+
+        function showNotification(message, type = 'info') {
+            $('.notification').remove();
+
+            const notification = $('<div>')
+                .addClass(`notification ${type}`)
+                .text(message);
+
+            $('body').append(notification);
+
+            setTimeout(() => {
+                notification.addClass('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.removeClass('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize with one module
+        $(document).ready(function() {
+            // Start auto-save
+            startAutoSave();
+
+            // Check if draft exists
+            const hasDraft = localStorage.getItem('courseDraft');
+            if (hasDraft) {
+                const draft = JSON.parse(hasDraft);
+                const draftTime = new Date(draft.savedAt).toLocaleString('id-ID');
+                $('#draftTime').text(draftTime);
+                $('#draftInfo').addClass('show');
+            } else {
+                addModule();
+            }
+
+            // Auto-save on input changes
+            $(document).on('input change', 'input, textarea, select', function() {
+                // Debounce the auto-save
+                clearTimeout(window.autoSaveDebounce);
+                window.autoSaveDebounce = setTimeout(() => {
+                    saveDraft(true);
+                }, 2000); // Save 2 seconds after user stops typing
+            });
+
+            // Save before leaving page
+            $(window).on('beforeunload', function() {
+                saveDraft(true);
+            });
+        });
+
+        // Stop auto-save when page unloads
+        $(window).on('unload', function() {
+            stopAutoSave();
+        });
+    </script>
+</body>
+</html>
